@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Local runtime state
+var/
+*.db
+*.sqlite
+
+# Eval outputs
+evals/reports/*
+!evals/reports/.gitkeep
+
+# Node
+node_modules/
+.next/
+out/
+apps/web/test-results/
+apps/web/playwright-report/
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/

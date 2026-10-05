@@ -1,0 +1,97 @@
+year,programme_code,programme,level,region,employer_segment,starts
+2022/23,DTS6,Digital & Technology Solutions Professional,6,North,Large employer,130
+2022/23,DTS6,Digital & Technology Solutions Professional,6,North,SME,57
+2022/23,DTS6,Digital & Technology Solutions Professional,6,Midlands,Large employer,132
+2022/23,DTS6,Digital & Technology Solutions Professional,6,Midlands,SME,56
+2022/23,DTS6,Digital & Technology Solutions Professional,6,South,Large employer,174
+2022/23,DTS6,Digital & Technology Solutions Professional,6,South,SME,71
+2023/24,DTS6,Digital & Technology Solutions Professional,6,North,Large employer,118
+2023/24,DTS6,Digital & Technology Solutions Professional,6,North,SME,50
+2023/24,DTS6,Digital & Technology Solutions Professional,6,Midlands,Large employer,120
+2023/24,DTS6,Digital & Technology Solutions Professional,6,Midlands,SME,51
+2023/24,DTS6,Digital & Technology Solutions Professional,6,South,Large employer,157
+2023/24,DTS6,Digital & Technology Solutions Professional,6,South,SME,64
+2024/25,DTS6,Digital & Technology Solutions Professional,6,North,Large employer,95
+2024/25,DTS6,Digital & Technology Solutions Professional,6,North,SME,42
+2024/25,DTS6,Digital & Technology Solutions Professional,6,Midlands,Large employer,93
+2024/25,DTS6,Digital & Technology Solutions Professional,6,Midlands,SME,40
+2024/25,DTS6,Digital & Technology Solutions Professional,6,South,Large employer,127
+2024/25,DTS6,Digital & Technology Solutions Professional,6,South,SME,53
+2025/26,DTS6,Digital & Technology Solutions Professional,6,North,Large employer,71
+2025/26,DTS6,Digital & Technology Solutions Professional,6,North,SME,31
+2025/26,DTS6,Digital & Technology Solutions Professional,6,Midlands,Large employer,72
+2025/26,DTS6,Digital & Technology Solutions Professional,6,Midlands,SME,32
+2025/26,DTS6,Digital & Technology Solutions Professional,6,South,Large employer,101
+2025/26,DTS6,Digital & Technology Solutions Professional,6,South,SME,43
+2022/23,DSP6,Data Science Professional,6,North,Large employer,38
+2022/23,DSP6,Data Science Professional,6,North,SME,16
+2022/23,DSP6,Data Science Professional,6,Midlands,Large employer,38
+2022/23,DSP6,Data Science Professional,6,Midlands,SME,16
+2022/23,DSP6,Data Science Professional,6,South,Large employer,50
+2022/23,DSP6,Data Science Professional,6,South,SME,22
+2023/24,DSP6,Data Science Professional,6,North,Large employer,36
+2023/24,DSP6,Data Science Professional,6,North,SME,16
+2023/24,DSP6,Data Science Professional,6,Midlands,Large employer,37
+2023/24,DSP6,Data Science Professional,6,Midlands,SME,15
+2023/24,DSP6,Data Science Professional,6,South,Large employer,47
+2023/24,DSP6,Data Science Professional,6,South,SME,21
+2024/25,DSP6,Data Science Professional,6,North,Large employer,33
+2024/25,DSP6,Data Science Professional,6,North,SME,14
+2024/25,DSP6,Data Science Professional,6,Midlands,Large employer,34
+2024/25,DSP6,Data Science Professional,6,Midlands,SME,14
+2024/25,DSP6,Data Science Professional,6,South,Large employer,45
+2024/25,DSP6,Data Science Professional,6,South,SME,20
+2025/26,DSP6,Data Science Professional,6,North,Large employer,32
+2025/26,DSP6,Data Science Professional,6,North,SME,13
+2025/26,DSP6,Data Science Professional,6,Midlands,Large employer,31
+2025/26,DSP6,Data Science Professional,6,Midlands,SME,13
+2025/26,DSP6,Data Science Professional,6,South,Large employer,43
+2025/26,DSP6,Data Science Professional,6,South,SME,18
+2022/23,CMDA6,Chartered Manager Degree Apprenticeship,6,North,Large employer,65
+2022/23,CMDA6,Chartered Manager Degree Apprenticeship,6,North,SME,26
+2022/23,CMDA6,Chartered Manager Degree Apprenticeship,6,Midlands,Large employer,61
+2022/23,CMDA6,Chartered Manager Degree Apprenticeship,6,Midlands,SME,26
+2022/23,CMDA6,Chartered Manager Degree Apprenticeship,6,South,Large employer,85
+2022/23,CMDA6,Chartered Manager Degree Apprenticeship,6,South,SME,37
+2023/24,CMDA6,Chartered Manager Degree Apprenticeship,6,North,Large employer,65
+2023/24,CMDA6,Chartered Manager Degree Apprenticeship,6,North,SME,28
+2023/24,CMDA6,Chartered Manager Degree Apprenticeship,6,Midlands,Large employer,65
+2023/24,CMDA6,Chartered Manager Degree Apprenticeship,6,Midlands,SME,27
+2023/24,CMDA6,Chartered Manager Degree Apprenticeship,6,South,Large employer,84
+2023/24,CMDA6,Chartered Manager Degree Apprenticeship,6,South,SME,36
+2024/25,CMDA6,Chartered Manager Degree Apprenticeship,6,North,Large employer,63
+2024/25,CMDA6,Chartered Manager Degree Apprenticeship,6,North,SME,28
+2024/25,CMDA6,Chartered Manager Degree Apprenticeship,6,Midlands,Large employer,61
+2024/25,CMDA6,Chartered Manager Degree Apprenticeship,6,Midlands,SME,25
+2024/25,CMDA6,Chartered Manager Degree Apprenticeship,6,South,Large employer,83
+2024/25,CMDA6,Chartered Manager Degree Apprenticeship,6,South,SME,36
+2025/26,CMDA6,Chartered Manager Degree Apprenticeship,6,North,Large employer,62
+2025/26,CMDA6,Chartered Manager Degree Apprenticeship,6,North,SME,27
+2025/26,CMDA6,Chartered Manager Degree Apprenticeship,6,Midlands,Large employer,61
+2025/26,CMDA6,Chartered Manager Degree Apprenticeship,6,Midlands,SME,27
+2025/26,CMDA6,Chartered Manager Degree Apprenticeship,6,South,Large employer,79
+2025/26,CMDA6,Chartered Manager Degree Apprenticeship,6,South,SME,34
+2022/23,SL7,Senior Leader (MBA),7,North,Large employer,85
+2022/23,SL7,Senior Leader (MBA),7,North,SME,36
+2022/23,SL7,Senior Leader (MBA),7,Midlands,Large employer,84
+2022/23,SL7,Senior Leader (MBA),7,Midlands,SME,37
+2022/23,SL7,Senior Leader (MBA),7,South,Large employer,112
+2022/23,SL7,Senior Leader (MBA),7,South,SME,46
+2023/24,SL7,Senior Leader (MBA),7,North,Large employer,82
+2023/24,SL7,Senior Leader (MBA),7,North,SME,35
+2023/24,SL7,Senior Leader (MBA),7,Midlands,Large employer,80
+2023/24,SL7,Senior Leader (MBA),7,Midlands,SME,36
+2023/24,SL7,Senior Leader (MBA),7,South,Large employer,107
+2023/24,SL7,Senior Leader (MBA),7,South,SME,45
+2024/25,SL7,Senior Leader (MBA),7,North,Large employer,65
+2024/25,SL7,Senior Leader (MBA),7,North,SME,27
+2024/25,SL7,Senior Leader (MBA),7,Midlands,Large employer,62
+2024/25,SL7,Senior Leader (MBA),7,Midlands,SME,26
+2024/25,SL7,Senior Leader (MBA),7,South,Large employer,85
+2024/25,SL7,Senior Leader (MBA),7,South,SME,35
+2025/26,SL7,Senior Leader (MBA),7,North,Large employer,37
+2025/26,SL7,Senior Leader (MBA),7,North,SME,15
+2025/26,SL7,Senior Leader (MBA),7,Midlands,Large employer,36
+2025/26,SL7,Senior Leader (MBA),7,Midlands,SME,16
+2025/26,SL7,Senior Leader (MBA),7,South,Large employer,46
+2025/26,SL7,Senior Leader (MBA),7,South,SME,20

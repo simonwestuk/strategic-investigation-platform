@@ -1,0 +1,215 @@
+# Default governance policy pack.
+#
+# Every activity the platform can perform is listed here. Rules are evaluated top-to-bottom per
+# activity; the first rule whose `when` matches the activity attributes wins. An activity with no
+# matching rule is DENIED (fail closed).
+#
+# autonomy:
+#   autonomous             - agents may act; standard audit
+#   autonomous_with_audit  - agents may act; an audit event with the policy rule is mandatory
+#   human_approval         - the graph must interrupt and obtain approval from `required_role`
+#   human_only             - agents may never perform this; only an authenticated human with the role
+#   prohibited             - nobody may perform this through the platform
+#
+# `when` operators: equality (scalar), membership (list), {gte: n}, {lte: n}, {is_true}/{is_false} via bool.
+version: "2026-10-01"
+name: default
+
+activities:
+  frame_question:
+    description: Interpret the strategic question and define scope.
+    rules:
+      - id: frame.clarify
+        when: { needs_clarification: true }
+        autonomy: human_approval
+        required_role: investigator
+        risk: medium
+        consequence: low
+        reason: The question is ambiguous enough that framing it without the requester risks investigating the wrong problem.
+      - id: frame.default
+        autonomy: autonomous
+        risk: low
+        consequence: low
+        reason: Framing is reversible and fully visible to the user.
+
+  generate_hypotheses:
+    description: Generate competing hypotheses.
+    rules:
+      - id: hypotheses.default
+        autonomy: autonomous
+        risk: low
+        consequence: low
+        reason: Hypotheses are explicitly unestablished and are tested before use.
+
+  plan_research:
+    description: Create research tasks.
+    rules:
+      - id: plan.default
+        autonomy: autonomous
+        risk: low
+        consequence: low
+        reason: Bounded by the research budget.
+
+  search_public_web:
+    description: Query an external search provider.
+    rules:
+      - id: search.default
+        autonomy: autonomous
+        risk: low
+        consequence: low
+        reason: Queries are generated from the framed question and never contain internal content.
+
+  fetch_public_url:
+    description: Retrieve a public web page.
+    rules:
+      - id: fetch.default
+        autonomy: autonomous
+        risk: low
+        consequence: low
+        reason: Retrieval passes SSRF controls and content is treated as untrusted data.
+
+  analyse_internal_dataset:
+    description: Run a deterministic analytical operation over an internal dataset.
+    rules:
+      - id: dataset.personal
+        when: { personal_data: [personal, special_category] }
+        autonomy: prohibited
+        risk: high
+        consequence: medium
+        reason: Row-level personal data is not analysed by agents; supply an aggregated extract.
+      - id: dataset.default
+        autonomy: autonomous_with_audit
+        risk: medium
+        consequence: low
+        reason: Aggregated internal data; computation is deterministic and every query is logged.
+
+  release_document_to_agents:
+    description: Release a sanitised internal document across the privacy boundary into the agent corpus.
+    rules:
+      - id: release.restricted
+        when: { confidentiality: restricted }
+        autonomy: prohibited
+        risk: critical
+        consequence: high
+        reason: Restricted material never enters the agent boundary.
+      - id: release.special_category
+        when: { personal_data: special_category }
+        autonomy: human_approval
+        required_role: privacy_reviewer
+        risk: high
+        consequence: high
+        reason: Special-category personal data was detected; a privacy reviewer must confirm the sanitised version is safe and necessary.
+      - id: release.uncertain_detection
+        when: { low_confidence_detections: { gte: 1 } }
+        autonomy: human_approval
+        required_role: privacy_reviewer
+        risk: medium
+        consequence: medium
+        reason: The detector was not confident about some entities; a human must confirm pseudonymisation is complete.
+      - id: release.confidential_personal
+        when: { confidentiality: commercially_confidential, personal_data: personal }
+        autonomy: human_approval
+        required_role: privacy_reviewer
+        risk: medium
+        consequence: medium
+        reason: Commercially confidential content containing personal data requires review even after pseudonymisation.
+      - id: release.default
+        autonomy: autonomous_with_audit
+        risk: low
+        consequence: low
+        reason: No personal data or only confidently pseudonymised personal data in internal material.
+
+  read_sanitised_document:
+    description: Search and read released, sanitised internal documents.
+    rules:
+      - id: read.default
+        autonomy: autonomous
+        risk: low
+        consequence: low
+        reason: Only sanitised content is reachable from the agent boundary.
+
+  classify_claim:
+    description: Assign KNOWN/INFERRED/HYPOTHESIS/UNKNOWN through the confidence rubric.
+    rules:
+      - id: classify.default
+        autonomy: autonomous_with_audit
+        risk: medium
+        consequence: medium
+        reason: Classification is rubric-bound and every downgrade is audited.
+
+  override_classification:
+    description: Change a claim's classification outside the rubric.
+    rules:
+      - id: override.human
+        autonomy: human_only
+        required_role: governance_reviewer
+        risk: high
+        consequence: medium
+        reason: Overrides bypass the evidence rubric and must be attributable to a named person.
+
+  publish_findings:
+    description: Promote claims to findings that may inform strategic options.
+    rules:
+      - id: findings.open_blocking_challenges
+        when: { open_blocking_challenges: { gte: 1 } }
+        autonomy: human_approval
+        required_role: governance_reviewer
+        risk: high
+        consequence: high
+        reason: Research stopped with blocking challenges unresolved; a human must decide whether to proceed with caveats or fund more research.
+      - id: findings.default
+        autonomy: autonomous_with_audit
+        risk: medium
+        consequence: medium
+        reason: Findings met promotion criteria and passed the challenger.
+
+  generate_strategic_options:
+    description: Draft strategic options from findings (recommendations, not decisions).
+    rules:
+      - id: options.draft
+        autonomy: autonomous_with_audit
+        risk: medium
+        consequence: low
+        reason: Drafting is reversible; presentation to decision-makers is separately governed.
+
+  present_recommendation:
+    description: Put AI-generated strategic options in front of decision-makers.
+    rules:
+      - id: recommend.high_consequence
+        when: { max_consequence: high }
+        autonomy: human_approval
+        required_role: governance_reviewer
+        risk: high
+        consequence: high
+        reason: High-consequence options must be reviewed for evidence, caveats and framing before decision-makers see them.
+      - id: recommend.low_confidence
+        when: { min_confidence_rank: { lte: 1 } }
+        autonomy: human_approval
+        required_role: governance_reviewer
+        risk: medium
+        consequence: medium
+        reason: Options resting on low-confidence findings require review before presentation.
+      - id: recommend.default
+        autonomy: autonomous_with_audit
+        risk: medium
+        consequence: medium
+        reason: Options are recommendations only and are clearly labelled as such.
+
+  record_decision:
+    description: Create an organisational Decision.
+    rules:
+      - id: decision.human_only
+        autonomy: human_only
+        required_role: decision_maker
+        risk: high
+        consequence: high
+        reason: Decisions are made by accountable humans. The platform records them; it never makes them.
+
+  take_external_action:
+    description: Act on the outside world (email, publish, change systems of record).
+    rules:
+      - id: external.prohibited
+        autonomy: prohibited
+        risk: critical
+        consequence: high
+        reason: Out of scope for the platform. Humans act on decisions through their own channels.

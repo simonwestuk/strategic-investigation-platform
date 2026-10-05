@@ -1,0 +1,48 @@
+# Source-quality policy. Authority is contextual: a source type's tier depends on what the evidence is
+# being used to establish (the "need"). Freshness thresholds are also per need and are measured
+# against the investigation's as-of date, not the wall clock.
+version: "2026-10-01"
+needs:
+  statistic:
+    primary: [official_statistics, internal_dataset]
+    secondary: [industry_body, academic, government_policy, regulator]
+    tertiary: [news, trade_press, organisation_official]
+    unsuitable: [commentary, competitor_official]
+    current_days: 450
+    stale_days: 900
+  policy:
+    primary: [government_policy, regulator, standards_body]
+    secondary: [industry_body, official_statistics, academic]
+    tertiary: [news, trade_press]
+    unsuitable: [commentary, competitor_official]
+    current_days: 365
+    stale_days: 730
+  competitor_offer:
+    primary: [competitor_official]
+    secondary: [standards_body, trade_press, news]
+    tertiary: [commentary, industry_body]
+    unsuitable: []
+    current_days: 270
+    stale_days: 540
+  market_interpretation:
+    primary: [industry_body, academic, official_statistics]
+    secondary: [trade_press, news, government_policy]
+    tertiary: [commentary, organisation_official, competitor_official]
+    unsuitable: []
+    current_days: 365
+    stale_days: 730
+    min_independent_sources: 2
+  internal_performance:
+    primary: [internal_dataset]
+    secondary: [internal_document]
+    tertiary: [crm_record, human_supplied]
+    unsuitable: [commentary, news]
+    current_days: 400
+    stale_days: 800
+  customer_feedback:
+    primary: [internal_dataset]
+    secondary: [crm_record, internal_document, human_supplied]
+    tertiary: [news, trade_press, commentary]
+    unsuitable: []
+    current_days: 365
+    stale_days: 730

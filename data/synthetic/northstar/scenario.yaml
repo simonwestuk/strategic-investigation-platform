@@ -1,0 +1,85 @@
+# Northstar Learning Group — flagship synthetic scenario.
+#
+# Everything in this pack is fictional. Publishers in the offline corpus are invented and use reserved
+# `.test` domains. Hidden ground truth used for evaluation is NOT in this directory; it lives in
+# evals/scenarios/northstar/ground_truth.yaml so that the application cannot read it.
+id: northstar
+title: Northstar Learning Group — degree-apprenticeship decline
+organisation: Northstar Learning Group
+question: >-
+  Why have enrolments in Northstar Learning Group's degree-apprenticeship portfolio declined, and what
+  should leadership investigate or do in response?
+context: >-
+  Northstar Learning Group is a mid-sized training provider. Degree-apprenticeship starts are the
+  largest part of its revenue. The executive team wants to understand the decline before the 2027/28
+  portfolio planning round.
+as_of: 2026-09-30
+subject_unit: starts
+privacy:
+  # Public names that the gateway must not pseudonymise.
+  allowlist: [Northstar Learning Group, Brightpath Academy, Meridian Digital Skills]
+
+datasets:
+  - id: northstar_starts
+    file: datasets/northstar_starts.csv
+    title: Northstar degree-apprenticeship starts by programme, region and employer segment
+    source_type: internal_dataset
+    publisher: Northstar Learning Group (internal MI)
+    published_on: 2026-08-31
+    classification: { confidentiality: commercially_confidential }
+    role: own_volume
+    period: year
+    measure: starts
+    entity_key: programme_code
+    entity_label: programme
+    dimensions: [programme_code, level, region, employer_segment]
+  - id: national_starts
+    file: datasets/national_starts.csv
+    title: National apprenticeship starts by standard (NSSO, synthetic)
+    source_type: official_statistics
+    publisher: National Skills Statistics Office (synthetic)
+    url: https://stats.nsso.example.test/apprenticeships/starts-by-standard-2025-26
+    published_on: 2026-07-15
+    classification: { confidentiality: public }
+    role: market_volume
+    period: year
+    measure: starts
+    entity_key: standard_code
+    entity_label: standard
+    dimensions: [standard_code, level]
+  - id: northstar_pipeline
+    file: datasets/northstar_pipeline.csv
+    title: Northstar employer sales pipeline by programme and segment
+    source_type: internal_dataset
+    publisher: Northstar Learning Group (CRM)
+    published_on: 2026-08-31
+    classification: { confidentiality: commercially_confidential }
+    role: funnel
+    period: year
+    stages: [enquiries, proposals, won]
+    entity_key: programme_code
+    dimensions: [programme_code, employer_segment]
+
+documents:
+  - file: documents/crm_lost_deal_notes.md
+    title: CRM lost-opportunity notes (DTS, 2024/25–2025/26)
+    source_type: crm_record
+    declared: { confidentiality: commercially_confidential }
+    published_on: 2026-08-15
+  - file: documents/board_paper_q2_2026.md
+    title: Board paper — degree apprenticeship performance Q2 2026
+    source_type: internal_document
+    declared: { confidentiality: commercially_confidential }
+    published_on: 2026-07-10
+  - file: documents/sales_ops_review_2024.md
+    title: Sales operations review, March 2024
+    source_type: internal_document
+    declared: { confidentiality: internal }
+    published_on: 2024-03-28
+  - file: documents/learner_withdrawals_note.md
+    title: Learner withdrawals summary 2025/26
+    source_type: internal_document
+    declared: { confidentiality: internal }
+    published_on: 2026-08-01
+
+corpus: corpus

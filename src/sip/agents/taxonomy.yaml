@@ -1,0 +1,557 @@
+# Generic strategic driver taxonomy for "why has <metric> changed?" investigations.
+#
+# This is a consultant-style issue tree that applies to any organisation and any volume metric (sales,
+# enrolments, renewals, market share...). It contains NO domain-specific content. It is used:
+#   * by the offline reasoner to instantiate initial hypotheses and research tasks;
+#   * by the LLM reasoner as the controlled vocabulary for hypothesis categories;
+#   * by deterministic analysis to map analytical pattern codes onto hypothesis stances.
+#
+# Placeholders: {subject}, {org}, {segment}.
+version: '2026-10-01'
+categories:
+  market_contraction:
+    label: Market contraction
+    statement: The overall market for {subject} has contracted, and {org} is declining with it.
+    segment_statement: The market for {segment} has contracted, and {org} is declining with it.
+    rationale: Separates market-wide decline from provider-specific performance; the first question in any decline
+      diagnosis.
+    priority: high
+    would_support:
+    - external market volume falling by a similar amount
+    - the organisation's share roughly stable
+    would_contradict:
+    - market volume stable or growing while the organisation declines
+    source_types:
+    - official_statistics
+    - industry_body
+    - trade_press
+    - news
+    - commentary
+    evidence_need: statistic
+    analyses:
+    - own_vs_market
+    - decompose_change
+    web_queries:
+    - '{subject} national statistics trend'
+    - '{subject} market size latest figures'
+    supported_by:
+    - market_decline
+    contradicted_by:
+    - market_growth
+    - own_underperforms_market
+    split_by_entity: true
+    signals:
+      support:
+      - market fell
+      - demand fell
+      - national decline
+      - contracted
+      - contraction
+      - fell
+      - fall of
+      - collapsing
+      - collapse
+      - wipe out
+      - hit hardest
+      - declin
+      contradict:
+      - grew
+      - growth
+      - increase
+      - rose
+      - broadly flat
+      - stable
+  share_loss:
+    label: Share loss to competitors
+    statement: '{org} is losing share of {subject} to competitors in a market that is not contracting as fast.'
+    segment_statement: '{org} is losing share of the {segment} market to competitors.'
+    rationale: If the market is healthy but the organisation is declining, the cause is likely provider-specific.
+    priority: high
+    would_support:
+    - organisation declining faster than the market
+    - competitors growing
+    - tender or deal losses to named competitors
+    would_contradict:
+    - organisation tracking or out-performing the market
+    source_types:
+    - official_statistics
+    - internal_dataset
+    - crm_record
+    - competitor_official
+    - industry_body
+    - trade_press
+    evidence_need: statistic
+    analyses:
+    - own_vs_market
+    web_queries:
+    - '{subject} providers competitors growth'
+    document_queries:
+    - lost to competitor
+    - chose another provider
+    supported_by:
+    - own_underperforms_market
+    contradicted_by:
+    - own_tracks_market
+    - own_outperforms_market
+    split_by_entity: true
+    signals:
+      support:
+      - lost to
+      - chose another provider
+      - switched provider
+      - competitor
+      - competitors
+      - losing tenders
+      - another provider
+      - switching provider
+      - losing tenders
+      - lost on
+      contradict:
+      - won back
+      - retained
+      - renewed with us
+  offer_proposition:
+    label: Offer is less relevant or current
+    statement: '{org}''s offer for {subject} is less relevant or current than competing offers.'
+    rationale: Customers may move to offers whose content better matches what they need now.
+    priority: high
+    would_support:
+    - customer feedback that content is dated
+    - competitors refreshing content
+    - long time since last refresh
+    would_contradict:
+    - customer feedback praising content
+    - recent refresh
+    source_types:
+    - competitor_official
+    - crm_record
+    - internal_document
+    - trade_press
+    - commentary
+    evidence_need: competitor_offer
+    web_queries:
+    - '{subject} new programmes launched {org} competitors'
+    - '{subject} curriculum refresh new content'
+    document_queries:
+    - curriculum dated refreshed
+    - content outdated
+    signals:
+      support:
+      - dated
+      - outdated
+      - refreshed
+      - refresh
+      - last substantially
+      - modules
+      - curriculum
+      - contemporary
+      - new content
+      - generative
+      contradict:
+      - recently refreshed
+      - up to date
+      - praised
+  offer_format:
+    label: Offer terms or format are less attractive
+    statement: '{org}''s terms or format for {subject} (duration, price, flexibility) are less attractive than alternatives.'
+    rationale: Customers compare commitment, price and flexibility, not just content.
+    priority: high
+    would_support:
+    - competitors offering shorter or cheaper or more flexible formats
+    - customer feedback citing duration or price
+    would_contradict:
+    - organisation's terms equal to or better than competitors
+    source_types:
+    - competitor_official
+    - crm_record
+    - industry_body
+    - trade_press
+    evidence_need: competitor_offer
+    web_queries:
+    - '{subject} programme duration months competitors'
+    - employer preference shorter programmes
+    document_queries:
+    - too long duration months
+    - price cost
+    signals:
+      support:
+      - months
+      - too long
+      - shorter
+      - duration
+      - years
+      - long commitment
+      - two years or less
+      - cohort starts
+      - price
+      - not three years
+      - shorter programme durations
+      - shorter timeline
+      contradict:
+      - in line with most providers
+      - same duration
+      - cheaper than
+  substitution:
+    label: Demand shifting to substitutes
+    statement: Demand is shifting from {subject} to substitute or adjacent offerings.
+    rationale: New categories can absorb demand without the core market appearing to shrink at first.
+    priority: high
+    would_support:
+    - fast growth in adjacent or new offerings
+    - customers moving budget to alternatives
+    would_contradict:
+    - adjacent offerings flat
+    - no evidence of budget moving
+    source_types:
+    - official_statistics
+    - industry_body
+    - trade_press
+    - standards_body
+    - competitor_official
+    - crm_record
+    - news
+    evidence_need: market_interpretation
+    analyses:
+    - own_vs_market
+    web_queries:
+    - new {subject} alternatives fastest growing
+    - employers moving budget to new programmes
+    document_queries:
+    - moved budget
+    - redirected
+    supported_by:
+    - emerging_market_segment_not_offered
+    signals:
+      support:
+      - moving apprenticeship spend
+      - moved budget
+      - redirected
+      - replacing places
+      - fastest-growing
+      - switching
+      - instead
+      - budget to
+      contradict:
+      - demand was stable
+      - no switching
+  demand_shift:
+    label: Customer needs have changed
+    statement: Customers' underlying needs have shifted away from what {subject} provides.
+    rationale: Priorities change; an offer can become less relevant even if competitors have not moved.
+    priority: medium
+    would_support:
+    - surveys showing changed priorities
+    - customer statements about new needs
+    would_contradict:
+    - stable priorities in surveys
+    source_types:
+    - industry_body
+    - academic
+    - official_statistics
+    evidence_need: market_interpretation
+    web_queries:
+    - employer skills priorities survey latest
+    - '{subject} changing customer needs'
+    signals:
+      support:
+      - priorities
+      - rank
+      - top three
+      - prefer
+      - increasingly
+      - want
+      - need
+      contradict:
+      - unchanged priorities
+  policy_change:
+    label: Policy, regulatory or funding change
+    statement: A policy, regulatory or funding change has reduced demand for {subject}.
+    segment_statement: A policy, regulatory or funding change has reduced demand for {segment}.
+    rationale: Rule changes can remove demand abruptly and unevenly across segments.
+    priority: high
+    would_support:
+    - official notice of a change
+    - timing of decline aligned with the change
+    - decline concentrated in affected segments
+    would_contradict:
+    - no relevant change
+    - decline in segments the change does not affect
+    source_types:
+    - government_policy
+    - regulator
+    - standards_body
+    - official_statistics
+    - industry_body
+    - internal_document
+    - trade_press
+    - commentary
+    evidence_need: policy
+    analyses:
+    - decompose_change
+    web_queries:
+    - '{subject} funding policy change'
+    - '{subject} eligibility rules change official'
+    document_queries:
+    - funding changes
+    supported_by:
+    - group_difference
+    split_by_entity: true
+    signals:
+      support:
+      - funding
+      - eligibility
+      - eligible
+      - policy
+      - regulation
+      - rule change
+      - levy
+      - restricted
+      - only for
+      - funding changes
+      - funding eligibility
+      contradict:
+      - does not change funding
+      - unaffected by
+      - redirected towards
+      - will continue to fund
+      - remain eligible
+    contradicted_by:
+    - market_growth
+    - no_group_difference
+  conversion:
+    label: Go-to-market conversion has deteriorated
+    statement: '{org}''s conversion of demand into {subject} has deteriorated.'
+    segment_statement: '{org}''s conversion of demand into {segment} has deteriorated.'
+    rationale: Demand may exist but be lost between opportunity and sale.
+    priority: high
+    would_support:
+    - falling win or conversion rates at a stage of the funnel
+    would_contradict:
+    - stable conversion rates
+    source_types:
+    - internal_dataset
+    - crm_record
+    evidence_need: internal_performance
+    analyses:
+    - funnel_conversion
+    document_queries:
+    - win rates conversion
+    supported_by:
+    - conversion_decline
+    contradicted_by:
+    - conversion_stable
+    split_by_entity: true
+    signals:
+      support:
+      - win rates have fallen
+      - lost
+      - conversion fell
+      contradict:
+      - win rates stable
+  pipeline_volume:
+    label: Fewer prospects entering the funnel
+    statement: Fewer prospective customers are entering {org}'s funnel for {subject}.
+    rationale: Awareness and lead generation problems show up before conversion.
+    priority: medium
+    would_support:
+    - falling enquiries or leads
+    would_contradict:
+    - stable enquiry volumes
+    source_types:
+    - internal_dataset
+    evidence_need: internal_performance
+    analyses:
+    - funnel_conversion
+    supported_by:
+    - top_of_funnel_decline
+    split_by_entity: true
+    signals:
+      support:
+      - enquiries fell
+      - fewer leads
+      contradict:
+      - enquiry definitions were unchanged
+  portfolio_gap:
+    label: Portfolio gap in growing segments
+    statement: '{org}''s portfolio lacks offerings in the segments where demand is growing.'
+    rationale: A provider can lose share of wallet by not being present where customers are moving.
+    priority: medium
+    would_support:
+    - growing market segments the organisation does not serve
+    would_contradict:
+    - organisation present in all growing segments
+    source_types:
+    - official_statistics
+    - internal_document
+    evidence_need: statistic
+    analyses:
+    - own_vs_market
+    document_queries:
+    - do not currently offer
+    supported_by:
+    - emerging_market_segment_not_offered
+    signals:
+      support:
+      - do not currently offer
+      - not offer
+      - no ai-specific
+      - gap
+      contradict: []
+  internal_change:
+    label: A specific internal change
+    statement: A specific internal organisational change (structure, systems or process) caused the decline in {subject}.
+    rationale: Internal events often coincide with declines; they need testing, not assuming.
+    priority: medium
+    would_support:
+    - decline concentrated where and when the change happened
+    would_contradict:
+    - decline equally present where the change did not happen
+    source_types:
+    - internal_document
+    - internal_dataset
+    evidence_need: internal_performance
+    document_queries:
+    - restructure team
+    - new system process change
+    supported_by:
+    - group_difference
+    contradicted_by:
+    - no_group_difference
+    signals:
+      support:
+      - restructure
+      - restructured
+      - reorganisation
+      - new team structure
+      - coincided
+      - after the
+      contradict:
+      - in every region
+      - not only in
+  capacity:
+    label: Delivery capacity constraint
+    statement: Delivery capacity or operational constraints limited {org}'s volume of {subject}.
+    rationale: Volume can fall because supply was constrained rather than demand.
+    priority: low
+    would_support:
+    - waiting lists
+    - cancelled cohorts
+    - staffing shortages
+    would_contradict:
+    - spare capacity
+    source_types:
+    - internal_document
+    evidence_need: internal_performance
+    document_queries:
+    - capacity waiting list cancelled cohort
+    signals:
+      support:
+      - capacity
+      - waiting list
+      - cancelled
+      - staff shortage
+      - delayed start
+      contradict:
+      - spare capacity
+  measurement_artefact:
+    label: Measurement or definition artefact
+    statement: Part of the apparent change in {subject} is a measurement or definition artefact.
+    rationale: Definition or system changes can create apparent trends.
+    priority: low
+    would_support:
+    - definition changes
+    - system migrations affecting counts
+    would_contradict:
+    - definitions unchanged across the period
+    source_types:
+    - internal_document
+    evidence_need: internal_performance
+    document_queries:
+    - definitions changed reporting system
+    signals:
+      support:
+      - definition changed
+      - counting rules
+      - reclassified
+      contradict:
+      - definitions were unchanged
+      - enquiry definitions were unchanged
+  customer_destination:
+    label: Where lost customers went
+    statement: Customers lost from {subject} have moved to competitors' substitute offerings rather than leaving
+      the category.
+    rationale: Determines whether the response should be to compete for switching customers or to accept a smaller
+      category.
+    priority: high
+    would_support:
+    - customer-level destination data showing switching to named alternatives
+    would_contradict:
+    - destination data showing customers leaving the category
+    source_types:
+    - internal_dataset
+    - crm_record
+    - industry_body
+    evidence_need: customer_feedback
+    requires_dataset_role: customer_destination
+    document_queries:
+    - chose another provider
+    - moved to
+    signals:
+      support:
+      - chose a
+      - lost to
+      - with another provider
+      - switched to
+      contradict:
+      - paused all
+      - left the category
+responses:
+  share_loss:
+    title: Defend and reposition the affected offer
+    description: Reposition {segment} against the competitors taking share, prioritising the deal segments where
+      conversion has fallen.
+    reversibility: high
+    consequence: medium
+  offer_format:
+    title: Redesign the offer's format and terms
+    description: Introduce a shorter or more flexible variant of {segment} and test it with customers before full
+      redesign.
+    reversibility: medium
+    consequence: high
+  offer_proposition:
+    title: Refresh the offer's content
+    description: Refresh the content of {segment} to match current customer needs, starting with the modules customers
+      cite.
+    reversibility: medium
+    consequence: medium
+  substitution:
+    title: Enter the growing substitute segment
+    description: Develop or partner to offer the growing substitute ({segment}), with a pathway from existing offers.
+    reversibility: low
+    consequence: high
+  portfolio_gap:
+    title: Close the portfolio gap
+    description: Add offerings in the growing segments the portfolio does not serve ({segment}).
+    reversibility: low
+    consequence: high
+  policy_change:
+    title: Rebalance away from policy-affected segments
+    description: Reduce exposure to {segment}, where the decline is policy-driven, and redeploy capacity; explore
+      self-funded variants.
+    reversibility: medium
+    consequence: high
+  market_contraction:
+    title: Manage the contracting segment for efficiency
+    description: Hold share in {segment} while reducing cost to serve, since the market itself is shrinking.
+    reversibility: high
+    consequence: medium
+  conversion:
+    title: Fix conversion in the affected segment
+    description: Diagnose lost deals in {segment} with structured loss reviews before changing sales structure.
+    reversibility: high
+    consequence: low
+  demand_shift:
+    title: Re-baseline customer needs
+    description: Commission structured customer research on how needs have shifted before committing to redesign.
+    reversibility: high
+    consequence: low
