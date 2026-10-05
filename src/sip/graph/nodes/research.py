@@ -316,8 +316,15 @@ async def _web(task: ResearchTask, payload: dict[str, Any], ctx: InvestigationCo
         if searches_left <= 0:
             break
         if not safe_query(q):
-            events.append(audit(WEB, AuditAction.ACTION_REFUSED, "Search query withheld: contains pseudonymised "
-                                "or withheld internal content.", subject_type="task", subject_id=task.id))
+            events.append(
+                audit(
+                    WEB,
+                    AuditAction.ACTION_REFUSED,
+                    "Search query withheld: contains pseudonymised or withheld internal content.",
+                    subject_type="task",
+                    subject_id=task.id,
+                )
+            )
             continue
         try:
             results = await ctx.search.search(q, ctx.results_per_query)
