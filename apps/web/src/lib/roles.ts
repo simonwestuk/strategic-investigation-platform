@@ -18,10 +18,26 @@ export interface Persona {
   roles: Role[];
 }
 
-export const PERSONA_KEYS = ["investigator", "privacy", "governance", "decision", "viewer", "demo"] as const;
+/**
+ * Operating modes.
+ * - Single operator (default): one person directs the agents and holds every approval. No persona switching.
+ * - Team mode (`NEXT_PUBLIC_TEAM_MODE=true`): approvals are split across roles, shown via the persona switcher.
+ *   In a real deployment the roles come from Entra ID; the server enforces them either way.
+ */
+export const TEAM_MODE = process.env.NEXT_PUBLIC_TEAM_MODE === "true";
+const OPERATOR_NAME = process.env.NEXT_PUBLIC_OPERATOR_NAME || "Operator";
+
+export const PERSONA_KEYS = ["operator", "investigator", "privacy", "governance", "decision", "viewer", "demo"] as const;
 export type PersonaKey = (typeof PERSONA_KEYS)[number];
 
 export const PERSONAS: Record<PersonaKey, Persona> = {
+  operator: {
+    key: "operator",
+    label: "Operator",
+    userId: "operator",
+    displayName: OPERATOR_NAME,
+    roles: ["investigator", "privacy_reviewer", "governance_reviewer", "decision_maker"],
+  },
   investigator: {
     key: "investigator",
     label: "Investigator",
@@ -66,7 +82,7 @@ export const PERSONAS: Record<PersonaKey, Persona> = {
   },
 };
 
-export const DEFAULT_PERSONA: PersonaKey = "demo";
+export const DEFAULT_PERSONA: PersonaKey = "operator";
 
 function isPersonaKey(value: string): value is PersonaKey {
   return (PERSONA_KEYS as readonly string[]).includes(value);
@@ -75,7 +91,7 @@ function isPersonaKey(value: string): value is PersonaKey {
 export const personaStore = createPersistentStore<PersonaKey>("sip.persona", DEFAULT_PERSONA, isPersonaKey);
 
 export function getPersona(): Persona {
-  return PERSONAS[personaStore.get()];
+  return TEAM_MODE ? PERSONAS[personaStore.get()] : PERSONAS.operator;
 }
 
 /** Mirrors the server's `Actor.has_role`: admin implies every role. */

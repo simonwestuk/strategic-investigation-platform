@@ -19,12 +19,12 @@ from fastapi import Depends, Header, HTTPException, Request, status
 from sip.config import AuthMode, Settings
 from sip.domain import Actor, ActorKind, Role
 
-DEMO_ROLES = [Role.INVESTIGATOR, Role.PRIVACY_REVIEWER, Role.GOVERNANCE_REVIEWER, Role.DECISION_MAKER]
+OPERATOR_ROLES = [Role.INVESTIGATOR, Role.PRIVACY_REVIEWER, Role.GOVERNANCE_REVIEWER, Role.DECISION_MAKER]
 
 
 def _parse_roles(raw: str | None) -> list[Role]:
     if raw is None:
-        return list(DEMO_ROLES)
+        return list(OPERATOR_ROLES)
     roles = []
     for r in raw.split(","):
         r = r.strip()
@@ -82,8 +82,8 @@ def current_actor(
         return _entra_actor(authorization.split(" ", 1)[1], settings)
     return Actor(
         kind=ActorKind.HUMAN,
-        id=f"dev:{(x_user_id or 'demo')[:64]}",
-        display_name=(x_user_name or "Demo User")[:100],
+        id=f"dev:{(x_user_id or 'operator')[:64]}",
+        display_name=(x_user_name or "Operator")[:100],  # single-operator default: holds every approval role
         roles=_parse_roles(x_user_roles),
     )
 

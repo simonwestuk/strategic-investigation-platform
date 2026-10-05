@@ -69,6 +69,18 @@ Supplying missing evidence = upload through the gateway, then respond with
   `test_non_human_and_wrong_role_responses_are_refused`, `test_end_to_end_review_flow_with_rbac`,
   `test_invalid_decision_is_refused_and_review_stays_pending`.
 
+## Operating modes
+
+**Single operator (default).** One person directs the agents and holds every approval: privacy release,
+findings, options and the decision. The checkpoints are unchanged — the agents still stop and wait — but
+there is no hand-off between people. In dev auth the default identity is `Operator` with every approval
+role; the web app hides role switching (`NEXT_PUBLIC_TEAM_MODE=false`).
+
+**Team mode.** The same checkpoints, split across roles (below), for organisations that want separation of
+duties — e.g. a privacy officer releasing data and an executive making the decision. Roles come from
+Entra ID app roles in deployment; the web app shows a persona switcher in dev (`NEXT_PUBLIC_TEAM_MODE=true`).
+The backend enforces roles identically in both modes; single-operator is simply one person holding all of them.
+
 ## RBAC
 
 | Role | Can |

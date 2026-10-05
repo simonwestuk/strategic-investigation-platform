@@ -1,9 +1,10 @@
-import { ROLE_LABELS, describeRoles, hasRole, type Persona } from "@/lib/roles";
+import { ROLE_LABELS, TEAM_MODE, describeRoles, hasRole, type Persona } from "@/lib/roles";
 import type { Role } from "@/lib/types";
 
 /** Explains, before the user tries, whether the current persona may respond to this review. */
 export function RoleGate({ required, persona }: { required: Role; persona: Persona }) {
   const ok = hasRole(persona.roles, required);
+  if (!TEAM_MODE) return null; // single operator: every approval is yours
   return (
     <p
       className={

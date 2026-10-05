@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { api } from "@/lib/api";
 import { formatCost, formatDateTime, formatNumber } from "@/lib/format";
-import { ROLE_LABELS, hasRole } from "@/lib/roles";
+import { ROLE_LABELS, TEAM_MODE, hasRole } from "@/lib/roles";
 import { ErrorNotice } from "../ErrorNotice";
 import { Button } from "../ui/Button";
 import { RunStatusBadge } from "../ui/StatusBadges";
@@ -136,11 +136,15 @@ export function WorkspaceHeader() {
             className="mt-3 flex flex-wrap items-center justify-between gap-3 rounded border border-warn-fg/40 bg-warn-bg px-3 py-2 text-[13px] text-warn-fg"
           >
             <div>
-              <strong className="font-semibold">Paused for human review:</strong> {pending.title}.{" "}
-              Requires <strong>{ROLE_LABELS[pending.required_role]}</strong>
-              {hasRole(persona.roles, pending.required_role)
-                ? " — you can act on this."
-                : ` — you are acting as ${persona.label}, so you can view but not respond.`}
+              <strong className="font-semibold">Waiting for you:</strong> {pending.title}.
+              {TEAM_MODE && (
+                <>
+                  {" "}Requires <strong>{ROLE_LABELS[pending.required_role]}</strong>
+                  {hasRole(persona.roles, pending.required_role)
+                    ? " — you can act on this."
+                    : ` — you are acting as ${persona.label}, so you can view but not respond.`}
+                </>
+              )}
             </div>
             <Button variant="secondary" onClick={() => goTo(pending.kind === "decision" ? "decision-room" : "governance")}>
               Open review

@@ -31,9 +31,14 @@ The backend's CORS default (`SIP_CORS_ORIGINS=http://localhost:3000`) matches `n
 
 Both are `NEXT_PUBLIC_*`, so they are **inlined at build time**. Set them before `npm run build` (or as Docker build args), not only at runtime. `next.config.ts` sets `output: "standalone"` for the container image.
 
-### Personas and RBAC
+### Single operator (default) and team mode
 
-Dev auth sends `X-User-Id`, `X-User-Name` and `X-User-Roles` headers. The header's **Acting as** switcher (saved in `localStorage`) offers Investigator, Privacy reviewer, Governance reviewer, Decision-maker, Viewer (read-only) and All roles (demo). Every pending review shows the role it needs. When the current persona lacks that role, the form is disabled and the reason is given. The server still enforces RBAC on its own and returns 403.
+By default the app assumes **one person directing the agents**: you are signed in as the operator
+(`NEXT_PUBLIC_OPERATOR_NAME`, default "Operator") and hold every approval. There is no persona switcher and
+no role messaging; the agents simply pause with "Waiting for you" when policy requires a human.
+
+Set `NEXT_PUBLIC_TEAM_MODE=true` to split approvals across people. Dev auth then sends `X-User-Id`,
+`X-User-Name` and `X-User-Roles` headers, and the header's **Acting as** switcher (saved in `localStorage`) offers Investigator, Privacy reviewer, Governance reviewer, Decision-maker, Viewer (read-only) and All roles (demo). Every pending review shows the role it needs. When the current persona lacks that role, the form is disabled and the reason is given. The server still enforces RBAC on its own and returns 403.
 
 ## Scripts
 

@@ -3,11 +3,12 @@
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { api } from "./api";
 import { type FixtureStage, fixtureStageStore } from "./fixture-stage";
-import { PERSONAS, type Persona, personaStore } from "./roles";
+import { PERSONAS, type Persona, TEAM_MODE, personaStore } from "./roles";
 import type { InvestigationDetail } from "./types";
 
 export function usePersona(): Persona {
-  const key = useSyncExternalStore(personaStore.subscribe, personaStore.get, personaStore.serverSnapshot);
+  const stored = useSyncExternalStore(personaStore.subscribe, personaStore.get, personaStore.serverSnapshot);
+  const key = TEAM_MODE ? stored : "operator";
   return PERSONAS[key];
 }
 
