@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
 import { buildLookups } from "@/lib/decision-room";
 import { useInvestigation, usePersona } from "@/lib/hooks";
+import { Briefing } from "../briefing/Briefing";
 import { ErrorNotice } from "../ErrorNotice";
 import { ClaimDrawer } from "./drawers/ClaimDrawer";
 import { DocumentDrawer } from "./drawers/DocumentDrawer";
@@ -84,8 +85,32 @@ export function Workspace({ id }: { id: string }) {
   const close = () => setStack((s) => s.slice(0, -1));
   const closeAll = () => setStack([]);
 
+  const drawers = (
+    <>
+      <ClaimDrawer claimId={open?.kind === "claim" ? open.id : null} onClose={closeAll} onBack={stack.length > 1 ? close : undefined} />
+      <SourceDrawer sourceId={open?.kind === "source" ? open.id : null} onClose={closeAll} onBack={stack.length > 1 ? close : undefined} />
+      <DocumentDrawer documentId={open?.kind === "document" ? open.id : null} onClose={closeAll} />
+    </>
+  );
+
+  // Default: the single-operator briefing. Any section hash opens the full working view.
+  if (hash === "" || hash === "#") {
+    return (
+      <WorkspaceProvider value={ws}>
+        <Briefing />
+        {drawers}
+      </WorkspaceProvider>
+    );
+  }
+
   return (
     <WorkspaceProvider value={ws}>
+      <div className="border-b border-line bg-surface-muted">
+        <div className="mx-auto max-w-[1440px] px-4 py-2 text-sm md:px-6">
+          <a href="#" className="text-accent hover:underline">← Back to the briefing</a>
+          <span className="ml-2 text-ink-subtle">Full working: every source, claim and decision point.</span>
+        </div>
+      </div>
       <WorkspaceHeader />
       <div className="mx-auto grid max-w-[1440px] gap-6 px-4 pb-16 pt-4 md:px-6 lg:grid-cols-[200px_minmax(0,1fr)]">
         <SectionNav current={section} />
@@ -106,9 +131,7 @@ export function Workspace({ id }: { id: string }) {
           {section === "audit" && <AuditTrail />}
         </div>
       </div>
-      <ClaimDrawer claimId={open?.kind === "claim" ? open.id : null} onClose={closeAll} onBack={stack.length > 1 ? close : undefined} />
-      <SourceDrawer sourceId={open?.kind === "source" ? open.id : null} onClose={closeAll} onBack={stack.length > 1 ? close : undefined} />
-      <DocumentDrawer documentId={open?.kind === "document" ? open.id : null} onClose={closeAll} />
+      {drawers}
     </WorkspaceProvider>
   );
 }

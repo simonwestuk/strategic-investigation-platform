@@ -33,32 +33,33 @@ async function shot(file, opts = {}) {
   console.log("wrote", path.join(OUT, file));
 }
 
-// 1. Decision Room (awaiting decision)
+// 1. Briefing, ready for the decision
 await stage("awaiting-decision", "decision");
-await page.goto(`${BASE}/investigations/${ID}#decision-room`);
-await page.getByRole("heading", { name: "Decision Room" }).waitFor();
-await shot("decision-room.png", { fullPage: false, clip: undefined });
-await page.setViewportSize({ width: 1440, height: 2400 });
+await page.goto(`${BASE}/investigations/${ID}`);
+await page.getByRole("heading", { name: "What we found" }).waitFor();
+await shot("decision-room.png");
+await page.setViewportSize({ width: 1440, height: 2600 });
 await shot("decision-room-full.png");
 await page.setViewportSize({ width: 1440, height: 900 });
 
-// 2. Claim chain drawer
-await page.getByRole("button", { name: /offer for degree-apprenticeship portfolio enrolments is less relevant/ }).first().click();
+// 2. Evidence behind a finding
+await page.getByRole("button", { name: "Evidence →" }).first().click();
 await page.getByTestId("claim-chain").waitFor();
 await shot("claim-chain.png");
 await page.keyboard.press("Escape");
 
-// 3. Hypothesis map
+// 3. Full working view: hypothesis map
 await page.goto(`${BASE}/investigations/${ID}#hypotheses`);
 await page.reload();
 await page.getByRole("heading", { name: "Hypothesis map" }).waitFor();
 await page.evaluate(() => window.scrollTo(0, 0));
 await shot("hypothesis-map.png");
 
-// 4. Governance: privacy release review
+// 4. Briefing, asking to release confidential documents
 await stage("privacy-review", "privacy");
-await page.goto(`${BASE}/investigations/${ID}#governance`);
-await page.getByRole("form", { name: "Privacy release review" }).waitFor();
+await page.goto(`${BASE}/investigations/${ID}`);
+await page.reload();
+await page.getByRole("heading", { name: /Can the agents read/ }).waitFor();
 await shot("privacy-review.png");
 
 await browser.close();

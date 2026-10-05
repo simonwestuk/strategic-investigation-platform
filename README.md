@@ -29,12 +29,12 @@ This platform investigates the question the way a rigorous strategy team would:
 6. It stops at **governed human checkpoints**: releasing sensitive material, approving high-consequence
    options, and the decision itself, which only an authorised human can make.
 
-![Decision Room](docs/images/decision-room.png)
+![The briefing: what was found, ruled out and unknown, then your decision](docs/images/decision-room.png)
 
 <table><tr>
-<td width="33%"><img src="docs/images/claim-chain.png" alt="Claim drawer: classification, rubric factors, evidence and sources"><br><sub>Every claim opens its rubric, evidence and sources</sub></td>
-<td width="33%"><img src="docs/images/privacy-review.png" alt="Privacy release review"><br><sub>Privacy review: counts and sanitised preview only</sub></td>
-<td width="33%"><img src="docs/images/hypothesis-map.png" alt="Hypothesis map"><br><sub>Hypotheses refine by segment as evidence arrives</sub></td>
+<td width="33%"><img src="docs/images/claim-chain.png" alt="Claim drawer: classification, rubric factors, evidence and sources"><br><sub>"Evidence →" opens the rubric, quotes and sources</sub></td>
+<td width="33%"><img src="docs/images/privacy-review.png" alt="Privacy release review"><br><sub>The agents ask before reading confidential documents</sub></td>
+<td width="33%"><img src="docs/images/hypothesis-map.png" alt="Hypothesis map"><br><sub>Full working view: the hypothesis tree</sub></td>
 </tr></table>
 
 ---

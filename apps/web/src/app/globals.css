@@ -45,48 +45,6 @@
   --human-bg: #18202a;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --canvas: #0e1217;
-    --surface: #151a21;
-    --surface-muted: #1b222b;
-    --line: #29313c;
-    --line-strong: #3a4452;
-    --ink: #e5e8ed;
-    --ink-muted: #a3acb8;
-    --ink-subtle: #7f8996;
-    --accent: #84aee8;
-    --accent-soft: #18263a;
-    --focus: #84aee8;
-
-    --known-fg: #6fd3ac;
-    --known-bg: #0f2a21;
-    --known-line: #3fa47e;
-    --inferred-fg: #93b8ee;
-    --inferred-bg: #142237;
-    --inferred-line: #5d8ccf;
-    --hypothesis-fg: #eabb58;
-    --hypothesis-bg: #2b2311;
-    --hypothesis-line: #b48a2f;
-    --unknown-fg: #aab3bf;
-    --unknown-bg: #151a21;
-    --unknown-line: #6b7583;
-
-    --ok-fg: #6fd3ac;
-    --ok-bg: #0f2a21;
-    --warn-fg: #eabb58;
-    --warn-bg: #2b2311;
-    --danger-fg: #f09a95;
-    --danger-bg: #351817;
-    --info-fg: #93b8ee;
-    --info-bg: #142237;
-    --ai-fg: #c3b2f0;
-    --ai-bg: #231d38;
-    --ai-line: #7d67bf;
-    --human-fg: #151a21;
-    --human-bg: #e5e8ed;
-  }
-}
 
 @theme inline {
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -133,7 +91,7 @@
 }
 
 html {
-  color-scheme: light dark;
+  color-scheme: light;
 }
 
 body {

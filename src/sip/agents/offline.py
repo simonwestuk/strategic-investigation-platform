@@ -555,7 +555,7 @@ class OfflineReasoner:
                 title="Hold the current portfolio (baseline)",
                 description="Make no portfolio change; monitor the indicators identified by the investigation.",
                 rationale="Baseline against which the other options should be judged.",
-                finding_ids=[f.id for f in findings[:3]],
+                finding_ids=[],  # a do-nothing baseline does not rest on findings
                 expected_benefits=["No investment or disruption."],
                 risks=["Findings indicate drivers that are unlikely to reverse without action."],
                 uncertainties=unknowns[:2],
