@@ -91,7 +91,10 @@ class DatasetCatalog:
         return next((d for d in self._by_id.values() if d.manifest.role == role), None)
 
     def has_role(self, role: DatasetRole | str) -> bool:
-        return self.by_role(DatasetRole(role)) is not None
+        try:
+            return self.by_role(DatasetRole(role)) is not None
+        except ValueError:  # a role name we don't know (e.g. invented by a model) is simply not available
+            return False
 
     def all(self) -> list[Dataset]:
         return list(self._by_id.values())

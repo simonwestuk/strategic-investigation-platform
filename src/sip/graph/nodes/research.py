@@ -8,6 +8,7 @@ Three methods share one output shape (``ResearchOutput``):
 
 from __future__ import annotations
 
+import asyncio
 import re
 from collections import defaultdict
 from datetime import date
@@ -341,13 +342,15 @@ async def _web(task: ResearchTask, payload: dict[str, Any], ctx: InvestigationCo
     sources: list[Source] = []
     documents: dict[str, str] = {}
     evidence: list[Evidence] = []
-    for url in fresh:
+
+    async def read(url: str) -> tuple[Source | None, str, list[Evidence], Usage, list[AuditEvent]]:
+        """Fetch, screen and extract one page. Pages within a task are processed concurrently."""
+        local: list[AuditEvent] = []
         try:
-            page = await ctx.fetcher.fetch(url)
+            page = await ctx.fetcher.fetch(url)  # type: ignore[union-attr]
         except FetchError as exc:
-            events.append(audit(WEB, AuditAction.TASK_SKIPPED, f"Fetch refused/failed: {exc}", subject_id=task.id))
-            continue
-        usage.fetches += 1
+            local.append(audit(WEB, AuditAction.TASK_SKIPPED, f"Fetch refused/failed: {exc}", subject_id=task.id))
+            return None, "", [], Usage(), local
         src = Source(
             id=stable_id("src", page.url),
             origin=SourceOrigin.EXTERNAL_WEB,
@@ -360,15 +363,13 @@ async def _web(task: ResearchTask, payload: dict[str, Any], ctx: InvestigationCo
             updated_on=page.updated_on,
             content_hash=page.sha256,
             retrieval_method=RetrievalMethod.WEB_SEARCH,
-            retrieval_provider=ctx.search.name,
+            retrieval_provider=ctx.search.name,  # type: ignore[union-attr]
             discovered_by_task_id=task.id,
             synthetic=page.synthetic,
             injection_flags=page.injection_flags,
         )
-        sources.append(src)
-        documents[src.id] = page.text
         if page.injection_flags:
-            events.append(
+            local.append(
                 audit(
                     WEB,
                     AuditAction.INJECTION_FLAGGED,
@@ -379,8 +380,16 @@ async def _web(task: ResearchTask, payload: dict[str, Any], ctx: InvestigationCo
                 )
             )
         found, u = await _extract(task, src, split_passages(page.text)[:40], payload, ctx, WEB)
-        evidence.extend(found)
+        return src, page.text, found, u + Usage(fetches=1), local
+
+    for src, text, found, u, local in await asyncio.gather(*(read(url) for url in fresh)):
+        events.extend(local)
         usage = usage + u
+        if src is None:
+            continue
+        sources.append(src)
+        documents[src.id] = text
+        evidence.extend(found)
     summary = (
         f"{usage.searches} search(es), {len(sources)} new source(s), {duplicates} already-known "
         f"source(s) skipped, {len(evidence)} evidence item(s)."

@@ -144,7 +144,10 @@ async def plan(state: InvestigationState, runtime: Runtime[InvestigationContext]
             iteration=iteration,
             challenge_id=chl,
         )
-        task = _validate(task, ctx, released)
+        try:
+            task = _validate(task, ctx, released)
+        except Exception as exc:  # one malformed proposal must not stop the investigation
+            task = task.model_copy(update={"status": TaskStatus.FAILED, "status_reason": f"Invalid task: {exc}"[:300]})
         new[task.id] = task
         existing[sig] = task
 

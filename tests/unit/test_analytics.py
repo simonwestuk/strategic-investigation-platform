@@ -53,3 +53,9 @@ def test_operations_validate_inputs(catalog: DatasetCatalog) -> None:
 def test_entity_mentions_resolve_aliases_and_levels(catalog: DatasetCatalog) -> None:
     ents, dims = catalog.resolve_mentions("DTS wins in the North fell; Level 7 funding changed for Senior Leader")
     assert {"DTS6", "SL7"} <= ents and ("region", "North") in dims
+
+
+def test_unknown_dataset_role_counts_as_unavailable(catalog: DatasetCatalog) -> None:
+    # Regression from the first live-model run: the planner invented the role "crm_raw".
+    assert catalog.has_role("crm_raw") is False
+    assert catalog.has_role("own_volume") is True
