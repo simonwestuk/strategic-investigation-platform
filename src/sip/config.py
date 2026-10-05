@@ -115,6 +115,7 @@ class Settings(BaseSettings):
     sip_upload_max_bytes: int = 10_000_000
     # When set (Azure), raw uploads are quarantined in this private Blob container via managed identity.
     sip_quarantine_blob_url: str | None = None
+    sip_vault_key: SecretStr | None = None  # encrypts vault values; required in production
 
     # --- retrieval -----------------------------------------------------------------------------
     azure_search_endpoint: str | None = None

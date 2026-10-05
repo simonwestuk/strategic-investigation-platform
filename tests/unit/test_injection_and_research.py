@@ -164,3 +164,11 @@ async def test_brave_request_parsing_and_errors() -> None:
     assert (await provider.search("q"))[0].title == "B"
     with pytest.raises(SearchError):
         await provider.search("q")
+
+
+def test_search_queries_never_carry_pseudonyms() -> None:
+    from sip.graph.nodes.research import safe_query
+
+    assert safe_query("degree apprenticeship national statistics")
+    assert not safe_query("why did EMPLOYER_0004 choose another provider")
+    assert not safe_query("[WITHHELD:HEALTH] withdrawals")

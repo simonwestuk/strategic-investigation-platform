@@ -37,7 +37,8 @@ def create_app(settings: Settings | None = None, *, reasoner: Any = None) -> Fas
         repo = Repository(engine)
         if not settings.database_url.startswith("postgresql"):
             await repo.create_schema()  # Postgres schema is managed by Alembic migrations
-        vault = SqlVault.from_url(settings.vault_database_url)
+        key = settings.sip_vault_key.get_secret_value() if settings.sip_vault_key else None
+        vault = SqlVault.from_url(settings.vault_database_url, key, production=settings.is_production)
         await vault.create_schema()
         quarantine = build_quarantine(settings)
         app.state.gateway_factory = lambda scenario: make_gateway(settings, vault, quarantine, scenario)

@@ -30,7 +30,8 @@ def _db_upgrade() -> None:
     command.upgrade(cfg, "head")
 
     async def vault() -> None:
-        v = SqlVault.from_url(settings.vault_database_url)
+        key = settings.sip_vault_key.get_secret_value() if settings.sip_vault_key else None
+        v = SqlVault.from_url(settings.vault_database_url, key, production=settings.is_production)
         await v.create_schema()
         await v.engine.dispose()
 

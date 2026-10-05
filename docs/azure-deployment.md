@@ -81,10 +81,10 @@ ACR; images are built and pushed; a second run with `apiImage`/`webImage` create
 | **PostgreSQL Flexible Server** | `sip` (investigations, evidence, audit projection, LangGraph checkpoints, Alembic-managed) and `sip_vault` (pseudonym vault, separate connection) | Raw uploads (Blob quarantine); analytics/warehousing |
 | **Storage account** (`quarantine` container) | Raw, un-sanitised upload bytes, private, shared-key disabled, lifecycle-expired after `quarantineRetentionDays` | The sanitised corpus, app state, static web assets, backups |
 | **Azure OpenAI** | LLM reasoner (`SIP_REASONER=llm`) via the OpenAI-compatible v1 endpoint, structured outputs, Entra auth, `store=false` | Embeddings/vector search (not in V1); PII detection; any step that sees raw content |
-| **Azure AI Language** | PII entity recognition inside the privacy gateway (`SIP_PII_DETECTOR=azure_language`, parameter `piiDetector`; template default `local` until keyless auth is wired in the app — §9), alongside local detectors | Anything after sanitisation; sentiment/summarisation |
+| **Azure AI Language** | PII entity recognition inside the privacy gateway (`SIP_PII_DETECTOR=azure_language`, parameter `piiDetector`; keyless Entra auth; template default `local` until verified live — §9), alongside local detectors | Anything after sanitisation; sentiment/summarisation |
 | **Azure AI Search** (optional, `deploySearch`) | Scale-out retrieval path: persistent, shared, hybrid index | Default operation — the app uses an in-process BM25 index over the sanitised corpus |
 | **Log Analytics** | Container console/system logs incl. the API's structured JSON logs (investigation IDs bound) | Agent/LLM trace trees (LangSmith) |
-| **Application Insights** | Workspace-based APM resource; connection string delivered to the API via Key Vault | — see §6: the API does not yet ship an OpenTelemetry exporter |
+| **Application Insights** | Workspace-based APM resource; connection string delivered to the API via Key Vault | LLM-level tracing (LangSmith) |
 
 **Why Azure AI Search is optional.** At demo scale (one scenario, hundreds of passages) the in-process BM25
 index is fast, deterministic, free, and keeps retrieval entirely inside the process that already holds the
@@ -143,10 +143,10 @@ The application's privacy model (see `docs/privacy.md` and `src/sip/privacy/`) m
 **Raw or reversible data exists in exactly two places**:
 
 1. **Raw quarantine** — raw upload bytes. Target: the private `quarantine` Blob container (Entra-only,
-   lifecycle deletion). *Current code:* only a local-filesystem quarantine exists (`LocalQuarantine`), so in
-   this deployment raw bytes land on a replica-local **EmptyDir** volume at `SIP_VAR_DIR=/app/var`
-   (ephemeral; lost on restart; not shared between replicas — hence `apiMaxReplicas=1`). The Blob container
-   and the identity's `Storage Blob Data Contributor` role are provisioned for the Blob adapter.
+   lifecycle deletion). The API receives `SIP_QUARANTINE_BLOB_URL` and writes raw bytes there with its
+   managed identity (`BlobQuarantine`, Blob REST API + `Storage Blob Data Contributor`). Locally, raw bytes
+   go to `var/quarantine` instead. (`apiMaxReplicas` stays 1 for a different reason: investigation runs
+   execute in-process; see the architecture roadmap.)
 2. **Pseudonym vault** — the reversible pseudonym ↔ value mapping, encrypted with `SIP_VAULT_KEY` (Key
    Vault) and stored in the separate `sip_vault` database via its own connection string.
 
@@ -160,8 +160,9 @@ managed identity and does not persist request content. Azure OpenAI is called wi
 - **Logs:** the API writes structured JSON (`SIP_LOG_JSON=true`) to stdout; Container Apps ships it to
   Log Analytics (`ContainerAppConsoleLogs_CL`). Query by investigation ID.
 - **Application Insights:** provisioned (workspace-based) and its connection string is delivered as
-  `APPLICATIONINSIGHTS_CONNECTION_STRING` from Key Vault. *Gap:* the API does not yet include an
-  OpenTelemetry/Azure Monitor exporter, so request/dependency telemetry will not appear until one is added.
+  `APPLICATIONINSIGHTS_CONNECTION_STRING` from Key Vault. The API image installs the `azure` extra
+  (`azure-monitor-opentelemetry`) and calls `configure_azure_monitor` at startup when the connection string
+  is present, exporting requests, dependencies and the structured logs (which never contain content).
 - **LangSmith:** graph, node, LLM and tool traces when `langsmithTracing=true` and a `langsmithApiKey` is
   supplied. `SIP_TRACE_CONTENT` (parameter `traceContent`) controls what leaves the process:
   `full` (sanitised content as-is), `redacted` (additional email/phone/national-ID scrubbing), or
@@ -253,7 +254,8 @@ Validated by the author's tooling (no Azure subscription was used):
 - **Docker images were never built** (Docker was not available); the Compose stack was not started.
 - The web image could not be build-checked: the Next.js app was still under construction at the time.
 - Entra user authentication end-to-end (web → API) is untested.
-- Keyless Azure AI Language: the Language account has local auth disabled, but `build_detector` in
-  `src/sip/services/bootstrap.py` only passes an API key, not an Entra token provider. The template therefore
-  defaults to `piiDetector=local`; switch to `azure_language` once the token provider is wired.
-- The Blob quarantine adapter and an Application Insights exporter do not exist in the code yet (§5, §6).
+- Keyless Azure AI Language is wired (Entra token provider via `DefaultAzureCredential`) and covered by a
+  mocked test, but not exercised against a live resource; the template still defaults to `piiDetector=local`
+  — set `azure_language` once verified in your subscription.
+- The Blob quarantine adapter and the Application Insights exporter are implemented but only tested with
+  mocks / not exercised against live Azure.

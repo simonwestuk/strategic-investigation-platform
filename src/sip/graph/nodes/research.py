@@ -8,6 +8,7 @@ Three methods share one output shape (``ResearchOutput``):
 
 from __future__ import annotations
 
+import re
 from collections import defaultdict
 from datetime import date
 from typing import Any
@@ -67,6 +68,15 @@ _DEFAULT_NEED = {
     SourceType.INDUSTRY_BODY: EvidenceNeed.MARKET_INTERPRETATION,
     SourceType.STANDARDS_BODY: EvidenceNeed.MARKET_INTERPRETATION,
 }
+
+
+_PSEUDONYM = re.compile(r"\b(PERSON|STAFF|EMPLOYER|EMAIL|PHONE|POSTCODE|NATIONAL_ID)_\d{4}\b|\[WITHHELD")
+
+
+def safe_query(query: str) -> bool:
+    """Queries go to a third-party search provider: never send pseudonyms or withheld markers, which
+    would reveal that (and roughly what) confidential material exists."""
+    return not _PSEUDONYM.search(query) and len(query) <= 300
 
 
 def _source_view(s: Source) -> SourceView:
@@ -305,6 +315,10 @@ async def _web(task: ResearchTask, payload: dict[str, Any], ctx: InvestigationCo
     for q in (task.queries or [task.question])[:2]:
         if searches_left <= 0:
             break
+        if not safe_query(q):
+            events.append(audit(WEB, AuditAction.ACTION_REFUSED, "Search query withheld: contains pseudonymised "
+                                "or withheld internal content.", subject_type="task", subject_id=task.id))
+            continue
         try:
             results = await ctx.search.search(q, ctx.results_per_query)
         except SearchError as exc:

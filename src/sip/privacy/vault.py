@@ -16,7 +16,6 @@ from __future__ import annotations
 import base64
 import hashlib
 import hmac
-import os
 from typing import Protocol
 
 from cryptography.fernet import Fernet
@@ -83,9 +82,10 @@ class SqlVault:
         self._fernet = Fernet(base64.urlsafe_b64encode(_derive(key, b"enc")))
 
     @classmethod
-    def from_url(cls, url: str, key: str | None = None) -> SqlVault:
-        key = key or os.environ.get("SIP_VAULT_KEY") or _DEV_KEY
-        return cls(create_async_engine(url), key)
+    def from_url(cls, url: str, key: str | None = None, *, production: bool = False) -> SqlVault:
+        if production and not key:
+            raise RuntimeError("SIP_VAULT_KEY is required in production.")
+        return cls(create_async_engine(url), key or _DEV_KEY)
 
     async def create_schema(self) -> None:
         async with self.engine.begin() as conn:

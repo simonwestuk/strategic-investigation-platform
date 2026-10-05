@@ -10,7 +10,8 @@ ARG PYTHON_VERSION=3.12
 # NOTE: `sip.config.REPO_ROOT` is derived from the location of config.py (parents[2]) and is used to find
 # alembic.ini, migrations/ and data/. A regular `pip install .` would put config.py in site-packages and
 # break that lookup, so the package is installed in editable mode from /app/src and the runtime stage keeps
-# the identical /app layout. Switch to `pip install .` once REPO_ROOT can be configured independently.
+# the identical /app layout (SIP_REPO_ROOT can override the root for a non-editable install). The `azure`
+# extra adds the Application Insights exporter.
 FROM python:${PYTHON_VERSION}-slim AS build
 ENV PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
@@ -20,7 +21,7 @@ ENV PATH="/opt/venv/bin:${PATH}"
 WORKDIR /app
 COPY pyproject.toml README.md ./
 COPY src ./src
-RUN pip install -e .
+RUN pip install -e ".[azure]"
 
 # ---- runtime: slim image, no build tooling, non-root ----------------------------------------
 FROM python:${PYTHON_VERSION}-slim AS runtime
