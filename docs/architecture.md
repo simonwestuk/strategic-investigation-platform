@@ -9,7 +9,7 @@ running code, it says so.
 
 ```mermaid
 flowchart LR
-    U[Investigator / reviewers / decision-maker] -->|Next.js Decision Room| API
+    U[Operator] -->|Next.js briefing UI| API
     subgraph Platform
       API[FastAPI<br/>auth · RBAC · validation] --> SVC[Investigation service]
       API -->|uploads| GW[Privacy gateway]

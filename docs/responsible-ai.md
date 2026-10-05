@@ -70,10 +70,12 @@ evidence.
 
 ## Automation bias
 
-* The Decision Room leads with *what we know / infer / do not know / what contradicts*, not with a
-  recommended answer.
+* The briefing leads with *what we found / ruled out / still don't know*, each with its strongest piece of
+  evidence, before any option is shown; options are labelled as suggestions and ranked by the evidence
+  behind them, not by the model's preference.
 * Options include a "commission research on unknowns" option and a do-nothing baseline.
-* Decisions require explicit acknowledgement of each UNKNOWN.
+* Decisions require a written reason and explicit acknowledgement of the stated unknowns (recorded per
+  unknown in the decision).
 * The challenger's open challenges and accepted limitations are shown next to the conclusions they
   affect.
 

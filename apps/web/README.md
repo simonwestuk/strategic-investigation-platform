@@ -75,20 +75,22 @@ src/lib/
   evidence.ts, research.ts, format.ts, labels.ts, roles.ts, hooks.ts, storage.ts
 src/components/
   ui/                     Badges (classification, confidence, statuses), Panel, Drawer, Button
-  shell/                  App header, persona switcher, fixture banner
-  home/                   Investigation list and new-investigation form
-  workspace/              Header, section nav, drawers (claim chain, source, document)
+  shell/                  App header, operator / persona switcher (team mode), fixture banner
+  home/                   Question box, example scenarios, your investigations
+  briefing/               Default investigation view: progress, Needs you, found / ruled out / unknown,
+                          ranked options, simple decision (lib/briefing.ts holds the view-model)
+  workspace/              Full working view: header, section nav, drawers (claim chain, source, document)
     sections/             Decision Room, Hypothesis map, Research, Evidence ledger, Claims,
                           Contradictions & challenges, Governance, Privacy intake, Audit trail
     decision/             Causal picture, knowledge columns, options, further investigation, decision
     reviews/              One form per review kind + shared optional fields and history
 ```
 
-Workspace sections are addressed by URL hash (e.g. `/investigations/inv_…#claims`). While `summary.status === "running"`, the workspace polls every 2 s.
+`/investigations/[id]` shows the briefing. Any section hash (e.g. `#claims`) opens the full working view; `#` returns to the briefing. While `summary.status === "running"`, the workspace polls every 2 s.
 
 ### Visual language
 
-The four classifications are told apart by more than colour: each has a text label, a glyph and its own border style. KNOWN ■ is solid green, INFERRED ◩ is solid blue, HYPOTHESIS ◇ has a dotted amber border, and UNKNOWN ? has a dashed grey border. Strategic options sit in dashed violet "AI recommendation · not a decision" cards. A recorded decision sits in a solid dark-bordered "Human decision" panel that shows who decided and when. Synthetic sources carry a `synthetic` badge. Dark mode follows `prefers-color-scheme`.
+The four classifications are told apart by more than colour: each has a text label, a glyph and its own border style. KNOWN ■ is solid green, INFERRED ◩ is solid blue, HYPOTHESIS ◇ has a dotted amber border, and UNKNOWN ? has a dashed grey border. Strategic options sit in dashed violet "AI recommendation · not a decision" cards. A recorded decision sits in a solid dark-bordered "Human decision" panel that shows who decided and when. Synthetic sources carry a `synthetic` badge. The app uses a light theme only.
 
 ## Dependencies
 

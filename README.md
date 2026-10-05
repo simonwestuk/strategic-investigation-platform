@@ -26,8 +26,9 @@ This platform investigates the question the way a rigorous strategy team would:
    disconfirming tests.
 5. It produces **strategic options**: AI recommendations, never decisions, each traceable from option to
    finding to claim to evidence to source.
-6. It stops at **governed human checkpoints**: releasing sensitive material, approving high-consequence
-   options, and the decision itself, which only an authorised human can make.
+6. It is run by **one person directing the agents**. It stops at **governed checkpoints**: releasing sensitive material, approving high-consequence
+   options, and the decision itself, which only that person can make. The interface is a short briefing:
+   what was found, what was ruled out, what is still unknown, a few options, and the decision.
 
 ![The briefing: what was found, ruled out and unknown, then your decision](docs/images/decision-room.png)
 
@@ -135,10 +136,10 @@ pip install -e '.[dev]'
 
 sip run --scenario northstar               # whole investigation in the terminal (~1s)
 sip eval run                               # evaluate both scenarios against hidden ground truth
-pytest                                     # 91 tests
+pytest                                     # 91 backend tests
 
 sip db upgrade && sip serve                # API on http://localhost:8000 (OpenAPI at /docs)
-cd apps/web && npm ci && npm run dev       # Decision Room on http://localhost:3000
+cd apps/web && npm ci && npm run dev       # briefing UI on http://localhost:3000 (npm test: 31 tests)
 ```
 
 The web app also has a **fixture mode** (`NEXT_PUBLIC_USE_FIXTURES=true`) that runs without the backend.
@@ -158,7 +159,7 @@ content leaves the process.
 ```
 src/sip/            domain · governance · evidence · privacy · research · tools · models · agents
                     graph · persistence · services · api · observability
-apps/web/           Next.js Decision Room
+apps/web/           Next.js briefing UI (+ full working view)
 evals/              hidden ground truth, graders, runner, LangSmith experiments
 data/synthetic/     fictional scenario packs (datasets, internal documents, offline web corpus)
 migrations/         Alembic
@@ -179,7 +180,7 @@ has a stated reason to exist. A manual GitHub OIDC workflow deploys it.
 
 **Verified locally:** the full offline investigation; the API end to end over HTTP (SQLite and
 PostgreSQL 15, including Postgres checkpointing); Alembic migrations; RBAC and human-only decisions;
-privacy gateway and vault; SSRF controls; evaluation (both scenarios 12/12); 91 tests, including the LLM path end to end with a scripted imperfect model; ruff, mypy and
+privacy gateway and vault; SSRF controls; evaluation (both scenarios 12/12); 91 backend and 31 frontend tests, including the LLM path end to end with a scripted imperfect model; ruff, mypy and
 pip-audit clean; Bicep compiles and lints with zero warnings.
 
 **Verified only with mocks (no credentials were available while building V1):** Azure OpenAI provider

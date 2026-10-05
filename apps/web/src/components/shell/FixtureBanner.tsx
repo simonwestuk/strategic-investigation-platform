@@ -9,7 +9,7 @@ export function FixtureBanner() {
   const stage = useFixtureStage();
   if (!USE_FIXTURES) return null;
   return (
-    <div className="border-b border-line bg-warn-bg text-warn-fg">
+    <div data-fixture-banner className="border-b border-line bg-warn-bg text-warn-fg">
       <div className="mx-auto flex max-w-[1440px] flex-wrap items-center gap-x-3 gap-y-1 px-4 py-1.5 text-xs md:px-6">
         <strong className="font-semibold">Fixture mode</strong>
         <span>Showing responses captured from the real backend. Nothing is sent to an API.</span>

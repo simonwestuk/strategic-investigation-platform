@@ -15,6 +15,14 @@ await mkdir(OUT, { recursive: true });
 const browser = await chromium.launch(channel ? { channel } : {});
 const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1, colorScheme: "light" });
 const page = await context.newPage();
+// The fixture banner is for demos; README screenshots should look like the live app.
+await context.addInitScript(() => {
+  document.addEventListener("DOMContentLoaded", () => {
+    const s = document.createElement("style");
+    s.textContent = "[data-fixture-banner]{display:none!important}";
+    document.head.appendChild(s);
+  });
+});
 
 async function stage(name, persona = "demo") {
   await page.goto(`${BASE}/`);
