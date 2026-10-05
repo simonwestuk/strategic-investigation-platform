@@ -46,9 +46,6 @@ await stage("awaiting-decision", "decision");
 await page.goto(`${BASE}/investigations/${ID}`);
 await page.getByRole("heading", { name: "What we found" }).waitFor();
 await shot("decision-room.png");
-await page.setViewportSize({ width: 1440, height: 2600 });
-await shot("decision-room-full.png");
-await page.setViewportSize({ width: 1440, height: 900 });
 
 // 2. Evidence behind a finding
 await page.getByRole("button", { name: "Evidence →" }).first().click();

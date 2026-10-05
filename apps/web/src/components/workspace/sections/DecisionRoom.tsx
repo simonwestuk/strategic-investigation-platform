@@ -18,7 +18,7 @@ export function DecisionRoom() {
   return (
     <div className="space-y-6">
       <SectionHeading
-        title="Decision Room"
+        title="Summary"
         description="What the evidence supports, what it does not, what remains unknown, and the options for leadership. Options are AI recommendations; only an accountable person records a decision."
       />
       {!hasAnalysis ? (

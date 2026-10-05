@@ -1,5 +1,5 @@
 export const SECTIONS = [
-  { id: "decision-room", label: "Decision Room" },
+  { id: "decision-room", label: "Summary" },
   { id: "hypotheses", label: "Hypothesis map" },
   { id: "research", label: "Research activity" },
   { id: "evidence", label: "Evidence ledger" },
