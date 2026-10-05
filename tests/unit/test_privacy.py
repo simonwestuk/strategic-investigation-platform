@@ -123,3 +123,18 @@ async def test_blob_quarantine_uses_bearer_token() -> None:
     await BlobQuarantine("https://acct.blob.core.windows.net/quarantine/", token).put("doc_1", b"raw")
     req = route.calls[0].request
     assert req.headers["authorization"] == "Bearer tok" and req.headers["x-ms-blob-type"] == "BlockBlob"
+
+
+def test_copy_protected_pdf_with_empty_password_is_readable(tmp_path) -> None:  # type: ignore[no-untyped-def]
+    import io
+
+    from pypdf import PdfWriter
+
+    from sip.privacy.extraction import extract_text
+
+    w = PdfWriter()
+    w.add_blank_page(width=200, height=200)
+    w.encrypt(user_password="", owner_password="owner-only")
+    buf = io.BytesIO()
+    w.write(buf)
+    assert extract_text(buf.getvalue(), "application/pdf") == ""  # opens (blank page) instead of raising

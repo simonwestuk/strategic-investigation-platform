@@ -45,7 +45,7 @@ from sip.graph.context import InvestigationContext
 from sip.graph.helpers import audit, policy_event, usage_from
 from sip.graph.state import ResearchOutput
 from sip.research.injection import is_suspicious
-from sip.research.search.base import FetchError, SearchError
+from sip.research.search.base import SearchError
 from sip.research.text import Passage, normalise, snap_quote, split_passages
 from sip.retrieval.bm25 import BM25Index
 from sip.tools.analytics import AnalysisError, run_operation
@@ -350,8 +350,8 @@ async def _web(task: ResearchTask, payload: dict[str, Any], ctx: InvestigationCo
         local: list[AuditEvent] = []
         try:
             page = await ctx.fetcher.fetch(url)  # type: ignore[union-attr]
-        except FetchError as exc:
-            local.append(audit(WEB, AuditAction.TASK_SKIPPED, f"Fetch refused/failed: {exc}", subject_id=task.id))
+        except Exception as exc:  # one unreadable page must not lose the task's other pages
+            local.append(audit(WEB, AuditAction.TASK_SKIPPED, f"Fetch refused/failed: {exc}"[:300], subject_id=task.id))
             return None, "", [], Usage(), local
         source_type = page.source_type_hint or SourceType.UNKNOWN
         publisher = page.publisher

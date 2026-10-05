@@ -46,7 +46,13 @@ def extract_text(content: bytes, content_type: str) -> str:
 
         reader = PdfReader(io.BytesIO(content))
         if reader.is_encrypted:
-            raise UnsupportedFile("Encrypted PDFs are not accepted.")
+            # Many published PDFs are "encrypted" only to restrict copying, with an empty user password.
+            try:
+                opened = reader.decrypt("")
+            except Exception as exc:
+                raise UnsupportedFile("Password-protected PDFs are not accepted.") from exc
+            if not opened:
+                raise UnsupportedFile("Password-protected PDFs are not accepted.")
         pages = reader.pages[:MAX_PDF_PAGES]
         return "\n\n".join((p.extract_text() or "") for p in pages)
     try:

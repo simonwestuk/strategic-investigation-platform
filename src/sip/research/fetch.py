@@ -122,7 +122,10 @@ class SafeFetcher:
                     body.extend(chunk)
                     if len(body) > self.max_bytes:
                         raise FetchError("Response exceeds size limit")
-            return self._to_page(current, ctype, bytes(body))
+            try:
+                return self._to_page(current, ctype, bytes(body))
+            except Exception as exc:  # unreadable content (bad PDF, odd encoding) is a failed fetch, not a crash
+                raise FetchError(f"Could not read content: {exc.__class__.__name__}") from exc
         raise FetchError("Too many redirects")
 
     @staticmethod
