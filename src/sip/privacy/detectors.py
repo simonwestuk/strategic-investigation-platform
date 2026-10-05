@@ -35,15 +35,18 @@ _UP = r"[A-Z\u00C0-\u00DE\u0100-\u017E]"
 _NAME_TOKEN = _UP + r"[^\W\d_]+(?:['\-]" + _UP + r"?[^\W\d_]+)?"
 _HONORIFIC = re.compile(r"\b(?:Mr|Mrs|Ms|Miss|Dr|Prof)\.?\s(" + _NAME_TOKEN + r"(?:\s" + _NAME_TOKEN + r")?)")
 # "First Last" where First is a known given name.
-_NAME_PAIR = re.compile(r"\b(" + _NAME_TOKEN + r")\s(" + _NAME_TOKEN + r")")
+# Lookahead so overlapping pairs are all considered: in "Customer Laura Bennett" the pair
+# "Customer Laura" must not consume "Laura" before "Laura Bennett" is tested.
+_NAME_PAIR = re.compile(r"\b(?=(" + _NAME_TOKEN + r")\s(" + _NAME_TOKEN + r"))")
 # Role cues that introduce a person's name. The value decides STAFF (our people) vs PERSON.
 _CUE = re.compile(
     r"(?P<cue>Account manager|Sales executive|Business development manager|BDM|Owner|Prepared by|"
-    r"Author|Contact|Spoke with|Spoke to|Met with|Learner|Apprentice|Line manager|HR contact|"
+    r"Author|Agent|Contact|Customer|Client|Patient|Student|Spoke with|Spoke to|Met with|Learner|Apprentice|"
+    r"Line manager|HR contact|"
     r"Head of [A-Z][a-z]+|Director)\s*[:\-–]?\s*(?P<name>" + _NAME_TOKEN + r"(?:\s" + _NAME_TOKEN + r")?)"
 )
 _STAFF_CUES = {"account manager", "sales executive", "business development manager", "bdm",
-               "owner", "prepared by", "author"}
+               "owner", "prepared by", "author", "agent"}
 
 # Sentences mentioning special-category data are removed wholesale, not pseudonymised.
 _SPECIAL = {
@@ -116,5 +119,5 @@ class LocalDetector:
         # 4. given-name lexicon pairs
         for m in _NAME_PAIR.finditer(text):
             if m.group(1).lower() in self.given_names:
-                add(EntityType.PERSON, m.start(), m.end(), 0.8)
+                add(EntityType.PERSON, m.start(1), m.end(2), 0.8)
         return sorted(found, key=lambda d: d.start)

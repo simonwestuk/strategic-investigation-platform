@@ -134,9 +134,14 @@ def split_by_segment(
         contradicted = {s for s, w in net.items() if w < 0}
         if not supported or not contradicted:
             continue
-        targets = sorted(supported | (contradicted & material_segments))
+        targets = set(supported | (contradicted & material_segments))
+        if len(targets) < 2:
+            # Show at least one segment where the driver is rejected, preferring material ones.
+            ranked = sorted(contradicted, key=lambda s: (s not in material_segments, net[s]))
+            targets |= set(ranked[:1])
         if len(targets) < 2:
             continue
+        targets = sorted(targets)
         for seg in targets:
             statement = (cat.segment_statement or cat.statement).format(
                 subject=names.get(seg, seg), org=organisation, segment=names.get(seg, seg))

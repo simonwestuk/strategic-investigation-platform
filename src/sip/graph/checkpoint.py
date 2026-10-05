@@ -21,7 +21,7 @@ _MODULES = [
     "sip.domain.audit", "sip.domain.challenges", "sip.domain.claims", "sip.domain.classification",
     "sip.domain.common", "sip.domain.decisions", "sip.domain.evidence", "sip.domain.hypotheses",
     "sip.domain.investigation", "sip.domain.options", "sip.domain.research", "sip.domain.reviews",
-    "sip.domain.sources", "sip.graph.state",
+    "sip.domain.sources", "sip.graph.state", "sip.privacy.models",
 ]
 
 

@@ -16,6 +16,7 @@ class InvestigationStatus(StrEnum):
     AWAITING_REVIEW = "awaiting_review"
     AWAITING_DECISION = "awaiting_decision"
     DECIDED = "decided"
+    CLOSED = "closed"  # ended without a decision (e.g. clarification declined)
     FAILED = "failed"
 
 

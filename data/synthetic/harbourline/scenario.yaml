@@ -1,0 +1,72 @@
+# Harbourline Coffee Roasters — second synthetic scenario (different domain, same platform).
+# Everything here is fictional. Hidden ground truth: evals/scenarios/harbourline/ground_truth.yaml
+id: harbourline
+title: Harbourline Coffee Roasters — falling subscription renewals
+organisation: Harbourline Coffee Roasters
+question: >-
+  Why have subscription renewals at Harbourline Coffee Roasters fallen over the last two years, and what
+  should we do about it?
+context: >-
+  Harbourline is an independent roaster selling coffee subscriptions online. Renewals drive most of its
+  profit. The founders want to understand the fall before the 2026 budget.
+as_of: 2026-03-31
+subject_unit: renewals
+privacy:
+  allowlist: [Harbourline Coffee Roasters, Beanline, Roastworks]
+datasets:
+  - id: harbourline_renewals
+    file: datasets/harbourline_renewals.csv
+    title: Harbourline subscription renewals by plan and region
+    source_type: internal_dataset
+    publisher: Harbourline Coffee Roasters (internal)
+    published_on: 2026-02-28
+    classification: { confidentiality: commercially_confidential }
+    role: own_volume
+    period: year
+    measure: renewals
+    entity_key: plan_code
+    entity_label: plan
+    dimensions: [plan_code, region]
+  - id: market_subscriptions
+    file: datasets/market_subscriptions.csv
+    title: UK coffee subscription renewals by plan type (SCRC, synthetic)
+    source_type: industry_body
+    publisher: Speciality Coffee Retail Council (synthetic)
+    url: https://scrc.example.test/research/subscription-market-2026
+    published_on: 2026-02-10
+    classification: { confidentiality: public }
+    role: market_volume
+    period: year
+    measure: renewals
+    entity_key: plan_code
+    entity_label: plan_type
+    dimensions: [plan_code]
+  - id: harbourline_renewal_funnel
+    file: datasets/harbourline_renewal_funnel.csv
+    title: Harbourline renewal funnel by plan and channel
+    source_type: internal_dataset
+    publisher: Harbourline Coffee Roasters (internal)
+    published_on: 2026-02-28
+    classification: { confidentiality: commercially_confidential }
+    role: funnel
+    period: year
+    stages: [due_for_renewal, renewed]
+    entity_key: plan_code
+    dimensions: [plan_code, channel]
+documents:
+  - file: documents/cancellation_notes.md
+    title: Customer cancellation notes (Espresso Club, 2025)
+    source_type: crm_record
+    declared: { confidentiality: internal }
+    published_on: 2026-01-20
+  - file: documents/pricing_memo_2025.md
+    title: Pricing memo — Espresso Club price change
+    source_type: internal_document
+    declared: { confidentiality: commercially_confidential }
+    published_on: 2025-01-15
+  - file: documents/ops_update_packaging.md
+    title: Operations update — packaging trial
+    source_type: internal_document
+    declared: { confidentiality: internal }
+    published_on: 2025-11-30
+corpus: corpus

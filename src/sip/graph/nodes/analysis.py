@@ -224,7 +224,7 @@ async def analyse(state: InvestigationState, runtime: Runtime[InvestigationConte
         cid = stable_id("clm", "split", p.id)
         claim = Claim(id=cid, statement=stmt, classification=Classification.INFERRED,
                       proposed_classification=Classification.INFERRED, causal=True,
-                      supporting_evidence_ids=support_ids, related_hypothesis_ids=[p.id, *(k.id for k in kids)],
+                      supporting_evidence_ids=support_ids, related_hypothesis_ids=[p.id, *(k.id for k in sup)],
                       inferential_step="Aggregates segment-level conclusions.",
                       reasoning_summary="Segment-level hypotheses were tested separately.",
                       limitations=["Share of the total change attributable to this driver is approximate."],

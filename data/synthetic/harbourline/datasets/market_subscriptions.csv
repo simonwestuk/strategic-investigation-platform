@@ -1,0 +1,13 @@
+year,plan_code,plan_type,renewals
+2023,ESP,Espresso Club,120000
+2024,ESP,Espresso Club,124000
+2025,ESP,Espresso Club,128000
+2023,FIL,Filter Club,80000
+2024,FIL,Filter Club,75000
+2025,FIL,Filter Club,70000
+2023,OFF,Office Plan,30000
+2024,OFF,Office Plan,31000
+2025,OFF,Office Plan,32000
+2023,PODS,Capsule subscription,40000
+2024,PODS,Capsule subscription,62000
+2025,PODS,Capsule subscription,90000

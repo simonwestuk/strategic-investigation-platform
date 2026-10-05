@@ -1,0 +1,28 @@
+year,plan_code,plan,region,renewals
+2023,ESP,Espresso Club,Scotland,1800
+2023,ESP,Espresso Club,North England,3150
+2023,ESP,Espresso Club,South England,4050
+2024,ESP,Espresso Club,Scotland,1520
+2024,ESP,Espresso Club,North England,2660
+2024,ESP,Espresso Club,South England,3420
+2025,ESP,Espresso Club,Scotland,1220
+2025,ESP,Espresso Club,North England,2135
+2025,ESP,Espresso Club,South England,2745
+2023,FIL,Filter Club,Scotland,1200
+2023,FIL,Filter Club,North England,2100
+2023,FIL,Filter Club,South England,2700
+2024,FIL,Filter Club,Scotland,1120
+2024,FIL,Filter Club,North England,1960
+2024,FIL,Filter Club,South England,2520
+2025,FIL,Filter Club,Scotland,1040
+2025,FIL,Filter Club,North England,1820
+2025,FIL,Filter Club,South England,2340
+2023,OFF,Office Plan,Scotland,300
+2023,OFF,Office Plan,North England,525
+2023,OFF,Office Plan,South England,675
+2024,OFF,Office Plan,Scotland,310
+2024,OFF,Office Plan,North England,542
+2024,OFF,Office Plan,South England,698
+2025,OFF,Office Plan,Scotland,316
+2025,OFF,Office Plan,North England,553
+2025,OFF,Office Plan,South England,711
