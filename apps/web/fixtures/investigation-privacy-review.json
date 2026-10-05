@@ -1,0 +1,596 @@
+{
+ "summary": {
+  "id": "inv_557216ee7c",
+  "question": "Why have enrolments in Northstar Learning Group's degree-apprenticeship portfolio declined, and what should leadership investigate or do in response?",
+  "scenario_id": "northstar",
+  "organisation": "Northstar Learning Group",
+  "status": "awaiting_review",
+  "reasoner": "offline",
+  "as_of": "2026-09-30",
+  "created_by": "dev:dana",
+  "created_at": "2026-10-05T10:53:28.652555",
+  "updated_at": "2026-10-05T10:53:28.754985",
+  "error": null
+ },
+ "frame": {
+  "question": "Why have enrolments in Northstar Learning Group's degree-apprenticeship portfolio declined, and what should leadership investigate or do in response?",
+  "question_types": [
+   "diagnostic",
+   "prescriptive"
+  ],
+  "subject": "degree-apprenticeship portfolio enrolments",
+  "organisation": "Northstar Learning Group",
+  "direction": "declined",
+  "decision_context": "Northstar Learning Group is a mid-sized training provider. Degree-apprenticeship starts are the largest part of its revenue. The executive team wants to understand the decline before the 2027/28 portfolio planning round.",
+  "scope": "Explain the change in degree-apprenticeship portfolio enrolments for Northstar Learning Group using internal performance data, external market and policy evidence, and supplied internal documents; identify options for leadership. Distinguish what is known, inferred, hypothesised and unknown.",
+  "out_of_scope": [
+   "Making the organisational decision (reserved for accountable humans).",
+   "Individual-level performance assessment of staff or customers."
+  ],
+  "objectives": [
+   "Establish whether the change is market-wide or specific to the organisation.",
+   "Locate where (which segments) the change is concentrated.",
+   "Test each plausible driver against evidence that could support or contradict it.",
+   "Identify what cannot be resolved with available evidence and what would resolve it.",
+   "Generate strategic options with explicit evidence, risks and uncertainties."
+  ],
+  "assumptions": [
+   "Internal degree-apprenticeship portfolio enrolments figures use consistent definitions across the period.",
+   "External market data covers a comparable population and period."
+  ],
+  "ambiguities": [
+   "'declined' is measured on volume; value or margin may differ."
+  ],
+  "constraints": [
+   "Research budget and iteration limits apply.",
+   "Confidential internal material is only available in sanitised form."
+  ],
+  "needs_clarification": false,
+  "clarification_questions": [],
+  "as_of": "2026-09-30"
+ },
+ "budget": {
+  "max_iterations": 4,
+  "max_tasks": 48,
+  "max_searches": 40,
+  "max_fetches": 80,
+  "max_llm_calls": 250,
+  "max_cost_usd": 5.0
+ },
+ "usage": {
+  "searches": 0,
+  "fetches": 0,
+  "analyses": 0,
+  "llm_calls": 0,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cost_usd": 0.0
+ },
+ "iteration": 0,
+ "routing": [],
+ "pending_review_id": "rev_b8dbd4c6b1",
+ "hypotheses": [],
+ "tasks": [],
+ "sources": [
+  {
+   "id": "src_4dc0d86a30",
+   "origin": "internal",
+   "source_type": "internal_dataset",
+   "title": "Northstar degree-apprenticeship starts by programme, region and employer segment",
+   "publisher": "Northstar Learning Group (internal MI)",
+   "canonical_url": null,
+   "domain": null,
+   "retrieved_at": "2026-10-05T10:53:28.732512Z",
+   "published_on": "2026-08-31",
+   "updated_on": null,
+   "content_hash": "2835342f6c87f0e6807faf56fe96c1010a6f312fd032122455b056bb8d7e06ba",
+   "classification": {
+    "confidentiality": "commercially_confidential",
+    "personal_data": "none",
+    "pseudonymised": false
+   },
+   "retrieval_method": "dataset_query",
+   "retrieval_provider": "dataset_catalog",
+   "discovered_by_task_id": null,
+   "synthetic": true,
+   "injection_flags": [],
+   "privacy_document_id": "doc_6ce689d2f7"
+  },
+  {
+   "id": "src_83a10328e9",
+   "origin": "external_web",
+   "source_type": "official_statistics",
+   "title": "National apprenticeship starts by standard (NSSO, synthetic)",
+   "publisher": "National Skills Statistics Office (synthetic)",
+   "canonical_url": "https://stats.nsso.example.test/apprenticeships/starts-by-standard-2025-26",
+   "domain": null,
+   "retrieved_at": "2026-10-05T10:53:28.732539Z",
+   "published_on": "2026-07-15",
+   "updated_on": null,
+   "content_hash": "1689e9f584f7ceb025899284ce1f97ba602d8b70a1962bc1990511943d467666",
+   "classification": {
+    "confidentiality": "public",
+    "personal_data": "none",
+    "pseudonymised": false
+   },
+   "retrieval_method": "dataset_query",
+   "retrieval_provider": "dataset_catalog",
+   "discovered_by_task_id": null,
+   "synthetic": true,
+   "injection_flags": [],
+   "privacy_document_id": "doc_1f6d99343e"
+  },
+  {
+   "id": "src_1bebcac8bf",
+   "origin": "internal",
+   "source_type": "internal_dataset",
+   "title": "Northstar employer sales pipeline by programme and segment",
+   "publisher": "Northstar Learning Group (CRM)",
+   "canonical_url": null,
+   "domain": null,
+   "retrieved_at": "2026-10-05T10:53:28.732557Z",
+   "published_on": "2026-08-31",
+   "updated_on": null,
+   "content_hash": "1e33ed2f035f6c5c8aeb808f4fad4bc3cf998ceb2c4eb5ff57bcbe76aa7534c6",
+   "classification": {
+    "confidentiality": "commercially_confidential",
+    "personal_data": "none",
+    "pseudonymised": false
+   },
+   "retrieval_method": "dataset_query",
+   "retrieval_provider": "dataset_catalog",
+   "discovered_by_task_id": null,
+   "synthetic": true,
+   "injection_flags": [],
+   "privacy_document_id": "doc_d2241e62bb"
+  },
+  {
+   "id": "src_779b1f40d7",
+   "origin": "internal",
+   "source_type": "internal_document",
+   "title": "Sales operations review, March 2024",
+   "publisher": "Northstar Learning Group",
+   "canonical_url": null,
+   "domain": null,
+   "retrieved_at": "2026-10-05T10:53:28.732595Z",
+   "published_on": "2024-03-28",
+   "updated_on": null,
+   "content_hash": "05bb34f701f03abef77e01953b13a5717081ca636ce2c60a2334335153a3e051",
+   "classification": {
+    "confidentiality": "internal",
+    "personal_data": "personal",
+    "pseudonymised": true
+   },
+   "retrieval_method": "upload",
+   "retrieval_provider": "privacy_gateway",
+   "discovered_by_task_id": null,
+   "synthetic": true,
+   "injection_flags": [],
+   "privacy_document_id": "doc_95a7575464"
+  }
+ ],
+ "evidence": [],
+ "claims": [],
+ "findings": [],
+ "contradictions": [],
+ "challenges": [],
+ "options": [],
+ "reviews": [
+  {
+   "id": "rev_b8dbd4c6b1",
+   "kind": "privacy_release",
+   "title": "Privacy review: 3 document(s) awaiting release",
+   "reason": "Commercially confidential content containing personal data requires review even after pseudonymisation. Special-category personal data was detected; a privacy reviewer must confirm the sanitised version is safe and necessary. The detector was not confident about some entities; a human must confirm pseudonymisation is complete.",
+   "subject_ids": [
+    "doc_32038f265c",
+    "doc_12fcb51fab",
+    "doc_e3cef51759"
+   ],
+   "policy_rule_ids": [
+    "release.confidential_personal",
+    "release.special_category",
+    "release.uncertain_detection"
+   ],
+   "required_role": "privacy_reviewer",
+   "allowed_actions": [
+    "approve",
+    "reject",
+    "modify"
+   ],
+   "context": {
+    "documents": [
+     {
+      "id": "doc_32038f265c",
+      "title": "CRM lost-opportunity notes (DTS, 2024/25\u20132025/26)",
+      "kind": "document",
+      "filename": "crm_lost_deal_notes.md",
+      "classification": {
+       "confidentiality": "commercially_confidential",
+       "personal_data": "personal",
+       "pseudonymised": true
+      },
+      "entity_counts": [
+       {
+        "entity_type": "EMAIL",
+        "count": 1,
+        "low_confidence": 0
+       },
+       {
+        "entity_type": "EMPLOYER",
+        "count": 8,
+        "low_confidence": 0
+       },
+       {
+        "entity_type": "PERSON",
+        "count": 8,
+        "low_confidence": 1
+       },
+       {
+        "entity_type": "PHONE",
+        "count": 1,
+        "low_confidence": 0
+       },
+       {
+        "entity_type": "STAFF",
+        "count": 8,
+        "low_confidence": 0
+       }
+      ],
+      "low_confidence_detections": 1,
+      "special_category_types": [],
+      "confidentiality_markers": [
+       "COMMERCIAL IN CONFIDENCE"
+      ],
+      "sanitised_preview": "COMMERCIAL IN CONFIDENCE \u2014 Northstar Learning Group CRM export (lost opportunities, DTS6, 2024/25\u20132025/26)\n\nNote 1. Account manager: STAFF_0001. Spoke with PERSON_0001, Head of Talent at EMPLOYER_0001 (EMAIL_0001, PHONE_0001). Lost to Brightpath. She said a three-year programme was too long for their technology graduates and they wanted AI content from the start.\n\nNote 2. Account manager: STAFF_0002. Contact: PERSON_0002 at EMPLOYER_0002. Employer chose a 24-month Applied AI Engineer apprenticeship with another provider. Reason given: duration and AI focus.\n\nNote 3. Account manager: STAFF_0001. Met with PERSON_0003 at EMPLOYER_0003. Employer said our DTS curriculum looked dated compared with competitors' generative AI modules.\n\nNote 4. Account manager: STAFF_0002. Contact: PERSON_0004 at EMPLOYER_0004. Lost on price; levy budget redirected to AI upskilling at Level 4.\n\nNote 5. Account manager: STAFF_0003. Spoke with PERSON_0005 at EMPLOYER_0005. Employer paused all apprenticeship recruitment following an internal restructure. Not a competitive loss.\n\nNote 6. Account manager: STAFF_0001. Contact: PERSON_0006 at EMPLOYER_0006. Employer said 36 months is a long commitment when roles a",
+      "policy_rule": "release.uncertain_detection",
+      "policy_reason": "The detector was not confident about some entities; a human must confirm pseudonymisation is complete."
+     },
+     {
+      "id": "doc_12fcb51fab",
+      "title": "Board paper \u2014 degree apprenticeship performance Q2 2026",
+      "kind": "document",
+      "filename": "board_paper_q2_2026.md",
+      "classification": {
+       "confidentiality": "commercially_confidential",
+       "personal_data": "personal",
+       "pseudonymised": true
+      },
+      "entity_counts": [
+       {
+        "entity_type": "STAFF",
+        "count": 1,
+        "low_confidence": 0
+       }
+      ],
+      "low_confidence_detections": 0,
+      "special_category_types": [],
+      "confidentiality_markers": [
+       "BOARD PAPER"
+      ],
+      "sanitised_preview": "BOARD PAPER \u2014 COMMERCIAL IN CONFIDENCE\nNorthstar Learning Group: Degree apprenticeship performance, Q2 2026\nPrepared by: STAFF_0004, Director of Sales\n\n1. Summary\nDegree apprenticeship starts have fallen from 1,500 in 2022/23 to 960 in 2025/26.\nIn my view the decline is entirely due to the Level 7 funding changes, and no change to our portfolio is required.\n\n2. Regional performance\nThe North region sales team was restructured in September 2023. DTS wins in the North fell sharply after the restructure, and the decline in the North coincided with the new team structure.\n\n3. Portfolio\nOur DTS programme runs for 36 months. The DTS curriculum was last substantially refreshed in 2019.\nWe do not currently offer an AI-specific apprenticeship at any level.\n\n4. Pricing\nOur pricing has been in line with the funding band maximum throughout the period, with no discounting.\n",
+      "policy_rule": "release.confidential_personal",
+      "policy_reason": "Commercially confidential content containing personal data requires review even after pseudonymisation."
+     },
+     {
+      "id": "doc_e3cef51759",
+      "title": "Learner withdrawals summary 2025/26",
+      "kind": "document",
+      "filename": "learner_withdrawals_note.md",
+      "classification": {
+       "confidentiality": "internal",
+       "personal_data": "special_category",
+       "pseudonymised": true
+      },
+      "entity_counts": [
+       {
+        "entity_type": "PERSON",
+        "count": 2,
+        "low_confidence": 1
+       },
+       {
+        "entity_type": "SPECIAL_CATEGORY",
+        "count": 1,
+        "low_confidence": 0
+       }
+      ],
+      "low_confidence_detections": 1,
+      "special_category_types": [
+       "health"
+      ],
+      "confidentiality_markers": [
+       "INTERNAL"
+      ],
+      "sanitised_preview": "INTERNAL \u2014 Learner support: withdrawals summary, 2025/26\n\nThis note summarises withdrawals from programmes after enrolment. Withdrawals do not affect the count of starts.\n\n[WITHHELD:HEALTH]\nLearner PERSON_0009 withdrew after changing employer.\nLearner PERSON_0010 transferred to a part-time route.\n\nOverall withdrawal rates were in line with previous years at around 9%.\n",
+      "policy_rule": "release.special_category",
+      "policy_reason": "Special-category personal data was detected; a privacy reviewer must confirm the sanitised version is safe and necessary."
+     }
+    ]
+   },
+   "status": "pending",
+   "requested_at": "2026-10-05T10:53:28.732636Z",
+   "response": null
+  }
+ ],
+ "decision": null,
+ "intake": [
+  {
+   "id": "doc_6ce689d2f7",
+   "kind": "dataset",
+   "title": "Northstar degree-apprenticeship starts by programme, region and employer segment",
+   "filename": "northstar_starts.csv",
+   "source_type": "internal_dataset",
+   "status": "released",
+   "scan": {
+    "detector": "none",
+    "entity_counts": [],
+    "low_confidence_detections": 0,
+    "special_category_spans": 0,
+    "special_category_types": [],
+    "confidentiality_markers": [],
+    "classification": {
+     "confidentiality": "commercially_confidential",
+     "personal_data": "none",
+     "pseudonymised": false
+    },
+    "declared_classification": {
+     "confidentiality": "commercially_confidential",
+     "personal_data": "none",
+     "pseudonymised": false
+    },
+    "pseudonym_tokens": 0
+   },
+   "uploaded_by": "dev:dana",
+   "uploaded_at": "2026-10-05T10:53:28.655811Z",
+   "sanitised_preview": "year,programme_code,programme,level,region,employer_segment,starts\r\n2022/23,DTS6,Digital & Technology Solutions Professional,6,North,Large employer,130\r\n2022/23,DTS6,Digital & Technology Solutions Professional,6,North,SME,57\r\n2022/23,DTS6,Digital & Technology Solutions Professional,6,Midlands,Large employer,132\r\n2022/23,DTS6,Digital & Technology Solutions Professional,6,Midlands,SME,56\r\n2022/23,DTS6,Digital & Technology Solutions Professional,6,South,Large employer,174\r\n2022/23,DTS6,Digital & Technology Solutions Professional,6,South,SME,71\r\n2023/24,DTS6,Digital & Technology Solutions Professional,6,North,Large employer,118\r\n2023/24,DTS6,Digital & Technology Solutions Professional,6,North,SME,50\r\n2023/24,DTS6,Digital & Technology Solutions Professional,6,Midlands,Large employer,120\r\n2023/24,DTS6,Digital & Technology Solutions Professional,6,Midlands,SME,51\r\n2023/24,DTS6,Digital & Technology Solutions Professional,6,South,Large employer,157\r\n2023/24,DTS6,Digital & Technology Solutions Professional,6,South,SME,64\r\n2024/25,DTS6,Digital & Technology Solutions Professional,6,North,Large employer,95\r\n2024/25,DTS6,Digital & Technology Solutions Professional,6,North,SME,42\r\n2024/25,DTS6,Digital & Technology Solutions Professional,6,Midlands,Large employer,93\r\n2024/25,DTS6,Digital & Technology Solutions Professional,6,Midlands,SME,40\r\n2024/25,DTS6,Digital & Technology Solutions Professional,6,South,Large employer,127\r\n2024/25,DTS6,Digital & Technology Solutions Professional,6,South,SM"
+  },
+  {
+   "id": "doc_1f6d99343e",
+   "kind": "dataset",
+   "title": "National apprenticeship starts by standard (NSSO, synthetic)",
+   "filename": "national_starts.csv",
+   "source_type": "official_statistics",
+   "status": "released",
+   "scan": {
+    "detector": "none",
+    "entity_counts": [],
+    "low_confidence_detections": 0,
+    "special_category_spans": 0,
+    "special_category_types": [],
+    "confidentiality_markers": [],
+    "classification": {
+     "confidentiality": "public",
+     "personal_data": "none",
+     "pseudonymised": false
+    },
+    "declared_classification": {
+     "confidentiality": "public",
+     "personal_data": "none",
+     "pseudonymised": false
+    },
+    "pseudonym_tokens": 0
+   },
+   "uploaded_by": "dev:dana",
+   "uploaded_at": "2026-10-05T10:53:28.656686Z",
+   "sanitised_preview": "year,standard_code,standard,level,starts\r\n2022/23,DTS6,Digital & Technology Solutions Professional,6,7800\r\n2023/24,DTS6,Digital & Technology Solutions Professional,6,8000\r\n2024/25,DTS6,Digital & Technology Solutions Professional,6,8150\r\n2025/26,DTS6,Digital & Technology Solutions Professional,6,8250\r\n2022/23,DSP6,Data Science Professional,6,3100\r\n2023/24,DSP6,Data Science Professional,6,2950\r\n2024/25,DSP6,Data Science Professional,6,2650\r\n2025/26,DSP6,Data Science Professional,6,2350\r\n2022/23,CMDA6,Chartered Manager Degree Apprenticeship,6,9800\r\n2023/24,CMDA6,Chartered Manager Degree Apprenticeship,6,9900\r\n2024/25,CMDA6,Chartered Manager Degree Apprenticeship,6,9850\r\n2025/26,CMDA6,Chartered Manager Degree Apprenticeship,6,9950\r\n2022/23,SL7,Senior Leader (MBA),7,14000\r\n2023/24,SL7,Senior Leader (MBA),7,13300\r\n2024/25,SL7,Senior Leader (MBA),7,9900\r\n2025/26,SL7,Senior Leader (MBA),7,5300\r\n2022/23,AIE6,Applied AI Engineer,6,0\r\n2023/24,AIE6,Applied AI Engineer,6,0\r\n2024/25,AIE6,Applied AI Engineer,6,1100\r\n2025/26,AIE6,Applied AI Engineer,6,2600\r\n2022/23,AIP4,AI & Automation Practitioner,4,1200\r\n2023/24,AIP4,AI & Automation Practitioner,4,3400\r\n2024/25,AIP4,AI & Automation Practitioner,4,5900\r\n2025/26,AIP4,AI & Automation Practitioner,4,7800\r\n2022/23,DA4,Data Analyst,4,11000\r\n2023/24,DA4,Data Analyst,4,10400\r\n2024/25,DA4,Data Analyst,4,9600\r\n2025/26,DA4,Data Analyst,4,9100\r\n"
+  },
+  {
+   "id": "doc_d2241e62bb",
+   "kind": "dataset",
+   "title": "Northstar employer sales pipeline by programme and segment",
+   "filename": "northstar_pipeline.csv",
+   "source_type": "internal_dataset",
+   "status": "released",
+   "scan": {
+    "detector": "none",
+    "entity_counts": [],
+    "low_confidence_detections": 0,
+    "special_category_spans": 0,
+    "special_category_types": [],
+    "confidentiality_markers": [],
+    "classification": {
+     "confidentiality": "commercially_confidential",
+     "personal_data": "none",
+     "pseudonymised": false
+    },
+    "declared_classification": {
+     "confidentiality": "commercially_confidential",
+     "personal_data": "none",
+     "pseudonymised": false
+    },
+    "pseudonym_tokens": 0
+   },
+   "uploaded_by": "dev:dana",
+   "uploaded_at": "2026-10-05T10:53:28.657244Z",
+   "sanitised_preview": "year,programme_code,employer_segment,enquiries,proposals,won\r\n2022/23,DTS6,Large employer,140,60,27\r\n2023/24,DTS6,Large employer,142,62,25\r\n2024/25,DTS6,Large employer,145,64,20\r\n2025/26,DTS6,Large employer,141,61,16\r\n2022/23,DTS6,SME,220,70,28\r\n2023/24,DTS6,SME,205,65,26\r\n2024/25,DTS6,SME,182,58,22\r\n2025/26,DTS6,SME,160,52,19\r\n2022/23,DSP6,Large employer,60,24,10\r\n2023/24,DSP6,Large employer,58,23,10\r\n2024/25,DSP6,Large employer,55,21,9\r\n2025/26,DSP6,Large employer,52,20,8\r\n2022/23,DSP6,SME,40,14,5\r\n2023/24,DSP6,SME,38,13,5\r\n2024/25,DSP6,SME,36,12,4\r\n2025/26,DSP6,SME,34,12,4\r\n2022/23,CMDA6,Large employer,90,35,16\r\n2023/24,CMDA6,Large employer,92,36,17\r\n2024/25,CMDA6,Large employer,91,35,16\r\n2025/26,CMDA6,Large employer,90,35,16\r\n2022/23,CMDA6,SME,70,22,9\r\n2023/24,CMDA6,SME,71,22,9\r\n2024/25,CMDA6,SME,70,22,9\r\n2025/26,CMDA6,SME,69,21,8\r\n2022/23,SL7,Large employer,120,50,25\r\n2023/24,SL7,Large employer,116,48,24\r\n2024/25,SL7,Large employer,92,40,20\r\n2025/26,SL7,Large employer,60,28,14\r\n2022/23,SL7,SME,70,30,12\r\n2023/24,SL7,SME,66,28,11\r\n2024/25,SL7,SME,44,18,7\r\n2025/26,SL7,SME,20,8,3\r\n"
+  },
+  {
+   "id": "doc_32038f265c",
+   "kind": "document",
+   "title": "CRM lost-opportunity notes (DTS, 2024/25\u20132025/26)",
+   "filename": "crm_lost_deal_notes.md",
+   "source_type": "crm_record",
+   "status": "pending_release",
+   "scan": {
+    "detector": "local-deterministic-v1",
+    "entity_counts": [
+     {
+      "entity_type": "EMAIL",
+      "count": 1,
+      "low_confidence": 0
+     },
+     {
+      "entity_type": "EMPLOYER",
+      "count": 8,
+      "low_confidence": 0
+     },
+     {
+      "entity_type": "PERSON",
+      "count": 8,
+      "low_confidence": 1
+     },
+     {
+      "entity_type": "PHONE",
+      "count": 1,
+      "low_confidence": 0
+     },
+     {
+      "entity_type": "STAFF",
+      "count": 8,
+      "low_confidence": 0
+     }
+    ],
+    "low_confidence_detections": 1,
+    "special_category_spans": 0,
+    "special_category_types": [],
+    "confidentiality_markers": [
+     "COMMERCIAL IN CONFIDENCE"
+    ],
+    "classification": {
+     "confidentiality": "commercially_confidential",
+     "personal_data": "personal",
+     "pseudonymised": true
+    },
+    "declared_classification": {
+     "confidentiality": "commercially_confidential",
+     "personal_data": "none",
+     "pseudonymised": false
+    },
+    "pseudonym_tokens": 21
+   },
+   "uploaded_by": "dev:dana",
+   "uploaded_at": "2026-10-05T10:53:28.678248Z",
+   "sanitised_preview": "COMMERCIAL IN CONFIDENCE \u2014 Northstar Learning Group CRM export (lost opportunities, DTS6, 2024/25\u20132025/26)\n\nNote 1. Account manager: STAFF_0001. Spoke with PERSON_0001, Head of Talent at EMPLOYER_0001 (EMAIL_0001, PHONE_0001). Lost to Brightpath. She said a three-year programme was too long for their technology graduates and they wanted AI content from the start.\n\nNote 2. Account manager: STAFF_0002. Contact: PERSON_0002 at EMPLOYER_0002. Employer chose a 24-month Applied AI Engineer apprenticeship with another provider. Reason given: duration and AI focus.\n\nNote 3. Account manager: STAFF_0001. Met with PERSON_0003 at EMPLOYER_0003. Employer said our DTS curriculum looked dated compared with competitors' generative AI modules.\n\nNote 4. Account manager: STAFF_0002. Contact: PERSON_0004 at EMPLOYER_0004. Lost on price; levy budget redirected to AI upskilling at Level 4.\n\nNote 5. Account manager: STAFF_0003. Spoke with PERSON_0005 at EMPLOYER_0005. Employer paused all apprenticeship recruitment following an internal restructure. Not a competitive loss.\n\nNote 6. Account manager: STAFF_0001. Contact: PERSON_0006 at EMPLOYER_0006. Employer said 36 months is a long commitment when roles are changing fast. Chose a 30-month programme with AI modules.\n\nNote 7. Account manager: STAFF_0003. Spoke with PERSON_0007 at EMPLOYER_0007. Employer moved budget to AI apprenticeships; did not say which provider.\n\nNote 8. Account manager: STAFF_0002. Contact: PERSON_0008 at EMPLOYER_0008. No decisi"
+  },
+  {
+   "id": "doc_12fcb51fab",
+   "kind": "document",
+   "title": "Board paper \u2014 degree apprenticeship performance Q2 2026",
+   "filename": "board_paper_q2_2026.md",
+   "source_type": "internal_document",
+   "status": "pending_release",
+   "scan": {
+    "detector": "local-deterministic-v1",
+    "entity_counts": [
+     {
+      "entity_type": "STAFF",
+      "count": 1,
+      "low_confidence": 0
+     }
+    ],
+    "low_confidence_detections": 0,
+    "special_category_spans": 0,
+    "special_category_types": [],
+    "confidentiality_markers": [
+     "BOARD PAPER"
+    ],
+    "classification": {
+     "confidentiality": "commercially_confidential",
+     "personal_data": "personal",
+     "pseudonymised": true
+    },
+    "declared_classification": {
+     "confidentiality": "commercially_confidential",
+     "personal_data": "none",
+     "pseudonymised": false
+    },
+    "pseudonym_tokens": 1
+   },
+   "uploaded_by": "dev:dana",
+   "uploaded_at": "2026-10-05T10:53:28.679678Z",
+   "sanitised_preview": "BOARD PAPER \u2014 COMMERCIAL IN CONFIDENCE\nNorthstar Learning Group: Degree apprenticeship performance, Q2 2026\nPrepared by: STAFF_0004, Director of Sales\n\n1. Summary\nDegree apprenticeship starts have fallen from 1,500 in 2022/23 to 960 in 2025/26.\nIn my view the decline is entirely due to the Level 7 funding changes, and no change to our portfolio is required.\n\n2. Regional performance\nThe North region sales team was restructured in September 2023. DTS wins in the North fell sharply after the restructure, and the decline in the North coincided with the new team structure.\n\n3. Portfolio\nOur DTS programme runs for 36 months. The DTS curriculum was last substantially refreshed in 2019.\nWe do not currently offer an AI-specific apprenticeship at any level.\n\n4. Pricing\nOur pricing has been in line with the funding band maximum throughout the period, with no discounting.\n"
+  },
+  {
+   "id": "doc_95a7575464",
+   "kind": "document",
+   "title": "Sales operations review, March 2024",
+   "filename": "sales_ops_review_2024.md",
+   "source_type": "internal_document",
+   "status": "released",
+   "scan": {
+    "detector": "local-deterministic-v1",
+    "entity_counts": [
+     {
+      "entity_type": "STAFF",
+      "count": 1,
+      "low_confidence": 0
+     }
+    ],
+    "low_confidence_detections": 0,
+    "special_category_spans": 0,
+    "special_category_types": [],
+    "confidentiality_markers": [
+     "INTERNAL"
+    ],
+    "classification": {
+     "confidentiality": "internal",
+     "personal_data": "personal",
+     "pseudonymised": true
+    },
+    "declared_classification": {
+     "confidentiality": "internal",
+     "personal_data": "none",
+     "pseudonymised": false
+    },
+    "pseudonym_tokens": 1
+   },
+   "uploaded_by": "dev:dana",
+   "uploaded_at": "2026-10-05T10:53:28.680343Z",
+   "sanitised_preview": "INTERNAL \u2014 Sales operations review, March 2024\n\nThe North region restructure in September 2023 consolidated three account manager roles into two.\nOwner: STAFF_0003.\n\nPipeline reporting moved to the new CRM in October 2023. Enquiry definitions were unchanged.\n\nWin rates for large-employer DTS opportunities have fallen in every region, not only in the North.\n"
+  },
+  {
+   "id": "doc_e3cef51759",
+   "kind": "document",
+   "title": "Learner withdrawals summary 2025/26",
+   "filename": "learner_withdrawals_note.md",
+   "source_type": "internal_document",
+   "status": "pending_release",
+   "scan": {
+    "detector": "local-deterministic-v1",
+    "entity_counts": [
+     {
+      "entity_type": "PERSON",
+      "count": 2,
+      "low_confidence": 1
+     },
+     {
+      "entity_type": "SPECIAL_CATEGORY",
+      "count": 1,
+      "low_confidence": 0
+     }
+    ],
+    "low_confidence_detections": 1,
+    "special_category_spans": 1,
+    "special_category_types": [
+     "health"
+    ],
+    "confidentiality_markers": [
+     "INTERNAL"
+    ],
+    "classification": {
+     "confidentiality": "internal",
+     "personal_data": "special_category",
+     "pseudonymised": true
+    },
+    "declared_classification": {
+     "confidentiality": "internal",
+     "personal_data": "none",
+     "pseudonymised": false
+    },
+    "pseudonym_tokens": 2
+   },
+   "uploaded_by": "dev:dana",
+   "uploaded_at": "2026-10-05T10:53:28.682299Z",
+   "sanitised_preview": "INTERNAL \u2014 Learner support: withdrawals summary, 2025/26\n\nThis note summarises withdrawals from programmes after enrolment. Withdrawals do not affect the count of starts.\n\n[WITHHELD:HEALTH]\nLearner PERSON_0009 withdrew after changing employer.\nLearner PERSON_0010 transferred to a part-time route.\n\nOverall withdrawal rates were in line with previous years at around 9%.\n"
+  }
+ ],
+ "audit_count": 15,
+ "segment_names": {
+  "DTS6": "Digital & Technology Solutions Professional",
+  "DSP6": "Data Science Professional",
+  "CMDA6": "Chartered Manager Degree Apprenticeship",
+  "SL7": "Senior Leader (MBA)",
+  "AIE6": "Applied AI Engineer",
+  "AIP4": "AI & Automation Practitioner",
+  "DA4": "Data Analyst"
+ }
+}

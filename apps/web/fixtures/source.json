@@ -1,0 +1,25 @@
+{
+ "id": "src_4dc0d86a30",
+ "origin": "internal",
+ "source_type": "internal_dataset",
+ "title": "Northstar degree-apprenticeship starts by programme, region and employer segment",
+ "publisher": "Northstar Learning Group (internal MI)",
+ "canonical_url": null,
+ "domain": null,
+ "retrieved_at": "2026-10-05T10:53:28.732512Z",
+ "published_on": "2026-08-31",
+ "updated_on": null,
+ "content_hash": "2835342f6c87f0e6807faf56fe96c1010a6f312fd032122455b056bb8d7e06ba",
+ "classification": {
+  "confidentiality": "commercially_confidential",
+  "personal_data": "none",
+  "pseudonymised": false
+ },
+ "retrieval_method": "dataset_query",
+ "retrieval_provider": "dataset_catalog",
+ "discovered_by_task_id": null,
+ "synthetic": true,
+ "injection_flags": [],
+ "privacy_document_id": "doc_6ce689d2f7",
+ "content": null
+}

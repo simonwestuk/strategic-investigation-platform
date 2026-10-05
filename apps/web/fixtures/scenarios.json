@@ -1,0 +1,18 @@
+[
+ {
+  "id": "harbourline",
+  "title": "Harbourline Coffee Roasters \u2014 falling subscription renewals",
+  "organisation": "Harbourline Coffee Roasters",
+  "question": "Why have subscription renewals at Harbourline Coffee Roasters fallen over the last two years, and what should we do about it?",
+  "datasets": 3,
+  "documents": 3
+ },
+ {
+  "id": "northstar",
+  "title": "Northstar Learning Group \u2014 degree-apprenticeship decline",
+  "organisation": "Northstar Learning Group",
+  "question": "Why have enrolments in Northstar Learning Group's degree-apprenticeship portfolio declined, and what should leadership investigate or do in response?",
+  "datasets": 3,
+  "documents": 4
+ }
+]

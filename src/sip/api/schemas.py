@@ -78,6 +78,16 @@ class IntakeOut(BaseModel):
     sanitised_preview: str
 
 
+class DocumentOut(BaseModel):
+    """Privacy-scan inspection view: sanitised text and scan summary only."""
+
+    id: str
+    title: str
+    status: str
+    scan: PrivacyScanSummary
+    sanitised_text: str
+
+
 class SourceOut(Source):
     content: str | None = None
 
@@ -103,6 +113,7 @@ class InvestigationDetail(BaseModel):
     decision: Decision | None
     intake: list[IntakeOut]
     audit_count: int
+    segment_names: dict[str, str] = Field(default_factory=dict)  # entity code -> display name
 
 
 class ClaimChain(BaseModel):

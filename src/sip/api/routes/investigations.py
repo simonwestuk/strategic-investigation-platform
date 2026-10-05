@@ -11,6 +11,7 @@ from sip.api.schemas import (
     AuditOut,
     ClaimChain,
     CreateInvestigation,
+    DocumentOut,
     IntakeOut,
     InvestigationDetail,
     InvestigationSummary,
@@ -35,6 +36,7 @@ from sip.privacy.extraction import UnsupportedFile
 from sip.privacy.gateway import UploadTooLarge
 from sip.privacy.models import IntakeDocument
 from sip.services.investigations import Conflict, InvestigationService, NotFound
+from sip.tools.datasets import Dataset, DatasetCatalog
 
 router = APIRouter(prefix="/api")
 
@@ -147,8 +149,16 @@ async def get_investigation(investigation_id: str, svc: Service, _: CurrentActor
         decision=await repo.decision(investigation_id),
         intake=[_intake(d) for d, _ in await repo.intake_for(investigation_id)],
         audit_count=await repo.audit_count(investigation_id),
+        segment_names=await _segment_names(svc, investigation_id),
         **ents,
     )
+
+
+async def _segment_names(svc: InvestigationService, investigation_id: str) -> dict[str, str]:
+    datasets = [
+        Dataset.from_csv(m, d.sanitised_text) for d, m in await svc.repo.intake_for(investigation_id) if m is not None
+    ]
+    return DatasetCatalog(datasets).display_names()
 
 
 @router.post("/investigations/{investigation_id}/start", response_model=InvestigationSummary)
@@ -201,18 +211,14 @@ async def documents(investigation_id: str, svc: Service, _: CurrentActor) -> lis
     return [_intake(d) for d, _ in await svc.repo.intake_for(investigation_id)]
 
 
-@router.get("/investigations/{investigation_id}/documents/{document_id}")
-async def document(investigation_id: str, document_id: str, svc: Service, _: CurrentActor) -> dict[str, Any]:
+@router.get("/investigations/{investigation_id}/documents/{document_id}", response_model=DocumentOut)
+async def document(investigation_id: str, document_id: str, svc: Service, _: CurrentActor) -> DocumentOut:
     """Privacy scan inspection: sanitised text and scan summary. Raw content is never served."""
     for d, _m in await svc.repo.intake_for(investigation_id):
         if d.id == document_id:
-            return {
-                "id": d.id,
-                "title": d.title,
-                "status": str(d.status),
-                "scan": d.scan.model_dump(mode="json"),
-                "sanitised_text": d.sanitised_text,
-            }
+            return DocumentOut(
+                id=d.id, title=d.title, status=str(d.status), scan=d.scan, sanitised_text=d.sanitised_text
+            )
     raise HTTPException(status.HTTP_404_NOT_FOUND, "Document not found")
 
 
@@ -248,6 +254,13 @@ async def source(investigation_id: str, source_id: str, svc: Service, _: Current
     return SourceOut(**s.model_dump(), content=content)
 
 
+@router.get("/investigations/{investigation_id}/audit", response_model=list[AuditOut])
+async def audit_trail(investigation_id: str, svc: Service, _: CurrentActor, limit: int = 500) -> list[AuditOut]:
+    """Most recent events first. ``limit`` is capped at 2000; ``audit_count`` on the detail gives the total."""
+    await _get(svc, investigation_id)
+    return [AuditOut(**r) for r in await svc.repo.audit(investigation_id, limit=max(1, min(limit, 2000)))]
+
+
 @router.get("/investigations/{investigation_id}/{collection}")
 async def collection(investigation_id: str, collection: str, svc: Service, _: CurrentActor) -> list[Any]:
     mapping = {
@@ -262,9 +275,6 @@ async def collection(investigation_id: str, collection: str, svc: Service, _: Cu
         "options": "options",
         "reviews": "reviews",
     }
-    if collection == "audit":
-        await _get(svc, investigation_id)
-        return [AuditOut(**r) for r in await svc.repo.audit(investigation_id)]
     if collection not in mapping:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Unknown collection")
     await _get(svc, investigation_id)

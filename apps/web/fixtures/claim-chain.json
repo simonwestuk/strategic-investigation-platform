@@ -1,0 +1,411 @@
+{
+ "claim": {
+  "id": "clm_f7d624b3aa",
+  "statement": "Northstar Learning Group's offer for degree-apprenticeship portfolio enrolments is less relevant or current than competing offers.",
+  "classification": "inferred",
+  "proposed_classification": "inferred",
+  "confidence": {
+   "band": "high",
+   "score": 5,
+   "factors": [
+    "+3 best supporting source is primary tier",
+    "+1 two independent sources",
+    "+1 includes direct measurement or documented fact"
+   ],
+   "classification_ceiling": "inferred",
+   "ceiling_reasons": [
+    "Causation is always an inference from the evidence.",
+    "The claim requires an inferential step."
+   ]
+  },
+  "causal": true,
+  "supporting_evidence_ids": [
+   "evd_a648d0590a",
+   "evd_69205e26da",
+   "evd_094fe05fa1",
+   "evd_a987209853"
+  ],
+  "contradicting_evidence_ids": [],
+  "source_quality_summary": "4 supporting (primary, secondary), 0 contradicting.",
+  "reasoning_summary": "4 supporting item(s) outweigh 0 contradicting item(s) on authority tier.",
+  "inferential_step": "Causal contribution is inferred from evidence that is consistent with the mechanism; it is not directly measured.",
+  "limitations": [
+   "Relative contribution of this driver versus others is not quantified."
+  ],
+  "missing_evidence": [
+   "customer feedback praising content"
+  ],
+  "related_hypothesis_ids": [
+   "hyp_48ab786e84"
+  ],
+  "next_question": null,
+  "created_by": {
+   "kind": "agent",
+   "id": "agent:analyst",
+   "display_name": "analyst",
+   "roles": []
+  },
+  "created_at": "2026-10-05T10:53:29.646519Z",
+  "updated_at": "2026-10-05T10:53:30.869119Z",
+  "review_state": "unreviewed",
+  "human_override": null,
+  "iteration": 3,
+  "active": true
+ },
+ "evidence": [
+  {
+   "id": "evd_a648d0590a",
+   "source_id": "src_08e33b4c9d",
+   "task_id": "tsk_fab2759ddb",
+   "statement": "Northstar Learning Group: The DTS curriculum was last substantially refreshed in 2019.",
+   "quote": "The DTS curriculum was last substantially refreshed in 2019.",
+   "locator": "passage 3",
+   "kind": "documented_fact",
+   "need": "internal_performance",
+   "observed_period": null,
+   "observed_on": "2026-07-10",
+   "relevance": "high",
+   "metrics": [],
+   "segments": [
+    "DTS6"
+   ],
+   "links": [
+    {
+     "hypothesis_id": "hyp_48ab786e84",
+     "stance": "supports",
+     "rationale": "mentions: refreshed, refresh, last substantially, curriculum"
+    }
+   ],
+   "quality": {
+    "need": "internal_performance",
+    "tier": "secondary",
+    "freshness": "current",
+    "age_days": 82,
+    "rationale": "internal_document is a secondary source for internal_performance evidence; dated 2026-07-10 (82 days before as-of), current."
+   },
+   "verification": "verified",
+   "flags": [],
+   "extracted_by": {
+    "kind": "agent",
+    "id": "agent:document_researcher",
+    "display_name": "document_researcher",
+    "roles": []
+   },
+   "created_at": "2026-10-05T10:53:28.957180Z"
+  },
+  {
+   "id": "evd_69205e26da",
+   "source_id": "src_e25b952038",
+   "task_id": "tsk_fab2759ddb",
+   "statement": "Northstar Learning Group: Note 3. Account manager: STAFF_0001. Met with PERSON_0003 at EMPLOYER_0003. Employer said our DTS curriculum looked dated compared with competitors' generative AI modules.",
+   "quote": "Note 3. Account manager: STAFF_0001. Met with PERSON_0003 at EMPLOYER_0003. Employer said our DTS curriculum looked dated compared with competitors' generative AI modules.",
+   "locator": "passage 3",
+   "kind": "anecdote",
+   "need": "customer_feedback",
+   "observed_period": null,
+   "observed_on": "2026-08-15",
+   "relevance": "high",
+   "metrics": [],
+   "segments": [
+    "DTS6"
+   ],
+   "links": [
+    {
+     "hypothesis_id": "hyp_28f3657fa2",
+     "stance": "supports",
+     "rationale": "mentions: competitor, competitors"
+    },
+    {
+     "hypothesis_id": "hyp_48ab786e84",
+     "stance": "supports",
+     "rationale": "mentions: dated, modules, curriculum, generative"
+    }
+   ],
+   "quality": {
+    "need": "customer_feedback",
+    "tier": "secondary",
+    "freshness": "current",
+    "age_days": 46,
+    "rationale": "crm_record is a secondary source for customer_feedback evidence; dated 2026-08-15 (46 days before as-of), current."
+   },
+   "verification": "verified",
+   "flags": [],
+   "extracted_by": {
+    "kind": "agent",
+    "id": "agent:document_researcher",
+    "display_name": "document_researcher",
+    "roles": []
+   },
+   "created_at": "2026-10-05T10:53:28.959169Z"
+  },
+  {
+   "id": "evd_094fe05fa1",
+   "source_id": "src_e25b952038",
+   "task_id": "tsk_fab2759ddb",
+   "statement": "Northstar Learning Group: Note 6. Account manager: STAFF_0001. Contact: PERSON_0006 at EMPLOYER_0006. Employer said 36 months is a long commitment when roles are changing fast. Chose a 30-month programme with AI modules.",
+   "quote": "Note 6. Account manager: STAFF_0001. Contact: PERSON_0006 at EMPLOYER_0006. Employer said 36 months is a long commitment when roles are changing fast. Chose a 30-month programme with AI modules.",
+   "locator": "passage 6",
+   "kind": "anecdote",
+   "need": "customer_feedback",
+   "observed_period": null,
+   "observed_on": "2026-08-15",
+   "relevance": "high",
+   "metrics": [],
+   "segments": [],
+   "links": [
+    {
+     "hypothesis_id": "hyp_48ab786e84",
+     "stance": "supports",
+     "rationale": "mentions: modules"
+    },
+    {
+     "hypothesis_id": "hyp_efe5ec029c",
+     "stance": "supports",
+     "rationale": "mentions: months, long commitment"
+    },
+    {
+     "hypothesis_id": "hyp_78f4121f08",
+     "stance": "supports",
+     "rationale": "mentions: chose a"
+    }
+   ],
+   "quality": {
+    "need": "customer_feedback",
+    "tier": "secondary",
+    "freshness": "current",
+    "age_days": 46,
+    "rationale": "crm_record is a secondary source for customer_feedback evidence; dated 2026-08-15 (46 days before as-of), current."
+   },
+   "verification": "verified",
+   "flags": [],
+   "extracted_by": {
+    "kind": "agent",
+    "id": "agent:document_researcher",
+    "display_name": "document_researcher",
+    "roles": []
+   },
+   "created_at": "2026-10-05T10:53:28.959650Z"
+  },
+  {
+   "id": "evd_a987209853",
+   "source_id": "src_d87c8df454",
+   "task_id": "tsk_31e5dcebb7",
+   "statement": "Brightpath Academy (synthetic competitor): Built around generative AI, machine learning operations and responsible AI from day one.",
+   "quote": "Built around generative AI, machine learning operations and responsible AI from day one.",
+   "locator": "passage 3",
+   "kind": "documented_fact",
+   "need": "competitor_offer",
+   "observed_period": null,
+   "observed_on": "2026-03-02",
+   "relevance": "medium",
+   "metrics": [],
+   "segments": [],
+   "links": [
+    {
+     "hypothesis_id": "hyp_48ab786e84",
+     "stance": "supports",
+     "rationale": "mentions: generative"
+    }
+   ],
+   "quality": {
+    "need": "competitor_offer",
+    "tier": "primary",
+    "freshness": "current",
+    "age_days": 212,
+    "rationale": "competitor_official is a primary source for competitor_offer evidence; dated 2026-03-02 (212 days before as-of), current."
+   },
+   "verification": "verified",
+   "flags": [],
+   "extracted_by": {
+    "kind": "agent",
+    "id": "agent:web_researcher",
+    "display_name": "web_researcher",
+    "roles": []
+   },
+   "created_at": "2026-10-05T10:53:28.964510Z"
+  }
+ ],
+ "sources": [
+  {
+   "id": "src_e25b952038",
+   "origin": "internal",
+   "source_type": "crm_record",
+   "title": "CRM lost-opportunity notes (DTS, 2024/25\u20132025/26)",
+   "publisher": "Northstar Learning Group",
+   "canonical_url": null,
+   "domain": null,
+   "retrieved_at": "2026-10-05T10:53:28.874274Z",
+   "published_on": "2026-08-15",
+   "updated_on": null,
+   "content_hash": "b8b86b7758b23725e97c97e6e2b232924aa114b7164ba3f3b7f027cb43b6cee5",
+   "classification": {
+    "confidentiality": "commercially_confidential",
+    "personal_data": "personal",
+    "pseudonymised": true
+   },
+   "retrieval_method": "upload",
+   "retrieval_provider": "privacy_gateway",
+   "discovered_by_task_id": null,
+   "synthetic": true,
+   "injection_flags": [],
+   "privacy_document_id": "doc_32038f265c"
+  },
+  {
+   "id": "src_08e33b4c9d",
+   "origin": "internal",
+   "source_type": "internal_document",
+   "title": "Board paper \u2014 degree apprenticeship performance Q2 2026",
+   "publisher": "Northstar Learning Group",
+   "canonical_url": null,
+   "domain": null,
+   "retrieved_at": "2026-10-05T10:53:28.874298Z",
+   "published_on": "2026-07-10",
+   "updated_on": null,
+   "content_hash": "78a466b442cea1fd5ee64a779ed4b8df10c62dbf3ecea36145bf7778cc2736c1",
+   "classification": {
+    "confidentiality": "commercially_confidential",
+    "personal_data": "personal",
+    "pseudonymised": true
+   },
+   "retrieval_method": "upload",
+   "retrieval_provider": "privacy_gateway",
+   "discovered_by_task_id": null,
+   "synthetic": true,
+   "injection_flags": [],
+   "privacy_document_id": "doc_12fcb51fab"
+  },
+  {
+   "id": "src_d87c8df454",
+   "origin": "external_web",
+   "source_type": "competitor_official",
+   "title": "Applied AI Engineer Degree Apprenticeship | Brightpath Academy",
+   "publisher": "Brightpath Academy (synthetic competitor)",
+   "canonical_url": "https://www.brightpath-academy.example.test/apprenticeships/applied-ai-engineer",
+   "domain": "www.brightpath-academy.example.test",
+   "retrieved_at": "2026-10-05T10:53:28.967897Z",
+   "published_on": "2025-01-20",
+   "updated_on": "2026-03-02",
+   "content_hash": "0337be994a6f84b52906e17839eac916c8c8997e32586b052e7217bc694d7bcb",
+   "classification": {
+    "confidentiality": "public",
+    "personal_data": "none",
+    "pseudonymised": false
+   },
+   "retrieval_method": "web_search",
+   "retrieval_provider": "offline_corpus",
+   "discovered_by_task_id": "tsk_354df9c652",
+   "synthetic": true,
+   "injection_flags": [],
+   "privacy_document_id": null
+  }
+ ],
+ "findings": [
+  {
+   "id": "fnd_7af2747069",
+   "title": "Northstar Learning Group's offer for degree-apprenticeship portfolio enrolments is less relevant or current th\u2026",
+   "statement": "Northstar Learning Group's offer for degree-apprenticeship portfolio enrolments is less relevant or current than competing offers.",
+   "claim_ids": [
+    "clm_f7d624b3aa"
+   ],
+   "hypothesis_ids": [
+    "hyp_48ab786e84"
+   ],
+   "classification": "inferred",
+   "confidence_band": "high",
+   "criteria_met": [
+    "classified KNOWN or INFERRED by the rubric",
+    "confidence band MODERATE or HIGH",
+    "at least one usable primary/secondary-tier supporting evidence item",
+    "no open blocking or major challenge against the claim"
+   ],
+   "status": "draft",
+   "created_at": "2026-10-05T10:53:31.104210Z"
+  }
+ ],
+ "options": [
+  {
+   "id": "opt_1924dfc318",
+   "title": "Refresh the offer's content",
+   "description": "Refresh the content of degree-apprenticeship portfolio enrolments to match current customer needs, starting with the modules customers cite.",
+   "rationale": "Responds to: Northstar Learning Group's offer for degree-apprenticeship portfolio enrolments is less relevant or current than competing offers.",
+   "finding_ids": [
+    "fnd_7af2747069"
+   ],
+   "claim_ids": [
+    "clm_f7d624b3aa"
+   ],
+   "expected_benefits": [
+    "Addresses the offer is less relevant or current driver identified in degree-apprenticeship portfolio enrolments."
+   ],
+   "risks": [
+    "Causal contribution of this driver is inferred, not measured; the response may address a smaller share of the decline than expected.",
+    "Weakest supporting finding is high confidence."
+   ],
+   "uncertainties": [
+    "It cannot be determined from available evidence whether customers lost from degree-apprenticeship portfolio enrolments have moved to competitors' substitute offerings rather than leaving the category.",
+    "6 drivers are supported for 'all' (offer_proposition, offer_format, substitution, demand_shift, pipeline_volume, portfolio_gap). Their relative contribution is not established by the available evidence."
+   ],
+   "dependencies": [
+    "Leadership agreement on investment appetite.",
+    "Customer validation before full commitment."
+   ],
+   "reversibility": "medium",
+   "reversibility_note": "Partially reversible; some sunk design cost.",
+   "consequence": "medium",
+   "additional_evidence_needed": [
+    "It cannot be determined from available evidence whether customers lost from degree-apprenticeship portfolio enrolments have moved to competitors' substitute offerings rather than leaving the category."
+   ],
+   "confidence_band": "high",
+   "review_status": "approved_for_decision",
+   "reviewer_note": null,
+   "created_by": {
+    "kind": "agent",
+    "id": "agent:strategy_synthesiser",
+    "display_name": "strategy_synthesiser",
+    "roles": []
+   },
+   "created_at": "2026-10-05T10:53:31.213599Z"
+  },
+  {
+   "id": "opt_d7710b9220",
+   "title": "Hold the current portfolio (baseline)",
+   "description": "Make no portfolio change; monitor the indicators identified by the investigation.",
+   "rationale": "Baseline against which the other options should be judged.",
+   "finding_ids": [
+    "fnd_7af2747069",
+    "fnd_27495a65dc",
+    "fnd_268cae1f35"
+   ],
+   "claim_ids": [
+    "clm_42fa500321",
+    "clm_e4208e86f1",
+    "clm_f7d624b3aa"
+   ],
+   "expected_benefits": [
+    "No investment or disruption."
+   ],
+   "risks": [
+    "Findings indicate drivers that are unlikely to reverse without action."
+   ],
+   "uncertainties": [
+    "It cannot be determined from available evidence whether customers lost from degree-apprenticeship portfolio enrolments have moved to competitors' substitute offerings rather than leaving the category."
+   ],
+   "dependencies": [],
+   "reversibility": "high",
+   "reversibility_note": "Fully reversible.",
+   "consequence": "medium",
+   "additional_evidence_needed": [],
+   "confidence_band": "moderate",
+   "review_status": "approved_for_decision",
+   "reviewer_note": null,
+   "created_by": {
+    "kind": "agent",
+    "id": "agent:strategy_synthesiser",
+    "display_name": "strategy_synthesiser",
+    "roles": []
+   },
+   "created_at": "2026-10-05T10:53:31.213662Z"
+  }
+ ],
+ "challenges": []
+}

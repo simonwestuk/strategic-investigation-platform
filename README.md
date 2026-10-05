@@ -31,6 +31,12 @@ This platform investigates the question the way a rigorous strategy team would:
 
 ![Decision Room](docs/images/decision-room.png)
 
+<table><tr>
+<td width="33%"><img src="docs/images/claim-chain.png" alt="Claim drawer: classification, rubric factors, evidence and sources"><br><sub>Every claim opens its rubric, evidence and sources</sub></td>
+<td width="33%"><img src="docs/images/privacy-review.png" alt="Privacy release review"><br><sub>Privacy review: counts and sanitised preview only</sub></td>
+<td width="33%"><img src="docs/images/hypothesis-map.png" alt="Hypothesis map"><br><sub>Hypotheses refine by segment as evidence arrives</sub></td>
+</tr></table>
+
 ---
 
 ## What it found in the flagship scenario

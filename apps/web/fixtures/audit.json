@@ -1,0 +1,3810 @@
+[
+ {
+  "id": "aud_25f9896f52",
+  "at": "2026-10-05T10:53:32.231838",
+  "actor_kind": "human",
+  "actor_id": "dev:dana",
+  "action": "review_resolved",
+  "subject_type": "review",
+  "subject_id": "rev_8494fefcb5",
+  "policy_rule_id": null,
+  "summary": "decision: decide",
+  "details": {
+   "note_present": false
+  }
+ },
+ {
+  "id": "aud_1e2140a33c",
+  "at": "2026-10-05T10:53:32.231825",
+  "actor_kind": "human",
+  "actor_id": "dev:dana",
+  "action": "decision_recorded",
+  "subject_type": "decision",
+  "subject_id": "dec_f7950ab50a",
+  "policy_rule_id": "decision.human_only",
+  "summary": "Commission an employer destination survey before redesigning the DTS programme",
+  "details": {
+   "autonomy": "human_only",
+   "risk": "high",
+   "policy_version": "2026-10-01",
+   "decision_type": "commission_further_investigation"
+  }
+ },
+ {
+  "id": "aud_6f1fd8c716",
+  "at": "2026-10-05T10:53:31.814470",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "policy_evaluated",
+  "subject_type": null,
+  "subject_id": null,
+  "policy_rule_id": "decision.human_only",
+  "summary": "record_decision: human_only (decision.human_only)",
+  "details": {
+   "autonomy": "human_only",
+   "risk": "high",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_9402cf90bc",
+  "at": "2026-10-05T10:53:31.814463",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "review_requested",
+  "subject_type": "review",
+  "subject_id": "rev_8494fefcb5",
+  "policy_rule_id": null,
+  "summary": "Decision required",
+  "details": {
+   "kind": "decision"
+  }
+ },
+ {
+  "id": "aud_d679722d36",
+  "at": "2026-10-05T10:53:31.703183",
+  "actor_kind": "human",
+  "actor_id": "dev:dana",
+  "action": "review_resolved",
+  "subject_type": "review",
+  "subject_id": "rev_9b9fec83fc",
+  "policy_rule_id": null,
+  "summary": "options: approve",
+  "details": {
+   "note_present": false
+  }
+ },
+ {
+  "id": "aud_655af756a1",
+  "at": "2026-10-05T10:53:31.325498",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "review_requested",
+  "subject_type": "review",
+  "subject_id": "rev_9b9fec83fc",
+  "policy_rule_id": null,
+  "summary": "Review strategic options before they reach decision-makers",
+  "details": {
+   "kind": "options"
+  }
+ },
+ {
+  "id": "aud_47285b6326",
+  "at": "2026-10-05T10:53:31.325461",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "policy_evaluated",
+  "subject_type": null,
+  "subject_id": null,
+  "policy_rule_id": "recommend.high_consequence",
+  "summary": "present_recommendation: human_approval (recommend.high_consequence)",
+  "details": {
+   "autonomy": "human_approval",
+   "risk": "high",
+   "policy_version": "2026-10-01",
+   "attributes": {
+    "max_consequence": "high",
+    "min_confidence_rank": 2
+   }
+  }
+ },
+ {
+  "id": "aud_67318a13a9",
+  "at": "2026-10-05T10:53:31.213664",
+  "actor_kind": "agent",
+  "actor_id": "agent:strategy_synthesiser",
+  "action": "option_generated",
+  "subject_type": "option",
+  "subject_id": "opt_d7710b9220",
+  "policy_rule_id": null,
+  "summary": "Hold the current portfolio (baseline)",
+  "details": {
+   "consequence": "medium"
+  }
+ },
+ {
+  "id": "aud_974d473f51",
+  "at": "2026-10-05T10:53:31.213658",
+  "actor_kind": "agent",
+  "actor_id": "agent:strategy_synthesiser",
+  "action": "option_generated",
+  "subject_type": "option",
+  "subject_id": "opt_f48119da36",
+  "policy_rule_id": null,
+  "summary": "Commission targeted research on the unresolved questions",
+  "details": {
+   "consequence": "low"
+  }
+ },
+ {
+  "id": "aud_3a63853fe0",
+  "at": "2026-10-05T10:53:31.213653",
+  "actor_kind": "agent",
+  "actor_id": "agent:strategy_synthesiser",
+  "action": "option_generated",
+  "subject_type": "option",
+  "subject_id": "opt_5ea294d455",
+  "policy_rule_id": null,
+  "summary": "Fix conversion in the affected segment (Digital & Technology Solutions Professional)",
+  "details": {
+   "consequence": "low"
+  }
+ },
+ {
+  "id": "aud_0956e3a2d7",
+  "at": "2026-10-05T10:53:31.213647",
+  "actor_kind": "agent",
+  "actor_id": "agent:strategy_synthesiser",
+  "action": "option_generated",
+  "subject_type": "option",
+  "subject_id": "opt_6c9523e15f",
+  "policy_rule_id": null,
+  "summary": "Rebalance away from policy-affected segments (Senior Leader (MBA))",
+  "details": {
+   "consequence": "high"
+  }
+ },
+ {
+  "id": "aud_62aa2f5590",
+  "at": "2026-10-05T10:53:31.213641",
+  "actor_kind": "agent",
+  "actor_id": "agent:strategy_synthesiser",
+  "action": "option_generated",
+  "subject_type": "option",
+  "subject_id": "opt_dc1c90d60d",
+  "policy_rule_id": null,
+  "summary": "Defend and reposition the affected offer (Digital & Technology Solutions Professional)",
+  "details": {
+   "consequence": "medium"
+  }
+ },
+ {
+  "id": "aud_b994d59caf",
+  "at": "2026-10-05T10:53:31.213634",
+  "actor_kind": "agent",
+  "actor_id": "agent:strategy_synthesiser",
+  "action": "option_generated",
+  "subject_type": "option",
+  "subject_id": "opt_3779e5521c",
+  "policy_rule_id": null,
+  "summary": "Manage the contracting segment for efficiency (Data Science Professional, Senior Leader (MBA))",
+  "details": {
+   "consequence": "medium"
+  }
+ },
+ {
+  "id": "aud_c0589c89f4",
+  "at": "2026-10-05T10:53:31.213627",
+  "actor_kind": "agent",
+  "actor_id": "agent:strategy_synthesiser",
+  "action": "option_generated",
+  "subject_type": "option",
+  "subject_id": "opt_0d7848f02c",
+  "policy_rule_id": null,
+  "summary": "Close the portfolio gap",
+  "details": {
+   "consequence": "high"
+  }
+ },
+ {
+  "id": "aud_b0dea6f5c5",
+  "at": "2026-10-05T10:53:31.213621",
+  "actor_kind": "agent",
+  "actor_id": "agent:strategy_synthesiser",
+  "action": "option_generated",
+  "subject_type": "option",
+  "subject_id": "opt_b6b5b67d7a",
+  "policy_rule_id": null,
+  "summary": "Re-baseline customer needs",
+  "details": {
+   "consequence": "low"
+  }
+ },
+ {
+  "id": "aud_cdb02f9b3d",
+  "at": "2026-10-05T10:53:31.213614",
+  "actor_kind": "agent",
+  "actor_id": "agent:strategy_synthesiser",
+  "action": "option_generated",
+  "subject_type": "option",
+  "subject_id": "opt_f5b66954fb",
+  "policy_rule_id": null,
+  "summary": "Enter the growing substitute segment",
+  "details": {
+   "consequence": "high"
+  }
+ },
+ {
+  "id": "aud_76e0e2756e",
+  "at": "2026-10-05T10:53:31.213604",
+  "actor_kind": "agent",
+  "actor_id": "agent:strategy_synthesiser",
+  "action": "option_generated",
+  "subject_type": "option",
+  "subject_id": "opt_1924dfc318",
+  "policy_rule_id": null,
+  "summary": "Refresh the offer's content",
+  "details": {
+   "consequence": "medium"
+  }
+ },
+ {
+  "id": "aud_93b8826311",
+  "at": "2026-10-05T10:53:31.213580",
+  "actor_kind": "agent",
+  "actor_id": "agent:strategy_synthesiser",
+  "action": "policy_evaluated",
+  "subject_type": null,
+  "subject_id": null,
+  "policy_rule_id": "options.draft",
+  "summary": "generate_strategic_options: autonomous_with_audit (options.draft)",
+  "details": {
+   "autonomy": "autonomous_with_audit",
+   "risk": "medium",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_19afb10af9",
+  "at": "2026-10-05T10:53:31.104475",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "policy_evaluated",
+  "subject_type": null,
+  "subject_id": null,
+  "policy_rule_id": "findings.default",
+  "summary": "publish_findings: autonomous_with_audit (findings.default)",
+  "details": {
+   "autonomy": "autonomous_with_audit",
+   "risk": "medium",
+   "policy_version": "2026-10-01",
+   "attributes": {
+    "open_blocking_challenges": 0
+   }
+  }
+ },
+ {
+  "id": "aud_52fbd3f791",
+  "at": "2026-10-05T10:53:31.104449",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_760be99dda",
+  "policy_rule_id": null,
+  "summary": "Starts for Digital & Technology Solutions Professional changed by -45% in region 'North' and by -43% in all other region values between 2022/23 and 2025/26 \u2014 a ",
+  "details": {}
+ },
+ {
+  "id": "aud_515d05f92a",
+  "at": "2026-10-05T10:53:31.104443",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_f785b8460b",
+  "policy_rule_id": null,
+  "summary": "Starts changed by -57% in programme_code 'SL7' and by -28% in all other programme_code values between 2022/23 and 2025/26 \u2014 a difference of -29 pp.",
+  "details": {}
+ },
+ {
+  "id": "aud_ec062452bd",
+  "at": "2026-10-05T10:53:31.104438",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_726377f69c",
+  "policy_rule_id": null,
+  "summary": "Go-to-market conversion has deteriorated explains part of the change: supported for Digital & Technology Solutions Professional; not supported for Senior Leader",
+  "details": {}
+ },
+ {
+  "id": "aud_cf4098b861",
+  "at": "2026-10-05T10:53:31.104432",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_e77291dcfd",
+  "policy_rule_id": null,
+  "summary": "Policy, regulatory or funding change explains part of the change: supported for Senior Leader (MBA); not supported for Digital & Technology Solutions Profession",
+  "details": {}
+ },
+ {
+  "id": "aud_9c2aa79d08",
+  "at": "2026-10-05T10:53:31.104425",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_64d6bfff09",
+  "policy_rule_id": null,
+  "summary": "Share loss to competitors explains part of the change: supported for Digital & Technology Solutions Professional; not supported for Senior Leader (MBA).",
+  "details": {}
+ },
+ {
+  "id": "aud_0d608b8894",
+  "at": "2026-10-05T10:53:31.104419",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_124db269e9",
+  "policy_rule_id": null,
+  "summary": "Market contraction explains part of the change: supported for Data Science Professional, Senior Leader (MBA); not supported for Digital & Technology Solutions P",
+  "details": {}
+ },
+ {
+  "id": "aud_413d05fe10",
+  "at": "2026-10-05T10:53:31.104413",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_865eab4f52",
+  "policy_rule_id": null,
+  "summary": "Not supported by the evidence: Northstar Learning Group's conversion of demand into Senior Leader (MBA) has deteriorated.",
+  "details": {}
+ },
+ {
+  "id": "aud_cd108a96a3",
+  "at": "2026-10-05T10:53:31.104407",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_aebd6e80d6",
+  "policy_rule_id": null,
+  "summary": "Senior Leader (MBA) / SME: proposals\u2192won conversion went from 40% in 2022/23 to 38% in 2025/26 (-3 pp), which is not a material change.",
+  "details": {}
+ },
+ {
+  "id": "aud_11075ee9bf",
+  "at": "2026-10-05T10:53:31.104402",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_b3758b8abe",
+  "policy_rule_id": null,
+  "summary": "Senior Leader (MBA) / Large employer: proposals\u2192won conversion went from 50% in 2022/23 to 50% in 2025/26 (+0 pp), which is not a material change.",
+  "details": {}
+ },
+ {
+  "id": "aud_42486519e9",
+  "at": "2026-10-05T10:53:31.104396",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_9243719131",
+  "policy_rule_id": null,
+  "summary": "Northstar Learning Group's conversion of demand into Digital & Technology Solutions Professional has deteriorated.",
+  "details": {}
+ },
+ {
+  "id": "aud_dccf6898e6",
+  "at": "2026-10-05T10:53:31.104390",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_ebc74f62a7",
+  "policy_rule_id": null,
+  "summary": "Digital & Technology Solutions Professional / SME: proposals\u2192won conversion went from 40% in 2022/23 to 37% in 2025/26 (-3 pp), which is not a material change.",
+  "details": {}
+ },
+ {
+  "id": "aud_4dfa96665c",
+  "at": "2026-10-05T10:53:31.104384",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_8cb55cad8a",
+  "policy_rule_id": null,
+  "summary": "Digital & Technology Solutions Professional / Large employer: proposals\u2192won conversion went from 45% in 2022/23 to 26% in 2025/26 (-19 pp).",
+  "details": {}
+ },
+ {
+  "id": "aud_ca9cac694e",
+  "at": "2026-10-05T10:53:31.104378",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_0b5c56662e",
+  "policy_rule_id": null,
+  "summary": "A policy, regulatory or funding change has reduced demand for Senior Leader (MBA).",
+  "details": {}
+ },
+ {
+  "id": "aud_a0aea64e0c",
+  "at": "2026-10-05T10:53:31.104371",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_c5c190f7a3",
+  "policy_rule_id": null,
+  "summary": "Not supported by the evidence: A policy, regulatory or funding change has reduced demand for Digital & Technology Solutions Professional.",
+  "details": {}
+ },
+ {
+  "id": "aud_77c61741b3",
+  "at": "2026-10-05T10:53:31.104365",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_610a18d27f",
+  "policy_rule_id": null,
+  "summary": "Not supported by the evidence: Northstar Learning Group is losing share of the Senior Leader (MBA) market to competitors.",
+  "details": {}
+ },
+ {
+  "id": "aud_7922f2b5fb",
+  "at": "2026-10-05T10:53:31.104359",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_93ada8b3b4",
+  "policy_rule_id": null,
+  "summary": "Senior Leader (MBA): own starts 400\u2192170 (-57%) vs market 14,000\u21925,300 (-62%), 2022/23\u20132025/26: the organisation moved in line with the market; share 2.9%\u21923.2%.",
+  "details": {}
+ },
+ {
+  "id": "aud_7207331f27",
+  "at": "2026-10-05T10:53:31.104354",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_f19a5cd9c9",
+  "policy_rule_id": null,
+  "summary": "Northstar Learning Group is losing share of the Digital & Technology Solutions Professional market to competitors.",
+  "details": {}
+ },
+ {
+  "id": "aud_1ec5e7329f",
+  "at": "2026-10-05T10:53:31.104348",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_a8e5dc93e0",
+  "policy_rule_id": null,
+  "summary": "The market for Senior Leader (MBA) has contracted, and Northstar Learning Group is declining with it.",
+  "details": {}
+ },
+ {
+  "id": "aud_52d89b2621",
+  "at": "2026-10-05T10:53:31.104341",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_8e4b5fbf62",
+  "policy_rule_id": null,
+  "summary": "Senior Leader (MBA): own starts 400\u2192170 (-57%) vs market 14,000\u21925,300 (-62%), 2022/23\u20132025/26: the market itself declined; share 2.9%\u21923.2%.",
+  "details": {}
+ },
+ {
+  "id": "aud_bf805bb83c",
+  "at": "2026-10-05T10:53:31.104335",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_5a901f8527",
+  "policy_rule_id": null,
+  "summary": "Not supported by the evidence: The market for Digital & Technology Solutions Professional has contracted, and Northstar Learning Group is declining with it.",
+  "details": {}
+ },
+ {
+  "id": "aud_674dbab55a",
+  "at": "2026-10-05T10:53:31.104329",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_a549426c60",
+  "policy_rule_id": null,
+  "summary": "Digital & Technology Solutions Professional: own starts 620\u2192350 (-44%) vs market 7,800\u21928,250 (+6%), 2022/23\u20132025/26: the organisation under-performed the market",
+  "details": {}
+ },
+ {
+  "id": "aud_86a808cbdc",
+  "at": "2026-10-05T10:53:31.104323",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_9ae98070fe",
+  "policy_rule_id": null,
+  "summary": "Digital & Technology Solutions Professional: own starts 620\u2192350 (-44%) vs market 7,800\u21928,250 (+6%), 2022/23\u20132025/26: the market grew; share 7.9%\u21924.2%.",
+  "details": {}
+ },
+ {
+  "id": "aud_cd77d82ff9",
+  "at": "2026-10-05T10:53:31.104317",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_2bb291bd4a",
+  "policy_rule_id": null,
+  "summary": "The market for Data Science Professional has contracted, and Northstar Learning Group is declining with it.",
+  "details": {}
+ },
+ {
+  "id": "aud_88c56d6173",
+  "at": "2026-10-05T10:53:31.104312",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_2a08ae2f3e",
+  "policy_rule_id": null,
+  "summary": "Data Science Professional: own starts 180\u2192150 (-17%) vs market 3,100\u21922,350 (-24%), 2022/23\u20132025/26: the market itself declined; share 5.8%\u21926.4%.",
+  "details": {}
+ },
+ {
+  "id": "aud_facb2721be",
+  "at": "2026-10-05T10:53:31.104305",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_5844498bef",
+  "policy_rule_id": null,
+  "summary": "Northstar Learning Group's portfolio lacks offerings in the segments where demand is growing.",
+  "details": {}
+ },
+ {
+  "id": "aud_45ce4530f2",
+  "at": "2026-10-05T10:53:31.104299",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_039466c270",
+  "policy_rule_id": null,
+  "summary": "Fewer prospective customers are entering Northstar Learning Group's funnel for degree-apprenticeship portfolio enrolments.",
+  "details": {}
+ },
+ {
+  "id": "aud_e4688a977c",
+  "at": "2026-10-05T10:53:31.104293",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_2956855bc6",
+  "policy_rule_id": null,
+  "summary": "Senior Leader (MBA) / SME: enquiries fell from 70 to 20 (-71%).",
+  "details": {}
+ },
+ {
+  "id": "aud_603f70e250",
+  "at": "2026-10-05T10:53:31.104287",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_60ab2da9f1",
+  "policy_rule_id": null,
+  "summary": "Senior Leader (MBA) / Large employer: enquiries fell from 120 to 60 (-50%).",
+  "details": {}
+ },
+ {
+  "id": "aud_52fff09ddb",
+  "at": "2026-10-05T10:53:31.104282",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_6dc69b29c2",
+  "policy_rule_id": null,
+  "summary": "Digital & Technology Solutions Professional / SME: enquiries fell from 220 to 160 (-27%).",
+  "details": {}
+ },
+ {
+  "id": "aud_9fedf973e3",
+  "at": "2026-10-05T10:53:31.104276",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_2183b4c8a4",
+  "policy_rule_id": null,
+  "summary": "Data Science Professional / SME: enquiries fell from 40 to 34 (-15%).",
+  "details": {}
+ },
+ {
+  "id": "aud_f90fce06f0",
+  "at": "2026-10-05T10:53:31.104269",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_268cae1f35",
+  "policy_rule_id": null,
+  "summary": "Customers' underlying needs have shifted away from what degree-apprenticeship portfolio enrolments provides.",
+  "details": {}
+ },
+ {
+  "id": "aud_8f7f54a34a",
+  "at": "2026-10-05T10:53:31.104262",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_27495a65dc",
+  "policy_rule_id": null,
+  "summary": "Demand is shifting from degree-apprenticeship portfolio enrolments to substitute or adjacent offerings.",
+  "details": {}
+ },
+ {
+  "id": "aud_36d9764a98",
+  "at": "2026-10-05T10:53:31.104251",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_09a14c629e",
+  "policy_rule_id": null,
+  "summary": "The market for AI & Automation Practitioner grew from 1,200 to 7,800 between 2022/23 and 2025/26; the organisation does not offer AI & Automation Practitioner.",
+  "details": {}
+ },
+ {
+  "id": "aud_a35e95958b",
+  "at": "2026-10-05T10:53:31.104244",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_76b64d027f",
+  "policy_rule_id": null,
+  "summary": "The market for Applied AI Engineer grew from 0 to 2,600 between 2022/23 and 2025/26; the organisation does not offer Applied AI Engineer.",
+  "details": {}
+ },
+ {
+  "id": "aud_b0ec81f3c5",
+  "at": "2026-10-05T10:53:31.104223",
+  "actor_kind": "agent",
+  "actor_id": "agent:governance_gate",
+  "action": "finding_promoted",
+  "subject_type": "finding",
+  "subject_id": "fnd_7af2747069",
+  "policy_rule_id": null,
+  "summary": "Northstar Learning Group's offer for degree-apprenticeship portfolio enrolments is less relevant or current than competing offers.",
+  "details": {}
+ },
+ {
+  "id": "aud_b0e7473404",
+  "at": "2026-10-05T10:53:30.976131",
+  "actor_kind": "agent",
+  "actor_id": "agent:sceptic",
+  "action": "routing_decision",
+  "subject_type": null,
+  "subject_id": null,
+  "policy_rule_id": null,
+  "summary": "Stopping: no open challenge requests further research and all hypotheses have been tested.",
+  "details": {
+   "continue_research": false,
+   "stop_reason": "sufficient_evidence"
+  }
+ },
+ {
+  "id": "aud_233baefad3",
+  "at": "2026-10-05T10:53:30.976112",
+  "actor_kind": "agent",
+  "actor_id": "agent:sceptic",
+  "action": "challenge_resolved",
+  "subject_type": "claim",
+  "subject_id": "clm_5414cc49fd",
+  "policy_rule_id": null,
+  "summary": "ignored_contradiction -> addressed",
+  "details": {}
+ },
+ {
+  "id": "aud_d89d1cf9cd",
+  "at": "2026-10-05T10:53:30.976108",
+  "actor_kind": "agent",
+  "actor_id": "agent:sceptic",
+  "action": "challenge_resolved",
+  "subject_type": "claim",
+  "subject_id": "clm_5414cc49fd",
+  "policy_rule_id": null,
+  "summary": "correlation_not_causation -> addressed",
+  "details": {}
+ },
+ {
+  "id": "aud_79eba92171",
+  "at": "2026-10-05T10:53:30.869426",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_downgraded",
+  "subject_type": "claim",
+  "subject_id": "clm_3f2f97d6c2",
+  "policy_rule_id": null,
+  "summary": "inferred -> hypothesis: All supporting evidence is stale relative to the as-of date.; The claim requires an inferential step.",
+  "details": {}
+ },
+ {
+  "id": "aud_6d7c02fc56",
+  "at": "2026-10-05T10:53:30.869407",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_updated",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_6922e114a6",
+  "policy_rule_id": null,
+  "summary": "contradicted: A specific internal organisational change (structure, systems or process) caused the decline in degree-apprenticeship portfolio enrolments.",
+  "details": {}
+ },
+ {
+  "id": "aud_1258f018fa",
+  "at": "2026-10-05T10:53:30.869400",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_ad19e35129",
+  "policy_rule_id": null,
+  "summary": "INFERRED (low): Not supported by the evidence: A specific internal organisational change (structure, systems or process) caused the decline in degree-appren",
+  "details": {}
+ },
+ {
+  "id": "aud_f9a68f4050",
+  "at": "2026-10-05T10:53:30.869376",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_7ab9c399fa",
+  "policy_rule_id": null,
+  "summary": "KNOWN (moderate): Starts for Digital & Technology Solutions Professional changed by -45% in region 'North' and by -43% in all other region values between 2022",
+  "details": {}
+ },
+ {
+  "id": "aud_5922ca3b41",
+  "at": "2026-10-05T10:53:30.868514",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "policy_evaluated",
+  "subject_type": null,
+  "subject_id": null,
+  "policy_rule_id": "classify.default",
+  "summary": "classify_claim: autonomous_with_audit (classify.default)",
+  "details": {
+   "autonomy": "autonomous_with_audit",
+   "risk": "medium",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_5b40619877",
+  "at": "2026-10-05T10:53:30.776765",
+  "actor_kind": "agent",
+  "actor_id": "agent:evidence_manager",
+  "action": "evidence_added",
+  "subject_type": null,
+  "subject_id": null,
+  "policy_rule_id": null,
+  "summary": "Round 3: 1 evidence item(s), 0 new source(s); 0 duplicate source(s) and 0 duplicate evidence item(s) merged.",
+  "details": {
+   "new_evidence": 1,
+   "duplicate_sources": 0
+  }
+ },
+ {
+  "id": "aud_0256e91bfd",
+  "at": "2026-10-05T10:53:30.685167",
+  "actor_kind": "agent",
+  "actor_id": "agent:data_analyst",
+  "action": "task_completed",
+  "subject_type": "task",
+  "subject_id": "tsk_c453fc2956",
+  "policy_rule_id": null,
+  "summary": "Starts for Digital & Technology Solutions Professional changed by -45% in region 'North' and by -43% in all other region values between 2022/23 and 2025/26 \u2014 a difference of 3 pp, so a factor specific",
+  "details": {
+   "operation": "compare_groups",
+   "evidence": 1
+  }
+ },
+ {
+  "id": "aud_3a89a65c08",
+  "at": "2026-10-05T10:53:30.685033",
+  "actor_kind": "agent",
+  "actor_id": "agent:data_analyst",
+  "action": "policy_evaluated",
+  "subject_type": "task",
+  "subject_id": "tsk_c453fc2956",
+  "policy_rule_id": "dataset.default",
+  "summary": "analyse_internal_dataset: autonomous_with_audit (dataset.default)",
+  "details": {
+   "autonomy": "autonomous_with_audit",
+   "risk": "medium",
+   "policy_version": "2026-10-01",
+   "attributes": {
+    "personal_data": "none",
+    "confidentiality": "commercially_confidential"
+   }
+  }
+ },
+ {
+  "id": "aud_d901114cea",
+  "at": "2026-10-05T10:53:30.600705",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_created",
+  "subject_type": "task",
+  "subject_id": "tsk_c453fc2956",
+  "policy_rule_id": null,
+  "summary": "[dataset_analysis] Disconfirming test for challenge: The causal claim rests on events that coincided in time. Coincidence does not show that one caused the other; test whether the",
+  "details": {
+   "status": "pending",
+   "origin": "challenger"
+  }
+ },
+ {
+  "id": "aud_05c8b92b93",
+  "at": "2026-10-05T10:53:30.600682",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "policy_evaluated",
+  "subject_type": null,
+  "subject_id": null,
+  "policy_rule_id": "plan.default",
+  "summary": "plan_research: autonomous (plan.default)",
+  "details": {
+   "autonomy": "autonomous",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_d011f3aa5b",
+  "at": "2026-10-05T10:53:30.509027",
+  "actor_kind": "agent",
+  "actor_id": "agent:sceptic",
+  "action": "routing_decision",
+  "subject_type": null,
+  "subject_id": null,
+  "policy_rule_id": null,
+  "summary": "Continuing: 1 open challenge(s) ask for further research.",
+  "details": {
+   "continue_research": true,
+   "stop_reason": null
+  }
+ },
+ {
+  "id": "aud_2799a8839d",
+  "at": "2026-10-05T10:53:30.509005",
+  "actor_kind": "agent",
+  "actor_id": "agent:sceptic",
+  "action": "challenge_raised",
+  "subject_type": "claim",
+  "subject_id": "clm_5414cc49fd",
+  "policy_rule_id": null,
+  "summary": "[major] ignored_contradiction: Evidence of equal or higher authority contradicts this claim.",
+  "details": {}
+ },
+ {
+  "id": "aud_575a41dc59",
+  "at": "2026-10-05T10:53:30.509002",
+  "actor_kind": "agent",
+  "actor_id": "agent:sceptic",
+  "action": "challenge_raised",
+  "subject_type": "claim",
+  "subject_id": "clm_5414cc49fd",
+  "policy_rule_id": null,
+  "summary": "[blocking] correlation_not_causation: The causal claim rests on events that coincided in time. Coincidence does not show that one caused the other; test whether the change also happened where the ev",
+  "details": {}
+ },
+ {
+  "id": "aud_ae5b89a740",
+  "at": "2026-10-05T10:53:30.508999",
+  "actor_kind": "agent",
+  "actor_id": "agent:sceptic",
+  "action": "challenge_resolved",
+  "subject_type": "claim",
+  "subject_id": "clm_3cf5ecea5c",
+  "policy_rule_id": null,
+  "summary": "correlation_not_causation -> addressed",
+  "details": {}
+ },
+ {
+  "id": "aud_8eb8468d17",
+  "at": "2026-10-05T10:53:30.508996",
+  "actor_kind": "agent",
+  "actor_id": "agent:sceptic",
+  "action": "challenge_resolved",
+  "subject_type": "claim",
+  "subject_id": "clm_6f448c1891",
+  "policy_rule_id": null,
+  "summary": "correlation_not_causation -> addressed",
+  "details": {}
+ },
+ {
+  "id": "aud_dc61677ca6",
+  "at": "2026-10-05T10:53:30.508990",
+  "actor_kind": "agent",
+  "actor_id": "agent:sceptic",
+  "action": "challenge_resolved",
+  "subject_type": "claim",
+  "subject_id": "clm_5414cc49fd",
+  "policy_rule_id": null,
+  "summary": "stale_evidence -> addressed",
+  "details": {}
+ },
+ {
+  "id": "aud_f527499a23",
+  "at": "2026-10-05T10:53:30.416755",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_946f4979df",
+  "policy_rule_id": null,
+  "summary": "KNOWN (moderate): Starts changed by -57% in programme_code 'SL7' and by -28% in all other programme_code values between 2022/23 and 2025/26 \u2014 a difference of ",
+  "details": {}
+ },
+ {
+  "id": "aud_861d7459c0",
+  "at": "2026-10-05T10:53:30.416519",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_downgraded",
+  "subject_type": "claim",
+  "subject_id": "clm_3f2f97d6c2",
+  "policy_rule_id": null,
+  "summary": "inferred -> hypothesis: All supporting evidence is stale relative to the as-of date.; The claim requires an inferential step.",
+  "details": {}
+ },
+ {
+  "id": "aud_81d0828375",
+  "at": "2026-10-05T10:53:30.416499",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_updated",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_6922e114a6",
+  "policy_rule_id": null,
+  "summary": "supported: A specific internal organisational change (structure, systems or process) caused the decline in degree-apprenticeship portfolio enrolments.",
+  "details": {}
+ },
+ {
+  "id": "aud_21f29e1edc",
+  "at": "2026-10-05T10:53:30.416491",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_5414cc49fd",
+  "policy_rule_id": null,
+  "summary": "INFERRED (low): A specific internal organisational change (structure, systems or process) caused the decline in degree-apprenticeship portfolio enrolments.",
+  "details": {}
+ },
+ {
+  "id": "aud_eea3ce7d92",
+  "at": "2026-10-05T10:53:30.415591",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "policy_evaluated",
+  "subject_type": null,
+  "subject_id": null,
+  "policy_rule_id": "classify.default",
+  "summary": "classify_claim: autonomous_with_audit (classify.default)",
+  "details": {
+   "autonomy": "autonomous_with_audit",
+   "risk": "medium",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_87d32941fc",
+  "at": "2026-10-05T10:53:30.327003",
+  "actor_kind": "agent",
+  "actor_id": "agent:evidence_manager",
+  "action": "evidence_added",
+  "subject_type": null,
+  "subject_id": null,
+  "policy_rule_id": null,
+  "summary": "Round 2: 10 evidence item(s), 0 new source(s); 0 duplicate source(s) and 0 duplicate evidence item(s) merged.",
+  "details": {
+   "new_evidence": 10,
+   "duplicate_sources": 0
+  }
+ },
+ {
+  "id": "aud_1e2b2b6805",
+  "at": "2026-10-05T10:53:29.906633",
+  "actor_kind": "agent",
+  "actor_id": "agent:data_analyst",
+  "action": "task_completed",
+  "subject_type": "task",
+  "subject_id": "tsk_7ac3f5d2c7",
+  "policy_rule_id": null,
+  "summary": "Starts changed by -57% in programme_code 'SL7' and by -28% in all other programme_code values between 2022/23 and 2025/26 \u2014 a difference of -29 pp.",
+  "details": {
+   "operation": "compare_groups",
+   "evidence": 1
+  }
+ },
+ {
+  "id": "aud_44dd8e4f9b",
+  "at": "2026-10-05T10:53:29.906529",
+  "actor_kind": "agent",
+  "actor_id": "agent:data_analyst",
+  "action": "policy_evaluated",
+  "subject_type": "task",
+  "subject_id": "tsk_7ac3f5d2c7",
+  "policy_rule_id": "dataset.default",
+  "summary": "analyse_internal_dataset: autonomous_with_audit (dataset.default)",
+  "details": {
+   "autonomy": "autonomous_with_audit",
+   "risk": "medium",
+   "policy_version": "2026-10-01",
+   "attributes": {
+    "personal_data": "none",
+    "confidentiality": "commercially_confidential"
+   }
+  }
+ },
+ {
+  "id": "aud_122dd7ad00",
+  "at": "2026-10-05T10:53:29.906492",
+  "actor_kind": "agent",
+  "actor_id": "agent:document_researcher",
+  "action": "task_completed",
+  "subject_type": "task",
+  "subject_id": "tsk_2bfb41726e",
+  "policy_rule_id": null,
+  "summary": "Searched 3 released document(s); 7 evidence item(s).",
+  "details": {}
+ },
+ {
+  "id": "aud_aba3a5cdc8",
+  "at": "2026-10-05T10:53:29.903234",
+  "actor_kind": "agent",
+  "actor_id": "agent:document_researcher",
+  "action": "policy_evaluated",
+  "subject_type": "task",
+  "subject_id": "tsk_2bfb41726e",
+  "policy_rule_id": "read.default",
+  "summary": "read_sanitised_document: autonomous (read.default)",
+  "details": {
+   "autonomy": "autonomous",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_43f06c00e7",
+  "at": "2026-10-05T10:53:29.903208",
+  "actor_kind": "agent",
+  "actor_id": "agent:web_researcher",
+  "action": "task_completed",
+  "subject_type": "task",
+  "subject_id": "tsk_e2144d5fb3",
+  "policy_rule_id": null,
+  "summary": "1 search(es), 0 new source(s), 4 already-known source(s) skipped, 0 evidence item(s).",
+  "details": {}
+ },
+ {
+  "id": "aud_d0ffa42b19",
+  "at": "2026-10-05T10:53:29.903167",
+  "actor_kind": "agent",
+  "actor_id": "agent:web_researcher",
+  "action": "policy_evaluated",
+  "subject_type": "task",
+  "subject_id": "tsk_e2144d5fb3",
+  "policy_rule_id": "search.default",
+  "summary": "search_public_web: autonomous (search.default)",
+  "details": {
+   "autonomy": "autonomous",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_d9c4ecc1f8",
+  "at": "2026-10-05T10:53:29.903127",
+  "actor_kind": "agent",
+  "actor_id": "agent:document_researcher",
+  "action": "task_completed",
+  "subject_type": "task",
+  "subject_id": "tsk_c36ba0b542",
+  "policy_rule_id": null,
+  "summary": "Searched 3 released document(s); 7 evidence item(s).",
+  "details": {}
+ },
+ {
+  "id": "aud_df32f1f8da",
+  "at": "2026-10-05T10:53:29.899761",
+  "actor_kind": "agent",
+  "actor_id": "agent:document_researcher",
+  "action": "policy_evaluated",
+  "subject_type": "task",
+  "subject_id": "tsk_c36ba0b542",
+  "policy_rule_id": "read.default",
+  "summary": "read_sanitised_document: autonomous (read.default)",
+  "details": {
+   "autonomy": "autonomous",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_e7204b3bb4",
+  "at": "2026-10-05T10:53:29.899725",
+  "actor_kind": "agent",
+  "actor_id": "agent:web_researcher",
+  "action": "task_completed",
+  "subject_type": "task",
+  "subject_id": "tsk_9da7aaf068",
+  "policy_rule_id": null,
+  "summary": "1 search(es), 0 new source(s), 4 already-known source(s) skipped, 0 evidence item(s).",
+  "details": {}
+ },
+ {
+  "id": "aud_334ce6eec2",
+  "at": "2026-10-05T10:53:29.899663",
+  "actor_kind": "agent",
+  "actor_id": "agent:web_researcher",
+  "action": "policy_evaluated",
+  "subject_type": "task",
+  "subject_id": "tsk_9da7aaf068",
+  "policy_rule_id": "search.default",
+  "summary": "search_public_web: autonomous (search.default)",
+  "details": {
+   "autonomy": "autonomous",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_c37e35eb0b",
+  "at": "2026-10-05T10:53:29.804907",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_skipped",
+  "subject_type": null,
+  "subject_id": null,
+  "policy_rule_id": null,
+  "summary": "1 duplicate task proposal(s) merged or skipped.",
+  "details": {}
+ },
+ {
+  "id": "aud_42634e26ab",
+  "at": "2026-10-05T10:53:29.804904",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_created",
+  "subject_type": "task",
+  "subject_id": "tsk_7ac3f5d2c7",
+  "policy_rule_id": null,
+  "summary": "[dataset_analysis] Disconfirming test for challenge: The causal claim rests on events that coincided in time. Coincidence does not show that one caused the other; test whether the",
+  "details": {
+   "status": "pending",
+   "origin": "challenger"
+  }
+ },
+ {
+  "id": "aud_99d5a2f5f8",
+  "at": "2026-10-05T10:53:29.804901",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_created",
+  "subject_type": "task",
+  "subject_id": "tsk_2bfb41726e",
+  "policy_rule_id": null,
+  "summary": "[internal_documents] Current evidence on: Not supported by the evidence: Part of the apparent change in degree-apprenticeship portfolio enrolments is a measurement or definition art",
+  "details": {
+   "status": "pending",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_f7091d2d60",
+  "at": "2026-10-05T10:53:29.804899",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_created",
+  "subject_type": "task",
+  "subject_id": "tsk_e2144d5fb3",
+  "policy_rule_id": null,
+  "summary": "[web_search] Current evidence on: Not supported by the evidence: Part of the apparent change in degree-apprenticeship portfolio enrolments is a measurement or definition art",
+  "details": {
+   "status": "pending",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_db1d66a470",
+  "at": "2026-10-05T10:53:29.804896",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_created",
+  "subject_type": "task",
+  "subject_id": "tsk_c36ba0b542",
+  "policy_rule_id": null,
+  "summary": "[internal_documents] Current evidence on: A specific internal organisational change (structure, systems or process) caused the decline in degree-apprenticeship portfolio enrolments.",
+  "details": {
+   "status": "pending",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_5d7eb77d48",
+  "at": "2026-10-05T10:53:29.804893",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_created",
+  "subject_type": "task",
+  "subject_id": "tsk_9da7aaf068",
+  "policy_rule_id": null,
+  "summary": "[web_search] Current evidence on: A specific internal organisational change (structure, systems or process) caused the decline in degree-apprenticeship portfolio enrolments.",
+  "details": {
+   "status": "pending",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_bd4760d145",
+  "at": "2026-10-05T10:53:29.804829",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "policy_evaluated",
+  "subject_type": null,
+  "subject_id": null,
+  "policy_rule_id": "plan.default",
+  "summary": "plan_research: autonomous (plan.default)",
+  "details": {
+   "autonomy": "autonomous",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_b9ba72784e",
+  "at": "2026-10-05T10:53:29.725847",
+  "actor_kind": "agent",
+  "actor_id": "agent:sceptic",
+  "action": "routing_decision",
+  "subject_type": null,
+  "subject_id": null,
+  "policy_rule_id": null,
+  "summary": "Continuing: 4 open challenge(s) ask for further research.",
+  "details": {
+   "continue_research": true,
+   "stop_reason": null
+  }
+ },
+ {
+  "id": "aud_0a2ab35794",
+  "at": "2026-10-05T10:53:29.725807",
+  "actor_kind": "agent",
+  "actor_id": "agent:sceptic",
+  "action": "challenge_raised",
+  "subject_type": "investigation",
+  "subject_id": "src_83c667821d",
+  "policy_rule_id": null,
+  "summary": "[minor] injection_suspected: Source 'Choosing an apprenticeship provider in 2026' contains text addressed to AI systems (addresses_ai, classification_instruction, decision_instruction, fake",
+  "details": {}
+ },
+ {
+  "id": "aud_cbb82782ba",
+  "at": "2026-10-05T10:53:29.725804",
+  "actor_kind": "agent",
+  "actor_id": "agent:sceptic",
+  "action": "challenge_raised",
+  "subject_type": "investigation",
+  "subject_id": "segment:all",
+  "policy_rule_id": null,
+  "summary": "[minor] alternative_explanation: 6 drivers are supported for 'all' (offer_proposition, offer_format, substitution, demand_shift, pipeline_volume, portfolio_gap). Their relative contribution is ",
+  "details": {}
+ },
+ {
+  "id": "aud_2d519a7b49",
+  "at": "2026-10-05T10:53:29.725801",
+  "actor_kind": "agent",
+  "actor_id": "agent:sceptic",
+  "action": "challenge_raised",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_5f285193fa",
+  "policy_rule_id": null,
+  "summary": "[major] overgeneralisation: A source asserts this driver explains the change across the board (\"From 1 January 2026, levy funding for Level 7 apprenticeships will be available only for app",
+  "details": {}
+ },
+ {
+  "id": "aud_4fe46e2d52",
+  "at": "2026-10-05T10:53:29.725798",
+  "actor_kind": "agent",
+  "actor_id": "agent:sceptic",
+  "action": "challenge_raised",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_893a66fa84",
+  "policy_rule_id": null,
+  "summary": "[major] overgeneralisation: A source asserts this driver explains the change across the board (\"Degree apprenticeship demand is collapsing across every subject area, according to several p",
+  "details": {}
+ },
+ {
+  "id": "aud_63b41def97",
+  "at": "2026-10-05T10:53:29.725795",
+  "actor_kind": "agent",
+  "actor_id": "agent:sceptic",
+  "action": "challenge_raised",
+  "subject_type": "claim",
+  "subject_id": "clm_3cf5ecea5c",
+  "policy_rule_id": null,
+  "summary": "[blocking] correlation_not_causation: The causal claim rests on events that coincided in time. Coincidence does not show that one caused the other; test whether the change also happened where the ev",
+  "details": {}
+ },
+ {
+  "id": "aud_3fef518858",
+  "at": "2026-10-05T10:53:29.725792",
+  "actor_kind": "agent",
+  "actor_id": "agent:sceptic",
+  "action": "challenge_raised",
+  "subject_type": "claim",
+  "subject_id": "clm_6f448c1891",
+  "policy_rule_id": null,
+  "summary": "[blocking] correlation_not_causation: The causal claim rests on events that coincided in time. Coincidence does not show that one caused the other; test whether the change also happened where the ev",
+  "details": {}
+ },
+ {
+  "id": "aud_bf771c9b8b",
+  "at": "2026-10-05T10:53:29.725789",
+  "actor_kind": "agent",
+  "actor_id": "agent:sceptic",
+  "action": "challenge_raised",
+  "subject_type": "claim",
+  "subject_id": "clm_3f2f97d6c2",
+  "policy_rule_id": null,
+  "summary": "[major] stale_evidence: All supporting evidence is stale relative to the investigation's as-of date.",
+  "details": {}
+ },
+ {
+  "id": "aud_dec486536e",
+  "at": "2026-10-05T10:53:29.725785",
+  "actor_kind": "agent",
+  "actor_id": "agent:sceptic",
+  "action": "challenge_raised",
+  "subject_type": "claim",
+  "subject_id": "clm_5414cc49fd",
+  "policy_rule_id": null,
+  "summary": "[major] stale_evidence: All supporting evidence is stale relative to the investigation's as-of date.",
+  "details": {}
+ },
+ {
+  "id": "aud_6d56e889d4",
+  "at": "2026-10-05T10:53:29.725779",
+  "actor_kind": "agent",
+  "actor_id": "agent:sceptic",
+  "action": "challenge_raised",
+  "subject_type": "claim",
+  "subject_id": "clm_c78503e1aa",
+  "policy_rule_id": null,
+  "summary": "[major] ignored_contradiction: Evidence of equal or higher authority contradicts this claim.",
+  "details": {}
+ },
+ {
+  "id": "aud_7f82061314",
+  "at": "2026-10-05T10:53:29.647315",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_updated",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_4009d551f0",
+  "policy_rule_id": null,
+  "summary": "contradicted: Northstar Learning Group's conversion of demand into Senior Leader (MBA) has deteriorated.",
+  "details": {}
+ },
+ {
+  "id": "aud_ff1316ef19",
+  "at": "2026-10-05T10:53:29.647311",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_5d72177342",
+  "policy_rule_id": null,
+  "summary": "INFERRED (moderate): Not supported by the evidence: Northstar Learning Group's conversion of demand into Senior Leader (MBA) has deteriorated.",
+  "details": {}
+ },
+ {
+  "id": "aud_c66e0663b7",
+  "at": "2026-10-05T10:53:29.647294",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_77313ed84c",
+  "policy_rule_id": null,
+  "summary": "KNOWN (moderate): Senior Leader (MBA) / SME: proposals\u2192won conversion went from 40% in 2022/23 to 38% in 2025/26 (-3 pp), which is not a material change.",
+  "details": {}
+ },
+ {
+  "id": "aud_c3d35ac841",
+  "at": "2026-10-05T10:53:29.647278",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_d97fade82d",
+  "policy_rule_id": null,
+  "summary": "KNOWN (moderate): Senior Leader (MBA) / Large employer: proposals\u2192won conversion went from 50% in 2022/23 to 50% in 2025/26 (+0 pp), which is not a material c",
+  "details": {}
+ },
+ {
+  "id": "aud_178652ba08",
+  "at": "2026-10-05T10:53:29.647261",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_updated",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_33fb13ba2c",
+  "policy_rule_id": null,
+  "summary": "supported: Northstar Learning Group's conversion of demand into Digital & Technology Solutions Professional has deteriorated.",
+  "details": {}
+ },
+ {
+  "id": "aud_e11f622d9b",
+  "at": "2026-10-05T10:53:29.647256",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_a89dfcc08f",
+  "policy_rule_id": null,
+  "summary": "INFERRED (high): Northstar Learning Group's conversion of demand into Digital & Technology Solutions Professional has deteriorated.",
+  "details": {}
+ },
+ {
+  "id": "aud_3f6ab8b909",
+  "at": "2026-10-05T10:53:29.647239",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_434d16e488",
+  "policy_rule_id": null,
+  "summary": "KNOWN (moderate): Digital & Technology Solutions Professional / SME: proposals\u2192won conversion went from 40% in 2022/23 to 37% in 2025/26 (-3 pp), which is not",
+  "details": {}
+ },
+ {
+  "id": "aud_cad0e38000",
+  "at": "2026-10-05T10:53:29.647221",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_9ca75a168e",
+  "policy_rule_id": null,
+  "summary": "KNOWN (moderate): Digital & Technology Solutions Professional / Large employer: proposals\u2192won conversion went from 45% in 2022/23 to 26% in 2025/26 (-19 pp).",
+  "details": {}
+ },
+ {
+  "id": "aud_ed11830d7a",
+  "at": "2026-10-05T10:53:29.647204",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_updated",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_0a90484295",
+  "policy_rule_id": null,
+  "summary": "supported: A policy, regulatory or funding change has reduced demand for Senior Leader (MBA).",
+  "details": {}
+ },
+ {
+  "id": "aud_9b9be09f10",
+  "at": "2026-10-05T10:53:29.647199",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_6f448c1891",
+  "policy_rule_id": null,
+  "summary": "INFERRED (high): A policy, regulatory or funding change has reduced demand for Senior Leader (MBA).",
+  "details": {}
+ },
+ {
+  "id": "aud_9c8cec9ea1",
+  "at": "2026-10-05T10:53:29.647176",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_updated",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_9ba0fcd43c",
+  "policy_rule_id": null,
+  "summary": "contradicted: A policy, regulatory or funding change has reduced demand for Digital & Technology Solutions Professional.",
+  "details": {}
+ },
+ {
+  "id": "aud_c80a005fee",
+  "at": "2026-10-05T10:53:29.647172",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_4da444a4db",
+  "policy_rule_id": null,
+  "summary": "INFERRED (high): Not supported by the evidence: A policy, regulatory or funding change has reduced demand for Digital & Technology Solutions Professional.",
+  "details": {}
+ },
+ {
+  "id": "aud_59e6d13bc6",
+  "at": "2026-10-05T10:53:29.647152",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_8743fc09d4",
+  "policy_rule_id": null,
+  "summary": "KNOWN (moderate): Digital & Technology Solutions Professional: own starts 620\u2192350 (-44%) vs market 7,800\u21928,250 (+6%), 2022/23\u20132025/26: the market grew; share ",
+  "details": {}
+ },
+ {
+  "id": "aud_6cdf9c9c25",
+  "at": "2026-10-05T10:53:29.647135",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_updated",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_2e62b362e5",
+  "policy_rule_id": null,
+  "summary": "contradicted: Northstar Learning Group is losing share of the Senior Leader (MBA) market to competitors.",
+  "details": {}
+ },
+ {
+  "id": "aud_3eda48f049",
+  "at": "2026-10-05T10:53:29.647130",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_161bcf24b6",
+  "policy_rule_id": null,
+  "summary": "INFERRED (moderate): Not supported by the evidence: Northstar Learning Group is losing share of the Senior Leader (MBA) market to competitors.",
+  "details": {}
+ },
+ {
+  "id": "aud_4b332ba3a0",
+  "at": "2026-10-05T10:53:29.647114",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_5ce7c5b905",
+  "policy_rule_id": null,
+  "summary": "KNOWN (moderate): Senior Leader (MBA): own starts 400\u2192170 (-57%) vs market 14,000\u21925,300 (-62%), 2022/23\u20132025/26: the organisation moved in line with the marke",
+  "details": {}
+ },
+ {
+  "id": "aud_ed7fe90285",
+  "at": "2026-10-05T10:53:29.647097",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_updated",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_28f3657fa2",
+  "policy_rule_id": null,
+  "summary": "supported: Northstar Learning Group is losing share of the Digital & Technology Solutions Professional market to competitors.",
+  "details": {}
+ },
+ {
+  "id": "aud_3c78a4187b",
+  "at": "2026-10-05T10:53:29.647093",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_7775503569",
+  "policy_rule_id": null,
+  "summary": "INFERRED (high): Northstar Learning Group is losing share of the Digital & Technology Solutions Professional market to competitors.",
+  "details": {}
+ },
+ {
+  "id": "aud_409efb2596",
+  "at": "2026-10-05T10:53:29.647075",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_9a4997b16c",
+  "policy_rule_id": null,
+  "summary": "KNOWN (moderate): Digital & Technology Solutions Professional: own starts 620\u2192350 (-44%) vs market 7,800\u21928,250 (+6%), 2022/23\u20132025/26: the organisation under-",
+  "details": {}
+ },
+ {
+  "id": "aud_7daf61b085",
+  "at": "2026-10-05T10:53:29.647057",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_updated",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_d470e2c96e",
+  "policy_rule_id": null,
+  "summary": "supported: The market for Senior Leader (MBA) has contracted, and Northstar Learning Group is declining with it.",
+  "details": {}
+ },
+ {
+  "id": "aud_d2aae9950d",
+  "at": "2026-10-05T10:53:29.647053",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_22972a4bc5",
+  "policy_rule_id": null,
+  "summary": "INFERRED (high): The market for Senior Leader (MBA) has contracted, and Northstar Learning Group is declining with it.",
+  "details": {}
+ },
+ {
+  "id": "aud_b61aab6407",
+  "at": "2026-10-05T10:53:29.647032",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_5f24bd4567",
+  "policy_rule_id": null,
+  "summary": "KNOWN (moderate): Senior Leader (MBA): own starts 400\u2192170 (-57%) vs market 14,000\u21925,300 (-62%), 2022/23\u20132025/26: the market itself declined; share 2.9%\u21923.2%.",
+  "details": {}
+ },
+ {
+  "id": "aud_159f08b914",
+  "at": "2026-10-05T10:53:29.647016",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_updated",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_e26ec33018",
+  "policy_rule_id": null,
+  "summary": "contradicted: The market for Digital & Technology Solutions Professional has contracted, and Northstar Learning Group is declining with it.",
+  "details": {}
+ },
+ {
+  "id": "aud_26b8376ca8",
+  "at": "2026-10-05T10:53:29.647011",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_eefb8e14bc",
+  "policy_rule_id": null,
+  "summary": "INFERRED (moderate): Not supported by the evidence: The market for Digital & Technology Solutions Professional has contracted, and Northstar Learning Group is de",
+  "details": {}
+ },
+ {
+  "id": "aud_3ffb92aa08",
+  "at": "2026-10-05T10:53:29.646993",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_9a4997b16c",
+  "policy_rule_id": null,
+  "summary": "KNOWN (moderate): Digital & Technology Solutions Professional: own starts 620\u2192350 (-44%) vs market 7,800\u21928,250 (+6%), 2022/23\u20132025/26: the organisation under-",
+  "details": {}
+ },
+ {
+  "id": "aud_930c7be9a7",
+  "at": "2026-10-05T10:53:29.646975",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_8743fc09d4",
+  "policy_rule_id": null,
+  "summary": "KNOWN (moderate): Digital & Technology Solutions Professional: own starts 620\u2192350 (-44%) vs market 7,800\u21928,250 (+6%), 2022/23\u20132025/26: the market grew; share ",
+  "details": {}
+ },
+ {
+  "id": "aud_7ef9f6bee7",
+  "at": "2026-10-05T10:53:29.646957",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_updated",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_1688f2a44c",
+  "policy_rule_id": null,
+  "summary": "supported: The market for Data Science Professional has contracted, and Northstar Learning Group is declining with it.",
+  "details": {}
+ },
+ {
+  "id": "aud_39ddd77110",
+  "at": "2026-10-05T10:53:29.646953",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_5bd304cf0c",
+  "policy_rule_id": null,
+  "summary": "INFERRED (moderate): The market for Data Science Professional has contracted, and Northstar Learning Group is declining with it.",
+  "details": {}
+ },
+ {
+  "id": "aud_0a84b0bf79",
+  "at": "2026-10-05T10:53:29.646937",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_e5800b1bfd",
+  "policy_rule_id": null,
+  "summary": "KNOWN (moderate): Data Science Professional: own starts 180\u2192150 (-17%) vs market 3,100\u21922,350 (-24%), 2022/23\u20132025/26: the market itself declined; share 5.8%\u21926",
+  "details": {}
+ },
+ {
+  "id": "aud_79f412c056",
+  "at": "2026-10-05T10:53:29.646916",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_updated",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_78f4121f08",
+  "policy_rule_id": null,
+  "summary": "unresolved: Customers lost from degree-apprenticeship portfolio enrolments have moved to competitors' substitute offerings rather than leaving the categ",
+  "details": {}
+ },
+ {
+  "id": "aud_d23d897ddc",
+  "at": "2026-10-05T10:53:29.646912",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_31120c66bd",
+  "policy_rule_id": null,
+  "summary": "UNKNOWN (very_low): It cannot be determined from available evidence whether customers lost from degree-apprenticeship portfolio enrolments have moved to competi",
+  "details": {}
+ },
+ {
+  "id": "aud_921aa3583d",
+  "at": "2026-10-05T10:53:29.646897",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_updated",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_15b9f65d46",
+  "policy_rule_id": null,
+  "summary": "weakened: Part of the apparent change in degree-apprenticeship portfolio enrolments is a measurement or definition artefact.",
+  "details": {}
+ },
+ {
+  "id": "aud_57d6fe9b0f",
+  "at": "2026-10-05T10:53:29.646891",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_3f2f97d6c2",
+  "policy_rule_id": null,
+  "summary": "HYPOTHESIS (low): Not supported by the evidence: Part of the apparent change in degree-apprenticeship portfolio enrolments is a measurement or definition arte",
+  "details": {}
+ },
+ {
+  "id": "aud_f469026cd3",
+  "at": "2026-10-05T10:53:29.646889",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_downgraded",
+  "subject_type": "claim",
+  "subject_id": "clm_3f2f97d6c2",
+  "policy_rule_id": null,
+  "summary": "inferred -> hypothesis: All supporting evidence is stale relative to the as-of date.; The claim requires an inferential step.",
+  "details": {}
+ },
+ {
+  "id": "aud_8e05ca1fc8",
+  "at": "2026-10-05T10:53:29.646870",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_5414cc49fd",
+  "policy_rule_id": null,
+  "summary": "HYPOTHESIS (very_low): A specific internal organisational change (structure, systems or process) caused the decline in degree-apprenticeship portfolio enrolments.",
+  "details": {}
+ },
+ {
+  "id": "aud_db3abcd5d5",
+  "at": "2026-10-05T10:53:29.646848",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_updated",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_88a8b71ddb",
+  "policy_rule_id": null,
+  "summary": "supported: Northstar Learning Group's portfolio lacks offerings in the segments where demand is growing.",
+  "details": {}
+ },
+ {
+  "id": "aud_796eb0391d",
+  "at": "2026-10-05T10:53:29.646843",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_736c55a288",
+  "policy_rule_id": null,
+  "summary": "INFERRED (high): Northstar Learning Group's portfolio lacks offerings in the segments where demand is growing.",
+  "details": {}
+ },
+ {
+  "id": "aud_9980f406f5",
+  "at": "2026-10-05T10:53:29.646825",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_f212c5db4e",
+  "policy_rule_id": null,
+  "summary": "KNOWN (moderate): The market for AI & Automation Practitioner grew from 1,200 to 7,800 between 2022/23 and 2025/26; the organisation does not offer AI & Autom",
+  "details": {}
+ },
+ {
+  "id": "aud_3d0d0ab27f",
+  "at": "2026-10-05T10:53:29.646808",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_78e9e9dc76",
+  "policy_rule_id": null,
+  "summary": "KNOWN (moderate): The market for Applied AI Engineer grew from 0 to 2,600 between 2022/23 and 2025/26; the organisation does not offer Applied AI Engineer.",
+  "details": {}
+ },
+ {
+  "id": "aud_94a6f4affc",
+  "at": "2026-10-05T10:53:29.646790",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_updated",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_4a48b4fb6e",
+  "policy_rule_id": null,
+  "summary": "supported: Fewer prospective customers are entering Northstar Learning Group's funnel for degree-apprenticeship portfolio enrolments.",
+  "details": {}
+ },
+ {
+  "id": "aud_959f927d6b",
+  "at": "2026-10-05T10:53:29.646786",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_372a9e6dea",
+  "policy_rule_id": null,
+  "summary": "INFERRED (moderate): Fewer prospective customers are entering Northstar Learning Group's funnel for degree-apprenticeship portfolio enrolments.",
+  "details": {}
+ },
+ {
+  "id": "aud_737b575541",
+  "at": "2026-10-05T10:53:29.646765",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_1314facf3f",
+  "policy_rule_id": null,
+  "summary": "KNOWN (moderate): Senior Leader (MBA) / SME: enquiries fell from 70 to 20 (-71%).",
+  "details": {}
+ },
+ {
+  "id": "aud_a713667872",
+  "at": "2026-10-05T10:53:29.646752",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_17dadb7f1e",
+  "policy_rule_id": null,
+  "summary": "KNOWN (moderate): Senior Leader (MBA) / Large employer: enquiries fell from 120 to 60 (-50%).",
+  "details": {}
+ },
+ {
+  "id": "aud_2e93edefc9",
+  "at": "2026-10-05T10:53:29.646738",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_1fdc194c4e",
+  "policy_rule_id": null,
+  "summary": "KNOWN (moderate): Digital & Technology Solutions Professional / SME: enquiries fell from 220 to 160 (-27%).",
+  "details": {}
+ },
+ {
+  "id": "aud_94934d7c77",
+  "at": "2026-10-05T10:53:29.646724",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_da7d862d22",
+  "policy_rule_id": null,
+  "summary": "KNOWN (moderate): Data Science Professional / SME: enquiries fell from 40 to 34 (-15%).",
+  "details": {}
+ },
+ {
+  "id": "aud_8b81389ac5",
+  "at": "2026-10-05T10:53:29.646709",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_updated",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_487f5248e9",
+  "policy_rule_id": null,
+  "summary": "supported: Customers' underlying needs have shifted away from what degree-apprenticeship portfolio enrolments provides.",
+  "details": {}
+ },
+ {
+  "id": "aud_4cd85abcb6",
+  "at": "2026-10-05T10:53:29.646704",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_42fa500321",
+  "policy_rule_id": null,
+  "summary": "INFERRED (moderate): Customers' underlying needs have shifted away from what degree-apprenticeship portfolio enrolments provides.",
+  "details": {}
+ },
+ {
+  "id": "aud_35fbb04220",
+  "at": "2026-10-05T10:53:29.646684",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_updated",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_4e4867594a",
+  "policy_rule_id": null,
+  "summary": "supported: Demand is shifting from degree-apprenticeship portfolio enrolments to substitute or adjacent offerings.",
+  "details": {}
+ },
+ {
+  "id": "aud_86e3f39192",
+  "at": "2026-10-05T10:53:29.646679",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_e4208e86f1",
+  "policy_rule_id": null,
+  "summary": "INFERRED (high): Demand is shifting from degree-apprenticeship portfolio enrolments to substitute or adjacent offerings.",
+  "details": {}
+ },
+ {
+  "id": "aud_6aff51b3c2",
+  "at": "2026-10-05T10:53:29.646654",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_f212c5db4e",
+  "policy_rule_id": null,
+  "summary": "KNOWN (moderate): The market for AI & Automation Practitioner grew from 1,200 to 7,800 between 2022/23 and 2025/26; the organisation does not offer AI & Autom",
+  "details": {}
+ },
+ {
+  "id": "aud_e9092fac65",
+  "at": "2026-10-05T10:53:29.646637",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_78e9e9dc76",
+  "policy_rule_id": null,
+  "summary": "KNOWN (moderate): The market for Applied AI Engineer grew from 0 to 2,600 between 2022/23 and 2025/26; the organisation does not offer Applied AI Engineer.",
+  "details": {}
+ },
+ {
+  "id": "aud_5beaf48258",
+  "at": "2026-10-05T10:53:29.646614",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_updated",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_efe5ec029c",
+  "policy_rule_id": null,
+  "summary": "supported: Northstar Learning Group's terms or format for degree-apprenticeship portfolio enrolments (duration, price, flexibility) are less attractive",
+  "details": {}
+ },
+ {
+  "id": "aud_5bbb49254e",
+  "at": "2026-10-05T10:53:29.646608",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_c78503e1aa",
+  "policy_rule_id": null,
+  "summary": "INFERRED (high): Northstar Learning Group's terms or format for degree-apprenticeship portfolio enrolments (duration, price, flexibility) are less attractive",
+  "details": {}
+ },
+ {
+  "id": "aud_5cb9ae5eab",
+  "at": "2026-10-05T10:53:29.646568",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_updated",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_48ab786e84",
+  "policy_rule_id": null,
+  "summary": "supported: Northstar Learning Group's offer for degree-apprenticeship portfolio enrolments is less relevant or current than competing offers.",
+  "details": {}
+ },
+ {
+  "id": "aud_87ca9978f1",
+  "at": "2026-10-05T10:53:29.646558",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "claim_classified",
+  "subject_type": "claim",
+  "subject_id": "clm_f7d624b3aa",
+  "policy_rule_id": null,
+  "summary": "INFERRED (high): Northstar Learning Group's offer for degree-apprenticeship portfolio enrolments is less relevant or current than competing offers.",
+  "details": {}
+ },
+ {
+  "id": "aud_c78332d537",
+  "at": "2026-10-05T10:53:29.645869",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_4009d551f0",
+  "policy_rule_id": null,
+  "summary": "Emergent: Northstar Learning Group's conversion of demand into Senior Leader (MBA) has deteriorated.",
+  "details": {
+   "parent": "hyp_ca840d6da1"
+  }
+ },
+ {
+  "id": "aud_8b5c9e8f31",
+  "at": "2026-10-05T10:53:29.645867",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_33fb13ba2c",
+  "policy_rule_id": null,
+  "summary": "Emergent: Northstar Learning Group's conversion of demand into Digital & Technology Solutions Professional has deteriorated.",
+  "details": {
+   "parent": "hyp_ca840d6da1"
+  }
+ },
+ {
+  "id": "aud_4044a3398d",
+  "at": "2026-10-05T10:53:29.645864",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_0a90484295",
+  "policy_rule_id": null,
+  "summary": "Emergent: A policy, regulatory or funding change has reduced demand for Senior Leader (MBA).",
+  "details": {
+   "parent": "hyp_5f285193fa"
+  }
+ },
+ {
+  "id": "aud_354d3418fd",
+  "at": "2026-10-05T10:53:29.645862",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_9ba0fcd43c",
+  "policy_rule_id": null,
+  "summary": "Emergent: A policy, regulatory or funding change has reduced demand for Digital & Technology Solutions Professional.",
+  "details": {
+   "parent": "hyp_5f285193fa"
+  }
+ },
+ {
+  "id": "aud_e2528c95a3",
+  "at": "2026-10-05T10:53:29.645860",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_2e62b362e5",
+  "policy_rule_id": null,
+  "summary": "Emergent: Northstar Learning Group is losing share of the Senior Leader (MBA) market to competitors.",
+  "details": {
+   "parent": "hyp_700b30fb5b"
+  }
+ },
+ {
+  "id": "aud_05ed452918",
+  "at": "2026-10-05T10:53:29.645858",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_28f3657fa2",
+  "policy_rule_id": null,
+  "summary": "Emergent: Northstar Learning Group is losing share of the Digital & Technology Solutions Professional market to competitors.",
+  "details": {
+   "parent": "hyp_700b30fb5b"
+  }
+ },
+ {
+  "id": "aud_088ef07a4e",
+  "at": "2026-10-05T10:53:29.645856",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_d470e2c96e",
+  "policy_rule_id": null,
+  "summary": "Emergent: The market for Senior Leader (MBA) has contracted, and Northstar Learning Group is declining with it.",
+  "details": {
+   "parent": "hyp_893a66fa84"
+  }
+ },
+ {
+  "id": "aud_6ffbc14887",
+  "at": "2026-10-05T10:53:29.645853",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_e26ec33018",
+  "policy_rule_id": null,
+  "summary": "Emergent: The market for Digital & Technology Solutions Professional has contracted, and Northstar Learning Group is declining with it.",
+  "details": {
+   "parent": "hyp_893a66fa84"
+  }
+ },
+ {
+  "id": "aud_bf24b8dc47",
+  "at": "2026-10-05T10:53:29.645849",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_1688f2a44c",
+  "policy_rule_id": null,
+  "summary": "Emergent: The market for Data Science Professional has contracted, and Northstar Learning Group is declining with it.",
+  "details": {
+   "parent": "hyp_893a66fa84"
+  }
+ },
+ {
+  "id": "aud_14f8a2895a",
+  "at": "2026-10-05T10:53:29.645636",
+  "actor_kind": "agent",
+  "actor_id": "agent:analyst",
+  "action": "policy_evaluated",
+  "subject_type": null,
+  "subject_id": null,
+  "policy_rule_id": "classify.default",
+  "summary": "classify_claim: autonomous_with_audit (classify.default)",
+  "details": {
+   "autonomy": "autonomous_with_audit",
+   "risk": "medium",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_b59208f259",
+  "at": "2026-10-05T10:53:29.586110",
+  "actor_kind": "agent",
+  "actor_id": "agent:evidence_manager",
+  "action": "source_added",
+  "subject_type": "source",
+  "subject_id": "src_7bc7ce2c66",
+  "policy_rule_id": null,
+  "summary": "Employer Skills Outlook 2026",
+  "details": {
+   "source_type": "industry_body",
+   "synthetic": true
+  }
+ },
+ {
+  "id": "aud_e688b28322",
+  "at": "2026-10-05T10:53:29.586107",
+  "actor_kind": "agent",
+  "actor_id": "agent:evidence_manager",
+  "action": "source_added",
+  "subject_type": "source",
+  "subject_id": "src_2f30c0d738",
+  "policy_rule_id": null,
+  "summary": "Applied AI Engineer (Level 6) \u2014 approved for delivery",
+  "details": {
+   "source_type": "standards_body",
+   "synthetic": true
+  }
+ },
+ {
+  "id": "aud_bd5fe40cfa",
+  "at": "2026-10-05T10:53:29.586104",
+  "actor_kind": "agent",
+  "actor_id": "agent:evidence_manager",
+  "action": "source_added",
+  "subject_type": "source",
+  "subject_id": "src_d87c8df454",
+  "policy_rule_id": null,
+  "summary": "Applied AI Engineer Degree Apprenticeship | Brightpath Academy",
+  "details": {
+   "source_type": "competitor_official",
+   "synthetic": true
+  }
+ },
+ {
+  "id": "aud_a7535fab94",
+  "at": "2026-10-05T10:53:29.586101",
+  "actor_kind": "agent",
+  "actor_id": "agent:evidence_manager",
+  "action": "source_added",
+  "subject_type": "source",
+  "subject_id": "src_a2f860818f",
+  "policy_rule_id": null,
+  "summary": "Changes to Level 7 apprenticeship funding eligibility",
+  "details": {
+   "source_type": "government_policy",
+   "synthetic": true
+  }
+ },
+ {
+  "id": "aud_0ab72cb969",
+  "at": "2026-10-05T10:53:29.586098",
+  "actor_kind": "agent",
+  "actor_id": "agent:evidence_manager",
+  "action": "source_added",
+  "subject_type": "source",
+  "subject_id": "src_bcba596add",
+  "policy_rule_id": null,
+  "summary": "Employers turn to AI apprenticeships as digital degree programmes face pressure",
+  "details": {
+   "source_type": "trade_press",
+   "synthetic": true
+  }
+ },
+ {
+  "id": "aud_5fc0fa803e",
+  "at": "2026-10-05T10:53:29.586095",
+  "actor_kind": "agent",
+  "actor_id": "agent:evidence_manager",
+  "action": "source_added",
+  "subject_type": "source",
+  "subject_id": "src_83c667821d",
+  "policy_rule_id": null,
+  "summary": "Choosing an apprenticeship provider in 2026",
+  "details": {
+   "source_type": "commentary",
+   "synthetic": true
+  }
+ },
+ {
+  "id": "aud_745b563d09",
+  "at": "2026-10-05T10:53:29.586091",
+  "actor_kind": "agent",
+  "actor_id": "agent:evidence_manager",
+  "action": "source_added",
+  "subject_type": "source",
+  "subject_id": "src_060d82a72b",
+  "policy_rule_id": null,
+  "summary": "Digital degree apprenticeship (archived 2021 page) | Meridian Digital Skills",
+  "details": {
+   "source_type": "competitor_official",
+   "synthetic": true
+  }
+ },
+ {
+  "id": "aud_0c4a1053dd",
+  "at": "2026-10-05T10:53:29.586085",
+  "actor_kind": "agent",
+  "actor_id": "agent:evidence_manager",
+  "action": "source_added",
+  "subject_type": "source",
+  "subject_id": "src_4a5b222b8b",
+  "policy_rule_id": null,
+  "summary": "Is degree apprenticeship demand collapsing?",
+  "details": {
+   "source_type": "trade_press",
+   "synthetic": true
+  }
+ },
+ {
+  "id": "aud_370b7318c5",
+  "at": "2026-10-05T10:53:29.586080",
+  "actor_kind": "agent",
+  "actor_id": "agent:evidence_manager",
+  "action": "source_added",
+  "subject_type": "source",
+  "subject_id": "src_fe6d48802b",
+  "policy_rule_id": null,
+  "summary": "The Level 7 changes are the end of degree apprenticeships",
+  "details": {
+   "source_type": "commentary",
+   "synthetic": true
+  }
+ },
+ {
+  "id": "aud_f074d8b7bd",
+  "at": "2026-10-05T10:53:29.586070",
+  "actor_kind": "agent",
+  "actor_id": "agent:evidence_manager",
+  "action": "evidence_added",
+  "subject_type": null,
+  "subject_id": null,
+  "policy_rule_id": null,
+  "summary": "Round 1: 66 evidence item(s), 9 new source(s); 0 duplicate source(s) and 86 duplicate evidence item(s) merged.",
+  "details": {
+   "new_evidence": 66,
+   "duplicate_sources": 0
+  }
+ },
+ {
+  "id": "aud_3b2127f09a",
+  "at": "2026-10-05T10:53:28.994070",
+  "actor_kind": "agent",
+  "actor_id": "agent:document_researcher",
+  "action": "task_completed",
+  "subject_type": "task",
+  "subject_id": "tsk_9a12c87034",
+  "policy_rule_id": null,
+  "summary": "Searched 3 released document(s); 10 evidence item(s).",
+  "details": {}
+ },
+ {
+  "id": "aud_a1f07fd7fd",
+  "at": "2026-10-05T10:53:28.990533",
+  "actor_kind": "agent",
+  "actor_id": "agent:document_researcher",
+  "action": "policy_evaluated",
+  "subject_type": "task",
+  "subject_id": "tsk_9a12c87034",
+  "policy_rule_id": "read.default",
+  "summary": "read_sanitised_document: autonomous (read.default)",
+  "details": {
+   "autonomy": "autonomous",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_2233f18457",
+  "at": "2026-10-05T10:53:28.990499",
+  "actor_kind": "agent",
+  "actor_id": "agent:document_researcher",
+  "action": "task_completed",
+  "subject_type": "task",
+  "subject_id": "tsk_24fc9e0cbe",
+  "policy_rule_id": null,
+  "summary": "Searched 3 released document(s); 8 evidence item(s).",
+  "details": {}
+ },
+ {
+  "id": "aud_be39470755",
+  "at": "2026-10-05T10:53:28.987696",
+  "actor_kind": "agent",
+  "actor_id": "agent:document_researcher",
+  "action": "policy_evaluated",
+  "subject_type": "task",
+  "subject_id": "tsk_24fc9e0cbe",
+  "policy_rule_id": "read.default",
+  "summary": "read_sanitised_document: autonomous (read.default)",
+  "details": {
+   "autonomy": "autonomous",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_d67ac96527",
+  "at": "2026-10-05T10:53:28.987665",
+  "actor_kind": "agent",
+  "actor_id": "agent:data_analyst",
+  "action": "task_completed",
+  "subject_type": "task",
+  "subject_id": "tsk_acd3a128ca",
+  "policy_rule_id": null,
+  "summary": "Funnel conversion (proposals\u2192won) by programme_code, employer_segment, 2022/23\u20132025/26.",
+  "details": {
+   "operation": "funnel_conversion",
+   "evidence": 12
+  }
+ },
+ {
+  "id": "aud_74e15134f7",
+  "at": "2026-10-05T10:53:28.987234",
+  "actor_kind": "agent",
+  "actor_id": "agent:data_analyst",
+  "action": "policy_evaluated",
+  "subject_type": "task",
+  "subject_id": "tsk_acd3a128ca",
+  "policy_rule_id": "dataset.default",
+  "summary": "analyse_internal_dataset: autonomous_with_audit (dataset.default)",
+  "details": {
+   "autonomy": "autonomous_with_audit",
+   "risk": "medium",
+   "policy_version": "2026-10-01",
+   "attributes": {
+    "personal_data": "none",
+    "confidentiality": "commercially_confidential"
+   }
+  }
+ },
+ {
+  "id": "aud_0bd35bfe1e",
+  "at": "2026-10-05T10:53:28.987196",
+  "actor_kind": "agent",
+  "actor_id": "agent:document_researcher",
+  "action": "task_completed",
+  "subject_type": "task",
+  "subject_id": "tsk_89bdad3d39",
+  "policy_rule_id": null,
+  "summary": "Searched 3 released document(s); 6 evidence item(s).",
+  "details": {}
+ },
+ {
+  "id": "aud_39dd7cbe1e",
+  "at": "2026-10-05T10:53:28.984981",
+  "actor_kind": "agent",
+  "actor_id": "agent:document_researcher",
+  "action": "policy_evaluated",
+  "subject_type": "task",
+  "subject_id": "tsk_89bdad3d39",
+  "policy_rule_id": "read.default",
+  "summary": "read_sanitised_document: autonomous (read.default)",
+  "details": {
+   "autonomy": "autonomous",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_4b8c932616",
+  "at": "2026-10-05T10:53:28.984949",
+  "actor_kind": "agent",
+  "actor_id": "agent:web_researcher",
+  "action": "task_completed",
+  "subject_type": "task",
+  "subject_id": "tsk_93ea296f94",
+  "policy_rule_id": null,
+  "summary": "2 search(es), 4 new source(s), 1 already-known source(s) skipped, 13 evidence item(s).",
+  "details": {}
+ },
+ {
+  "id": "aud_0bf64d874a",
+  "at": "2026-10-05T10:53:28.984554",
+  "actor_kind": "agent",
+  "actor_id": "agent:web_researcher",
+  "action": "injection_flagged",
+  "subject_type": "source",
+  "subject_id": "src_83c667821d",
+  "policy_rule_id": null,
+  "summary": "Instruction-like content in 'Choosing an apprenticeship provider in 2026'",
+  "details": {
+   "flags": [
+    "addresses_ai",
+    "classification_instruction",
+    "decision_instruction",
+    "fake_system_message",
+    "override_instructions",
+    "role_reassignment"
+   ]
+  }
+ },
+ {
+  "id": "aud_fd22470e40",
+  "at": "2026-10-05T10:53:28.980606",
+  "actor_kind": "agent",
+  "actor_id": "agent:web_researcher",
+  "action": "policy_evaluated",
+  "subject_type": "task",
+  "subject_id": "tsk_93ea296f94",
+  "policy_rule_id": "search.default",
+  "summary": "search_public_web: autonomous (search.default)",
+  "details": {
+   "autonomy": "autonomous",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_8edbd494a5",
+  "at": "2026-10-05T10:53:28.980569",
+  "actor_kind": "agent",
+  "actor_id": "agent:document_researcher",
+  "action": "task_completed",
+  "subject_type": "task",
+  "subject_id": "tsk_63a7540672",
+  "policy_rule_id": null,
+  "summary": "Searched 3 released document(s); 8 evidence item(s).",
+  "details": {}
+ },
+ {
+  "id": "aud_54c9247174",
+  "at": "2026-10-05T10:53:28.977876",
+  "actor_kind": "agent",
+  "actor_id": "agent:document_researcher",
+  "action": "policy_evaluated",
+  "subject_type": "task",
+  "subject_id": "tsk_63a7540672",
+  "policy_rule_id": "read.default",
+  "summary": "read_sanitised_document: autonomous (read.default)",
+  "details": {
+   "autonomy": "autonomous",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_612dab0732",
+  "at": "2026-10-05T10:53:28.977830",
+  "actor_kind": "agent",
+  "actor_id": "agent:web_researcher",
+  "action": "task_completed",
+  "subject_type": "task",
+  "subject_id": "tsk_82b202e2c1",
+  "policy_rule_id": null,
+  "summary": "2 search(es), 4 new source(s), 0 already-known source(s) skipped, 12 evidence item(s).",
+  "details": {}
+ },
+ {
+  "id": "aud_bda36ed185",
+  "at": "2026-10-05T10:53:28.974315",
+  "actor_kind": "agent",
+  "actor_id": "agent:web_researcher",
+  "action": "policy_evaluated",
+  "subject_type": "task",
+  "subject_id": "tsk_82b202e2c1",
+  "policy_rule_id": "search.default",
+  "summary": "search_public_web: autonomous (search.default)",
+  "details": {
+   "autonomy": "autonomous",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_b437d597f2",
+  "at": "2026-10-05T10:53:28.974279",
+  "actor_kind": "agent",
+  "actor_id": "agent:document_researcher",
+  "action": "task_completed",
+  "subject_type": "task",
+  "subject_id": "tsk_0d2063ce10",
+  "policy_rule_id": null,
+  "summary": "Searched 3 released document(s); 9 evidence item(s).",
+  "details": {}
+ },
+ {
+  "id": "aud_ba39d0d2da",
+  "at": "2026-10-05T10:53:28.970794",
+  "actor_kind": "agent",
+  "actor_id": "agent:document_researcher",
+  "action": "policy_evaluated",
+  "subject_type": "task",
+  "subject_id": "tsk_0d2063ce10",
+  "policy_rule_id": "read.default",
+  "summary": "read_sanitised_document: autonomous (read.default)",
+  "details": {
+   "autonomy": "autonomous",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_b24a340d8a",
+  "at": "2026-10-05T10:53:28.970761",
+  "actor_kind": "agent",
+  "actor_id": "agent:web_researcher",
+  "action": "task_completed",
+  "subject_type": "task",
+  "subject_id": "tsk_354df9c652",
+  "policy_rule_id": null,
+  "summary": "2 search(es), 4 new source(s), 0 already-known source(s) skipped, 8 evidence item(s).",
+  "details": {}
+ },
+ {
+  "id": "aud_15561f0b26",
+  "at": "2026-10-05T10:53:28.969926",
+  "actor_kind": "agent",
+  "actor_id": "agent:web_researcher",
+  "action": "injection_flagged",
+  "subject_type": "source",
+  "subject_id": "src_83c667821d",
+  "policy_rule_id": null,
+  "summary": "Instruction-like content in 'Choosing an apprenticeship provider in 2026'",
+  "details": {
+   "flags": [
+    "addresses_ai",
+    "classification_instruction",
+    "decision_instruction",
+    "fake_system_message",
+    "override_instructions",
+    "role_reassignment"
+   ]
+  }
+ },
+ {
+  "id": "aud_be41c1fa44",
+  "at": "2026-10-05T10:53:28.967849",
+  "actor_kind": "agent",
+  "actor_id": "agent:web_researcher",
+  "action": "policy_evaluated",
+  "subject_type": "task",
+  "subject_id": "tsk_354df9c652",
+  "policy_rule_id": "search.default",
+  "summary": "search_public_web: autonomous (search.default)",
+  "details": {
+   "autonomy": "autonomous",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_efbfdeb36c",
+  "at": "2026-10-05T10:53:28.967810",
+  "actor_kind": "agent",
+  "actor_id": "agent:document_researcher",
+  "action": "task_completed",
+  "subject_type": "task",
+  "subject_id": "tsk_c58d2ada93",
+  "policy_rule_id": null,
+  "summary": "Searched 3 released document(s); 8 evidence item(s).",
+  "details": {}
+ },
+ {
+  "id": "aud_3ca5fa8224",
+  "at": "2026-10-05T10:53:28.964677",
+  "actor_kind": "agent",
+  "actor_id": "agent:document_researcher",
+  "action": "policy_evaluated",
+  "subject_type": "task",
+  "subject_id": "tsk_c58d2ada93",
+  "policy_rule_id": "read.default",
+  "summary": "read_sanitised_document: autonomous (read.default)",
+  "details": {
+   "autonomy": "autonomous",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_044c0c7ede",
+  "at": "2026-10-05T10:53:28.964639",
+  "actor_kind": "agent",
+  "actor_id": "agent:web_researcher",
+  "action": "task_completed",
+  "subject_type": "task",
+  "subject_id": "tsk_31e5dcebb7",
+  "policy_rule_id": null,
+  "summary": "2 search(es), 4 new source(s), 0 already-known source(s) skipped, 16 evidence item(s).",
+  "details": {}
+ },
+ {
+  "id": "aud_463211f637",
+  "at": "2026-10-05T10:53:28.960132",
+  "actor_kind": "agent",
+  "actor_id": "agent:web_researcher",
+  "action": "policy_evaluated",
+  "subject_type": "task",
+  "subject_id": "tsk_31e5dcebb7",
+  "policy_rule_id": "search.default",
+  "summary": "search_public_web: autonomous (search.default)",
+  "details": {
+   "autonomy": "autonomous",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_c2710478f3",
+  "at": "2026-10-05T10:53:28.960084",
+  "actor_kind": "agent",
+  "actor_id": "agent:document_researcher",
+  "action": "task_completed",
+  "subject_type": "task",
+  "subject_id": "tsk_fab2759ddb",
+  "policy_rule_id": null,
+  "summary": "Searched 3 released document(s); 10 evidence item(s).",
+  "details": {}
+ },
+ {
+  "id": "aud_ded458f60c",
+  "at": "2026-10-05T10:53:28.955912",
+  "actor_kind": "agent",
+  "actor_id": "agent:document_researcher",
+  "action": "policy_evaluated",
+  "subject_type": "task",
+  "subject_id": "tsk_fab2759ddb",
+  "policy_rule_id": "read.default",
+  "summary": "read_sanitised_document: autonomous (read.default)",
+  "details": {
+   "autonomy": "autonomous",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_b519d1efc8",
+  "at": "2026-10-05T10:53:28.955881",
+  "actor_kind": "agent",
+  "actor_id": "agent:web_researcher",
+  "action": "task_completed",
+  "subject_type": "task",
+  "subject_id": "tsk_6c1efb9cb7",
+  "policy_rule_id": null,
+  "summary": "1 search(es), 4 new source(s), 0 already-known source(s) skipped, 13 evidence item(s).",
+  "details": {}
+ },
+ {
+  "id": "aud_f4db49fb2f",
+  "at": "2026-10-05T10:53:28.951650",
+  "actor_kind": "agent",
+  "actor_id": "agent:web_researcher",
+  "action": "policy_evaluated",
+  "subject_type": "task",
+  "subject_id": "tsk_6c1efb9cb7",
+  "policy_rule_id": "search.default",
+  "summary": "search_public_web: autonomous (search.default)",
+  "details": {
+   "autonomy": "autonomous",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_401d722db2",
+  "at": "2026-10-05T10:53:28.951614",
+  "actor_kind": "agent",
+  "actor_id": "agent:web_researcher",
+  "action": "task_completed",
+  "subject_type": "task",
+  "subject_id": "tsk_9829f2a8de",
+  "policy_rule_id": null,
+  "summary": "2 search(es), 4 new source(s), 1 already-known source(s) skipped, 8 evidence item(s).",
+  "details": {}
+ },
+ {
+  "id": "aud_c67de7967c",
+  "at": "2026-10-05T10:53:28.951224",
+  "actor_kind": "agent",
+  "actor_id": "agent:web_researcher",
+  "action": "injection_flagged",
+  "subject_type": "source",
+  "subject_id": "src_83c667821d",
+  "policy_rule_id": null,
+  "summary": "Instruction-like content in 'Choosing an apprenticeship provider in 2026'",
+  "details": {
+   "flags": [
+    "addresses_ai",
+    "classification_instruction",
+    "decision_instruction",
+    "fake_system_message",
+    "override_instructions",
+    "role_reassignment"
+   ]
+  }
+ },
+ {
+  "id": "aud_df2be01cb4",
+  "at": "2026-10-05T10:53:28.947044",
+  "actor_kind": "agent",
+  "actor_id": "agent:web_researcher",
+  "action": "policy_evaluated",
+  "subject_type": "task",
+  "subject_id": "tsk_9829f2a8de",
+  "policy_rule_id": "search.default",
+  "summary": "search_public_web: autonomous (search.default)",
+  "details": {
+   "autonomy": "autonomous",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_f1ed2ec988",
+  "at": "2026-10-05T10:53:28.947013",
+  "actor_kind": "agent",
+  "actor_id": "agent:data_analyst",
+  "action": "task_completed",
+  "subject_type": "task",
+  "subject_id": "tsk_6eb69f4f14",
+  "policy_rule_id": null,
+  "summary": "Total starts changed by -540 between 2022/23 and 2025/26; Chartered Manager Degree Apprenticeship -10; Data Science Professional -30; Digital & Technology Solutions Professional -270; Senior Leader (M",
+  "details": {
+   "operation": "decompose_change",
+   "evidence": 2
+  }
+ },
+ {
+  "id": "aud_3466ecf6ac",
+  "at": "2026-10-05T10:53:28.946913",
+  "actor_kind": "agent",
+  "actor_id": "agent:data_analyst",
+  "action": "policy_evaluated",
+  "subject_type": "task",
+  "subject_id": "tsk_6eb69f4f14",
+  "policy_rule_id": "dataset.default",
+  "summary": "analyse_internal_dataset: autonomous_with_audit (dataset.default)",
+  "details": {
+   "autonomy": "autonomous_with_audit",
+   "risk": "medium",
+   "policy_version": "2026-10-01",
+   "attributes": {
+    "personal_data": "none",
+    "confidentiality": "commercially_confidential"
+   }
+  }
+ },
+ {
+  "id": "aud_df0abb3605",
+  "at": "2026-10-05T10:53:28.946869",
+  "actor_kind": "agent",
+  "actor_id": "agent:data_analyst",
+  "action": "task_completed",
+  "subject_type": "task",
+  "subject_id": "tsk_4d0e70ddfc",
+  "policy_rule_id": null,
+  "summary": "Own vs market comparison by programme_code, 2022/23\u20132025/26.",
+  "details": {
+   "operation": "own_vs_market",
+   "evidence": 9
+  }
+ },
+ {
+  "id": "aud_6d3e24ff4a",
+  "at": "2026-10-05T10:53:28.946541",
+  "actor_kind": "agent",
+  "actor_id": "agent:data_analyst",
+  "action": "policy_evaluated",
+  "subject_type": "task",
+  "subject_id": "tsk_4d0e70ddfc",
+  "policy_rule_id": "dataset.default",
+  "summary": "analyse_internal_dataset: autonomous_with_audit (dataset.default)",
+  "details": {
+   "autonomy": "autonomous_with_audit",
+   "risk": "medium",
+   "policy_version": "2026-10-01",
+   "attributes": {
+    "personal_data": "none",
+    "confidentiality": "commercially_confidential"
+   }
+  }
+ },
+ {
+  "id": "aud_2eeafa45bf",
+  "at": "2026-10-05T10:53:28.911030",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_skipped",
+  "subject_type": null,
+  "subject_id": null,
+  "policy_rule_id": null,
+  "summary": "5 duplicate task proposal(s) merged or skipped.",
+  "details": {}
+ },
+ {
+  "id": "aud_7296c225ef",
+  "at": "2026-10-05T10:53:28.911028",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_created",
+  "subject_type": "task",
+  "subject_id": "tsk_9a12c87034",
+  "policy_rule_id": null,
+  "summary": "[internal_documents] What do internal documents say about: Customers lost from degree-apprenticeship portfolio enrolments have moved to competitors' substitute offerings rather than",
+  "details": {
+   "status": "pending",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_4e22241b48",
+  "at": "2026-10-05T10:53:28.911025",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_skipped",
+  "subject_type": "task",
+  "subject_id": "tsk_55fc9dabba",
+  "policy_rule_id": null,
+  "summary": "[dataset_analysis] What customer destination data shows about: Customers lost from degree-apprenticeship portfolio enrolments have moved to competitors' substitute offerings rathe",
+  "details": {
+   "status": "blocked_unavailable",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_4f8c56c7ca",
+  "at": "2026-10-05T10:53:28.911023",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_skipped",
+  "subject_type": "task",
+  "subject_id": "tsk_90d67f1b17",
+  "policy_rule_id": null,
+  "summary": "[internal_documents] What do internal documents say about: Part of the apparent change in degree-apprenticeship portfolio enrolments is a measurement or definition artefact.",
+  "details": {
+   "status": "skipped_budget",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_99aa1d7b20",
+  "at": "2026-10-05T10:53:28.911020",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_skipped",
+  "subject_type": "task",
+  "subject_id": "tsk_477f9b006b",
+  "policy_rule_id": null,
+  "summary": "[internal_documents] What do internal documents say about: Delivery capacity or operational constraints limited Northstar Learning Group's volume of degree-apprenticeship portfolio ",
+  "details": {
+   "status": "skipped_budget",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_80edc3db10",
+  "at": "2026-10-05T10:53:28.911018",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_skipped",
+  "subject_type": "task",
+  "subject_id": "tsk_363d517bff",
+  "policy_rule_id": null,
+  "summary": "[internal_documents] What do internal documents say about: A specific internal organisational change (structure, systems or process) caused the decline in degree-apprenticeship port",
+  "details": {
+   "status": "skipped_budget",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_db88fb00ec",
+  "at": "2026-10-05T10:53:28.911016",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_skipped",
+  "subject_type": "task",
+  "subject_id": "tsk_becfa273a8",
+  "policy_rule_id": null,
+  "summary": "[internal_documents] What do internal documents say about: Northstar Learning Group's portfolio lacks offerings in the segments where demand is growing.",
+  "details": {
+   "status": "skipped_budget",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_4a8b23c8a1",
+  "at": "2026-10-05T10:53:28.911013",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_created",
+  "subject_type": "task",
+  "subject_id": "tsk_24fc9e0cbe",
+  "policy_rule_id": null,
+  "summary": "[internal_documents] What do internal documents say about: Northstar Learning Group's conversion of demand into degree-apprenticeship portfolio enrolments has deteriorated.",
+  "details": {
+   "status": "pending",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_f5504f89b7",
+  "at": "2026-10-05T10:53:28.911010",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_created",
+  "subject_type": "task",
+  "subject_id": "tsk_acd3a128ca",
+  "policy_rule_id": null,
+  "summary": "[dataset_analysis] Run funnel conversion to test: Northstar Learning Group's conversion of demand into degree-apprenticeship portfolio enrolments has deteriorated.",
+  "details": {
+   "status": "pending",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_63827dc5cc",
+  "at": "2026-10-05T10:53:28.911007",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_created",
+  "subject_type": "task",
+  "subject_id": "tsk_89bdad3d39",
+  "policy_rule_id": null,
+  "summary": "[internal_documents] What do internal documents say about: A policy, regulatory or funding change has reduced demand for degree-apprenticeship portfolio enrolments.",
+  "details": {
+   "status": "pending",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_0b2f36a733",
+  "at": "2026-10-05T10:53:28.911005",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_created",
+  "subject_type": "task",
+  "subject_id": "tsk_93ea296f94",
+  "policy_rule_id": null,
+  "summary": "[web_search] What external evidence supports or contradicts: A policy, regulatory or funding change has reduced demand for degree-apprenticeship portfolio enrolments.",
+  "details": {
+   "status": "pending",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_8f8fc99f9e",
+  "at": "2026-10-05T10:53:28.911003",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_skipped",
+  "subject_type": "task",
+  "subject_id": "tsk_d35a0792ff",
+  "policy_rule_id": null,
+  "summary": "[web_search] What external evidence supports or contradicts: Customers' underlying needs have shifted away from what degree-apprenticeship portfolio enrolments provides.",
+  "details": {
+   "status": "skipped_budget",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_0cca226679",
+  "at": "2026-10-05T10:53:28.911000",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_created",
+  "subject_type": "task",
+  "subject_id": "tsk_63a7540672",
+  "policy_rule_id": null,
+  "summary": "[internal_documents] What do internal documents say about: Demand is shifting from degree-apprenticeship portfolio enrolments to substitute or adjacent offerings.",
+  "details": {
+   "status": "pending",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_87ac1231b2",
+  "at": "2026-10-05T10:53:28.910997",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_created",
+  "subject_type": "task",
+  "subject_id": "tsk_82b202e2c1",
+  "policy_rule_id": null,
+  "summary": "[web_search] What external evidence supports or contradicts: Demand is shifting from degree-apprenticeship portfolio enrolments to substitute or adjacent offerings.",
+  "details": {
+   "status": "pending",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_a990c5099b",
+  "at": "2026-10-05T10:53:28.910995",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_created",
+  "subject_type": "task",
+  "subject_id": "tsk_0d2063ce10",
+  "policy_rule_id": null,
+  "summary": "[internal_documents] What do internal documents say about: Northstar Learning Group's terms or format for degree-apprenticeship portfolio enrolments (duration, price, flexibility) a",
+  "details": {
+   "status": "pending",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_140b32efd2",
+  "at": "2026-10-05T10:53:28.910993",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_created",
+  "subject_type": "task",
+  "subject_id": "tsk_354df9c652",
+  "policy_rule_id": null,
+  "summary": "[web_search] What external evidence supports or contradicts: Northstar Learning Group's terms or format for degree-apprenticeship portfolio enrolments (duration, price, flex",
+  "details": {
+   "status": "pending",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_a34824317f",
+  "at": "2026-10-05T10:53:28.910989",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_created",
+  "subject_type": "task",
+  "subject_id": "tsk_c58d2ada93",
+  "policy_rule_id": null,
+  "summary": "[internal_documents] What do internal documents say about: Northstar Learning Group's offer for degree-apprenticeship portfolio enrolments is less relevant or current than competing",
+  "details": {
+   "status": "pending",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_b022372ef7",
+  "at": "2026-10-05T10:53:28.910986",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_created",
+  "subject_type": "task",
+  "subject_id": "tsk_31e5dcebb7",
+  "policy_rule_id": null,
+  "summary": "[web_search] What external evidence supports or contradicts: Northstar Learning Group's offer for degree-apprenticeship portfolio enrolments is less relevant or current than",
+  "details": {
+   "status": "pending",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_fd375fb2f5",
+  "at": "2026-10-05T10:53:28.910984",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_created",
+  "subject_type": "task",
+  "subject_id": "tsk_fab2759ddb",
+  "policy_rule_id": null,
+  "summary": "[internal_documents] What do internal documents say about: Northstar Learning Group is losing share of degree-apprenticeship portfolio enrolments to competitors in a market that is ",
+  "details": {
+   "status": "pending",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_bfa00ee40c",
+  "at": "2026-10-05T10:53:28.910981",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_created",
+  "subject_type": "task",
+  "subject_id": "tsk_6c1efb9cb7",
+  "policy_rule_id": null,
+  "summary": "[web_search] What external evidence supports or contradicts: Northstar Learning Group is losing share of degree-apprenticeship portfolio enrolments to competitors in a marke",
+  "details": {
+   "status": "pending",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_0492038831",
+  "at": "2026-10-05T10:53:28.910979",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_created",
+  "subject_type": "task",
+  "subject_id": "tsk_9829f2a8de",
+  "policy_rule_id": null,
+  "summary": "[web_search] What external evidence supports or contradicts: The overall market for degree-apprenticeship portfolio enrolments has contracted, and Northstar Learning Group i",
+  "details": {
+   "status": "pending",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_800f8406ac",
+  "at": "2026-10-05T10:53:28.910976",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_created",
+  "subject_type": "task",
+  "subject_id": "tsk_6eb69f4f14",
+  "policy_rule_id": null,
+  "summary": "[dataset_analysis] Run decompose change to test: The overall market for degree-apprenticeship portfolio enrolments has contracted, and Northstar Learning Group is declining with i",
+  "details": {
+   "status": "pending",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_0c7e3e3f12",
+  "at": "2026-10-05T10:53:28.910971",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "task_created",
+  "subject_type": "task",
+  "subject_id": "tsk_4d0e70ddfc",
+  "policy_rule_id": null,
+  "summary": "[dataset_analysis] Run own vs market to test: The overall market for degree-apprenticeship portfolio enrolments has contracted, and Northstar Learning Group is declining with it.",
+  "details": {
+   "status": "pending",
+   "origin": "planner"
+  }
+ },
+ {
+  "id": "aud_586ee8fdde",
+  "at": "2026-10-05T10:53:28.910732",
+  "actor_kind": "agent",
+  "actor_id": "agent:research_planner",
+  "action": "policy_evaluated",
+  "subject_type": null,
+  "subject_id": null,
+  "policy_rule_id": "plan.default",
+  "summary": "plan_research: autonomous (plan.default)",
+  "details": {
+   "autonomy": "autonomous",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_a49b18682f",
+  "at": "2026-10-05T10:53:28.896886",
+  "actor_kind": "agent",
+  "actor_id": "agent:hypothesis_generator",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_78f4121f08",
+  "policy_rule_id": null,
+  "summary": "Customers lost from degree-apprenticeship portfolio enrolments have moved to competitors' substitute offerings rather than leaving the category.",
+  "details": {
+   "category": "customer_destination"
+  }
+ },
+ {
+  "id": "aud_411047cfcd",
+  "at": "2026-10-05T10:53:28.896881",
+  "actor_kind": "agent",
+  "actor_id": "agent:hypothesis_generator",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_15b9f65d46",
+  "policy_rule_id": null,
+  "summary": "Part of the apparent change in degree-apprenticeship portfolio enrolments is a measurement or definition artefact.",
+  "details": {
+   "category": "measurement_artefact"
+  }
+ },
+ {
+  "id": "aud_0d188a4806",
+  "at": "2026-10-05T10:53:28.896876",
+  "actor_kind": "agent",
+  "actor_id": "agent:hypothesis_generator",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_9d0ef6ecd5",
+  "policy_rule_id": null,
+  "summary": "Delivery capacity or operational constraints limited Northstar Learning Group's volume of degree-apprenticeship portfolio enrolments.",
+  "details": {
+   "category": "capacity"
+  }
+ },
+ {
+  "id": "aud_1611d08248",
+  "at": "2026-10-05T10:53:28.896871",
+  "actor_kind": "agent",
+  "actor_id": "agent:hypothesis_generator",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_6922e114a6",
+  "policy_rule_id": null,
+  "summary": "A specific internal organisational change (structure, systems or process) caused the decline in degree-apprenticeship portfolio enrolments.",
+  "details": {
+   "category": "internal_change"
+  }
+ },
+ {
+  "id": "aud_4313ae8656",
+  "at": "2026-10-05T10:53:28.896866",
+  "actor_kind": "agent",
+  "actor_id": "agent:hypothesis_generator",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_88a8b71ddb",
+  "policy_rule_id": null,
+  "summary": "Northstar Learning Group's portfolio lacks offerings in the segments where demand is growing.",
+  "details": {
+   "category": "portfolio_gap"
+  }
+ },
+ {
+  "id": "aud_ff3d6cc565",
+  "at": "2026-10-05T10:53:28.896861",
+  "actor_kind": "agent",
+  "actor_id": "agent:hypothesis_generator",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_4a48b4fb6e",
+  "policy_rule_id": null,
+  "summary": "Fewer prospective customers are entering Northstar Learning Group's funnel for degree-apprenticeship portfolio enrolments.",
+  "details": {
+   "category": "pipeline_volume"
+  }
+ },
+ {
+  "id": "aud_056b1ef030",
+  "at": "2026-10-05T10:53:28.896856",
+  "actor_kind": "agent",
+  "actor_id": "agent:hypothesis_generator",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_ca840d6da1",
+  "policy_rule_id": null,
+  "summary": "Northstar Learning Group's conversion of demand into degree-apprenticeship portfolio enrolments has deteriorated.",
+  "details": {
+   "category": "conversion"
+  }
+ },
+ {
+  "id": "aud_3c30ab0aaa",
+  "at": "2026-10-05T10:53:28.896851",
+  "actor_kind": "agent",
+  "actor_id": "agent:hypothesis_generator",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_5f285193fa",
+  "policy_rule_id": null,
+  "summary": "A policy, regulatory or funding change has reduced demand for degree-apprenticeship portfolio enrolments.",
+  "details": {
+   "category": "policy_change"
+  }
+ },
+ {
+  "id": "aud_7f230b279f",
+  "at": "2026-10-05T10:53:28.896846",
+  "actor_kind": "agent",
+  "actor_id": "agent:hypothesis_generator",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_487f5248e9",
+  "policy_rule_id": null,
+  "summary": "Customers' underlying needs have shifted away from what degree-apprenticeship portfolio enrolments provides.",
+  "details": {
+   "category": "demand_shift"
+  }
+ },
+ {
+  "id": "aud_ee999488a2",
+  "at": "2026-10-05T10:53:28.896841",
+  "actor_kind": "agent",
+  "actor_id": "agent:hypothesis_generator",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_4e4867594a",
+  "policy_rule_id": null,
+  "summary": "Demand is shifting from degree-apprenticeship portfolio enrolments to substitute or adjacent offerings.",
+  "details": {
+   "category": "substitution"
+  }
+ },
+ {
+  "id": "aud_c9361e813a",
+  "at": "2026-10-05T10:53:28.896836",
+  "actor_kind": "agent",
+  "actor_id": "agent:hypothesis_generator",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_efe5ec029c",
+  "policy_rule_id": null,
+  "summary": "Northstar Learning Group's terms or format for degree-apprenticeship portfolio enrolments (duration, price, flexibility) are less attractive than alternatives.",
+  "details": {
+   "category": "offer_format"
+  }
+ },
+ {
+  "id": "aud_fd3bada14e",
+  "at": "2026-10-05T10:53:28.896831",
+  "actor_kind": "agent",
+  "actor_id": "agent:hypothesis_generator",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_48ab786e84",
+  "policy_rule_id": null,
+  "summary": "Northstar Learning Group's offer for degree-apprenticeship portfolio enrolments is less relevant or current than competing offers.",
+  "details": {
+   "category": "offer_proposition"
+  }
+ },
+ {
+  "id": "aud_4c7b61837e",
+  "at": "2026-10-05T10:53:28.896825",
+  "actor_kind": "agent",
+  "actor_id": "agent:hypothesis_generator",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_700b30fb5b",
+  "policy_rule_id": null,
+  "summary": "Northstar Learning Group is losing share of degree-apprenticeship portfolio enrolments to competitors in a market that is not contracting as fast.",
+  "details": {
+   "category": "share_loss"
+  }
+ },
+ {
+  "id": "aud_5557d1c648",
+  "at": "2026-10-05T10:53:28.896818",
+  "actor_kind": "agent",
+  "actor_id": "agent:hypothesis_generator",
+  "action": "hypothesis_created",
+  "subject_type": "hypothesis",
+  "subject_id": "hyp_893a66fa84",
+  "policy_rule_id": null,
+  "summary": "The overall market for degree-apprenticeship portfolio enrolments has contracted, and Northstar Learning Group is declining with it.",
+  "details": {
+   "category": "market_contraction"
+  }
+ },
+ {
+  "id": "aud_17a461db1a",
+  "at": "2026-10-05T10:53:28.896803",
+  "actor_kind": "agent",
+  "actor_id": "agent:hypothesis_generator",
+  "action": "policy_evaluated",
+  "subject_type": null,
+  "subject_id": null,
+  "policy_rule_id": "hypotheses.default",
+  "summary": "generate_hypotheses: autonomous (hypotheses.default)",
+  "details": {
+   "autonomy": "autonomous",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {}
+  }
+ },
+ {
+  "id": "aud_74a99e50bf",
+  "at": "2026-10-05T10:53:28.874325",
+  "actor_kind": "human",
+  "actor_id": "dev:dana",
+  "action": "review_resolved",
+  "subject_type": "review",
+  "subject_id": "rev_b8dbd4c6b1",
+  "policy_rule_id": null,
+  "summary": "privacy_release: approve",
+  "details": {
+   "note_present": false
+  }
+ },
+ {
+  "id": "aud_5170f02268",
+  "at": "2026-10-05T10:53:28.874307",
+  "actor_kind": "human",
+  "actor_id": "dev:dana",
+  "action": "document_withheld",
+  "subject_type": "intake_document",
+  "subject_id": "doc_e3cef51759",
+  "policy_rule_id": null,
+  "summary": "Release rejected by privacy reviewer.",
+  "details": {}
+ },
+ {
+  "id": "aud_4cec027e8f",
+  "at": "2026-10-05T10:53:28.874304",
+  "actor_kind": "human",
+  "actor_id": "dev:dana",
+  "action": "document_released",
+  "subject_type": "intake_document",
+  "subject_id": "doc_12fcb51fab",
+  "policy_rule_id": null,
+  "summary": "Approved release of 'Board paper \u2014 degree apprenticeship performance Q2 2026'.",
+  "details": {}
+ },
+ {
+  "id": "aud_84d56401e5",
+  "at": "2026-10-05T10:53:28.874292",
+  "actor_kind": "human",
+  "actor_id": "dev:dana",
+  "action": "document_released",
+  "subject_type": "intake_document",
+  "subject_id": "doc_32038f265c",
+  "policy_rule_id": null,
+  "summary": "Approved release of 'CRM lost-opportunity notes (DTS, 2024/25\u20132025/26)'.",
+  "details": {}
+ },
+ {
+  "id": "aud_b11e77a1b1",
+  "at": "2026-10-05T10:53:28.732640",
+  "actor_kind": "agent",
+  "actor_id": "agent:privacy_release",
+  "action": "review_requested",
+  "subject_type": "review",
+  "subject_id": "rev_b8dbd4c6b1",
+  "policy_rule_id": null,
+  "summary": "Privacy review: 3 document(s) awaiting release",
+  "details": {}
+ },
+ {
+  "id": "aud_8f4ec29b3f",
+  "at": "2026-10-05T10:53:28.732607",
+  "actor_kind": "agent",
+  "actor_id": "agent:privacy_release",
+  "action": "policy_evaluated",
+  "subject_type": "intake_document",
+  "subject_id": "doc_e3cef51759",
+  "policy_rule_id": "release.special_category",
+  "summary": "release_document_to_agents: human_approval (release.special_category)",
+  "details": {
+   "autonomy": "human_approval",
+   "risk": "high",
+   "policy_version": "2026-10-01",
+   "attributes": {
+    "confidentiality": "internal",
+    "personal_data": "special_category",
+    "low_confidence_detections": 1
+   }
+  }
+ },
+ {
+  "id": "aud_5b63cdb772",
+  "at": "2026-10-05T10:53:28.732600",
+  "actor_kind": "agent",
+  "actor_id": "agent:privacy_release",
+  "action": "document_released",
+  "subject_type": "intake_document",
+  "subject_id": "doc_95a7575464",
+  "policy_rule_id": "release.default",
+  "summary": "Released sanitised 'Sales operations review, March 2024' (internal / personal (pseudonymised)).",
+  "details": {
+   "autonomy": "autonomous_with_audit",
+   "risk": "low",
+   "policy_version": "2026-10-01"
+  }
+ },
+ {
+  "id": "aud_10beee189c",
+  "at": "2026-10-05T10:53:28.732590",
+  "actor_kind": "agent",
+  "actor_id": "agent:privacy_release",
+  "action": "policy_evaluated",
+  "subject_type": "intake_document",
+  "subject_id": "doc_95a7575464",
+  "policy_rule_id": "release.default",
+  "summary": "release_document_to_agents: autonomous_with_audit (release.default)",
+  "details": {
+   "autonomy": "autonomous_with_audit",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {
+    "confidentiality": "internal",
+    "personal_data": "personal",
+    "low_confidence_detections": 0
+   }
+  }
+ },
+ {
+  "id": "aud_a18e48fbaf",
+  "at": "2026-10-05T10:53:28.732582",
+  "actor_kind": "agent",
+  "actor_id": "agent:privacy_release",
+  "action": "policy_evaluated",
+  "subject_type": "intake_document",
+  "subject_id": "doc_12fcb51fab",
+  "policy_rule_id": "release.confidential_personal",
+  "summary": "release_document_to_agents: human_approval (release.confidential_personal)",
+  "details": {
+   "autonomy": "human_approval",
+   "risk": "medium",
+   "policy_version": "2026-10-01",
+   "attributes": {
+    "confidentiality": "commercially_confidential",
+    "personal_data": "personal",
+    "low_confidence_detections": 0
+   }
+  }
+ },
+ {
+  "id": "aud_fcc989c31f",
+  "at": "2026-10-05T10:53:28.732573",
+  "actor_kind": "agent",
+  "actor_id": "agent:privacy_release",
+  "action": "policy_evaluated",
+  "subject_type": "intake_document",
+  "subject_id": "doc_32038f265c",
+  "policy_rule_id": "release.uncertain_detection",
+  "summary": "release_document_to_agents: human_approval (release.uncertain_detection)",
+  "details": {
+   "autonomy": "human_approval",
+   "risk": "medium",
+   "policy_version": "2026-10-01",
+   "attributes": {
+    "confidentiality": "commercially_confidential",
+    "personal_data": "personal",
+    "low_confidence_detections": 1
+   }
+  }
+ },
+ {
+  "id": "aud_60433dabde",
+  "at": "2026-10-05T10:53:28.732561",
+  "actor_kind": "agent",
+  "actor_id": "agent:privacy_release",
+  "action": "document_released",
+  "subject_type": "intake_document",
+  "subject_id": "doc_d2241e62bb",
+  "policy_rule_id": "dataset.default",
+  "summary": "Released sanitised 'Northstar employer sales pipeline by programme and segment' (commercially_confidential).",
+  "details": {
+   "autonomy": "autonomous_with_audit",
+   "risk": "medium",
+   "policy_version": "2026-10-01"
+  }
+ },
+ {
+  "id": "aud_36cf69db08",
+  "at": "2026-10-05T10:53:28.732552",
+  "actor_kind": "agent",
+  "actor_id": "agent:privacy_release",
+  "action": "policy_evaluated",
+  "subject_type": "intake_document",
+  "subject_id": "doc_d2241e62bb",
+  "policy_rule_id": "dataset.default",
+  "summary": "analyse_internal_dataset: autonomous_with_audit (dataset.default)",
+  "details": {
+   "autonomy": "autonomous_with_audit",
+   "risk": "medium",
+   "policy_version": "2026-10-01",
+   "attributes": {
+    "personal_data": "none",
+    "confidentiality": "commercially_confidential"
+   }
+  }
+ },
+ {
+  "id": "aud_c0ba7f870f",
+  "at": "2026-10-05T10:53:28.732545",
+  "actor_kind": "agent",
+  "actor_id": "agent:privacy_release",
+  "action": "document_released",
+  "subject_type": "intake_document",
+  "subject_id": "doc_1f6d99343e",
+  "policy_rule_id": "dataset.default",
+  "summary": "Released sanitised 'National apprenticeship starts by standard (NSSO, synthetic)' (public).",
+  "details": {
+   "autonomy": "autonomous_with_audit",
+   "risk": "medium",
+   "policy_version": "2026-10-01"
+  }
+ },
+ {
+  "id": "aud_66dbee72dc",
+  "at": "2026-10-05T10:53:28.732532",
+  "actor_kind": "agent",
+  "actor_id": "agent:privacy_release",
+  "action": "policy_evaluated",
+  "subject_type": "intake_document",
+  "subject_id": "doc_1f6d99343e",
+  "policy_rule_id": "dataset.default",
+  "summary": "analyse_internal_dataset: autonomous_with_audit (dataset.default)",
+  "details": {
+   "autonomy": "autonomous_with_audit",
+   "risk": "medium",
+   "policy_version": "2026-10-01",
+   "attributes": {
+    "personal_data": "none",
+    "confidentiality": "public"
+   }
+  }
+ },
+ {
+  "id": "aud_5bf41f64d1",
+  "at": "2026-10-05T10:53:28.732521",
+  "actor_kind": "agent",
+  "actor_id": "agent:privacy_release",
+  "action": "document_released",
+  "subject_type": "intake_document",
+  "subject_id": "doc_6ce689d2f7",
+  "policy_rule_id": "dataset.default",
+  "summary": "Released sanitised 'Northstar degree-apprenticeship starts by programme, region and employer segment' (commercially_confidential).",
+  "details": {
+   "autonomy": "autonomous_with_audit",
+   "risk": "medium",
+   "policy_version": "2026-10-01"
+  }
+ },
+ {
+  "id": "aud_d2be5f0ae1",
+  "at": "2026-10-05T10:53:28.732488",
+  "actor_kind": "agent",
+  "actor_id": "agent:privacy_release",
+  "action": "policy_evaluated",
+  "subject_type": "intake_document",
+  "subject_id": "doc_6ce689d2f7",
+  "policy_rule_id": "dataset.default",
+  "summary": "analyse_internal_dataset: autonomous_with_audit (dataset.default)",
+  "details": {
+   "autonomy": "autonomous_with_audit",
+   "risk": "medium",
+   "policy_version": "2026-10-01",
+   "attributes": {
+    "personal_data": "none",
+    "confidentiality": "commercially_confidential"
+   }
+  }
+ },
+ {
+  "id": "aud_ecaa810854",
+  "at": "2026-10-05T10:53:28.726588",
+  "actor_kind": "agent",
+  "actor_id": "agent:investigation_lead",
+  "action": "question_framed",
+  "subject_type": null,
+  "subject_id": null,
+  "policy_rule_id": null,
+  "summary": "Framed question; subject 'degree-apprenticeship portfolio enrolments'.",
+  "details": {}
+ },
+ {
+  "id": "aud_5a706e183d",
+  "at": "2026-10-05T10:53:28.726579",
+  "actor_kind": "agent",
+  "actor_id": "agent:investigation_lead",
+  "action": "policy_evaluated",
+  "subject_type": null,
+  "subject_id": null,
+  "policy_rule_id": "frame.default",
+  "summary": "frame_question: autonomous (frame.default)",
+  "details": {
+   "autonomy": "autonomous",
+   "risk": "low",
+   "policy_version": "2026-10-01",
+   "attributes": {
+    "needs_clarification": false
+   }
+  }
+ },
+ {
+  "id": "aud_f9e24aaa29",
+  "at": "2026-10-05T10:53:28.687213",
+  "actor_kind": "human",
+  "actor_id": "dev:dana",
+  "action": "investigation_created",
+  "subject_type": null,
+  "subject_id": null,
+  "policy_rule_id": null,
+  "summary": "Created: Why have enrolments in Northstar Learning Group's degree-apprenticeship portfolio declined, and what should leadership investigate or do in response?",
+  "details": {}
+ }
+]

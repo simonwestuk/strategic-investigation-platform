@@ -1,0 +1,15 @@
+[
+ {
+  "id": "inv_557216ee7c",
+  "question": "Why have enrolments in Northstar Learning Group's degree-apprenticeship portfolio declined, and what should leadership investigate or do in response?",
+  "scenario_id": "northstar",
+  "organisation": "Northstar Learning Group",
+  "status": "decided",
+  "reasoner": "offline",
+  "as_of": "2026-09-30",
+  "created_by": "dev:dana",
+  "created_at": "2026-10-05T10:53:28.652555",
+  "updated_at": "2026-10-05T10:53:32.452824",
+  "error": null
+ }
+]

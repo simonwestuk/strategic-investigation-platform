@@ -1,0 +1,4811 @@
+{
+ "openapi": "3.1.0",
+ "info": {
+  "title": "Strategic Investigation Platform",
+  "description": "Autonomous research. Governed reasoning. Human decisions.",
+  "version": "0.2.0"
+ },
+ "paths": {
+  "/api/me": {
+   "get": {
+    "summary": "Me",
+    "operationId": "me_api_me_get",
+    "parameters": [
+     {
+      "name": "x-user-id",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Id"
+      }
+     },
+     {
+      "name": "x-user-name",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Name"
+      }
+     },
+     {
+      "name": "x-user-roles",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Roles"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Actor"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/scenarios": {
+   "get": {
+    "summary": "Scenarios",
+    "operationId": "scenarios_api_scenarios_get",
+    "parameters": [
+     {
+      "name": "x-user-id",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Id"
+      }
+     },
+     {
+      "name": "x-user-name",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Name"
+      }
+     },
+     {
+      "name": "x-user-roles",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Roles"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/ScenarioOut"
+         },
+         "title": "Response Scenarios Api Scenarios Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/investigations": {
+   "post": {
+    "summary": "Create",
+    "operationId": "create_api_investigations_post",
+    "parameters": [
+     {
+      "name": "x-user-id",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Id"
+      }
+     },
+     {
+      "name": "x-user-name",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Name"
+      }
+     },
+     {
+      "name": "x-user-roles",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Roles"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/CreateInvestigation"
+       }
+      }
+     }
+    },
+    "responses": {
+     "201": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/InvestigationSummary"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "get": {
+    "summary": "List Investigations",
+    "operationId": "list_investigations_api_investigations_get",
+    "parameters": [
+     {
+      "name": "x-user-id",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Id"
+      }
+     },
+     {
+      "name": "x-user-name",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Name"
+      }
+     },
+     {
+      "name": "x-user-roles",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Roles"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/InvestigationSummary"
+         },
+         "title": "Response List Investigations Api Investigations Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/investigations/{investigation_id}": {
+   "get": {
+    "summary": "Get Investigation",
+    "operationId": "get_investigation_api_investigations__investigation_id__get",
+    "parameters": [
+     {
+      "name": "investigation_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Investigation Id"
+      }
+     },
+     {
+      "name": "x-user-id",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Id"
+      }
+     },
+     {
+      "name": "x-user-name",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Name"
+      }
+     },
+     {
+      "name": "x-user-roles",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Roles"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/InvestigationDetail"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/investigations/{investigation_id}/start": {
+   "post": {
+    "summary": "Start",
+    "operationId": "start_api_investigations__investigation_id__start_post",
+    "parameters": [
+     {
+      "name": "investigation_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Investigation Id"
+      }
+     },
+     {
+      "name": "x-user-id",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Id"
+      }
+     },
+     {
+      "name": "x-user-name",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Name"
+      }
+     },
+     {
+      "name": "x-user-roles",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Roles"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/InvestigationSummary"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/investigations/{investigation_id}/documents": {
+   "post": {
+    "summary": "Upload",
+    "operationId": "upload_api_investigations__investigation_id__documents_post",
+    "parameters": [
+     {
+      "name": "investigation_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Investigation Id"
+      }
+     },
+     {
+      "name": "x-user-id",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Id"
+      }
+     },
+     {
+      "name": "x-user-name",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Name"
+      }
+     },
+     {
+      "name": "x-user-roles",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Roles"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "multipart/form-data": {
+       "schema": {
+        "$ref": "#/components/schemas/Body_upload_api_investigations__investigation_id__documents_post"
+       }
+      }
+     }
+    },
+    "responses": {
+     "201": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/IntakeOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "get": {
+    "summary": "Documents",
+    "operationId": "documents_api_investigations__investigation_id__documents_get",
+    "parameters": [
+     {
+      "name": "investigation_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Investigation Id"
+      }
+     },
+     {
+      "name": "x-user-id",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Id"
+      }
+     },
+     {
+      "name": "x-user-name",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Name"
+      }
+     },
+     {
+      "name": "x-user-roles",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Roles"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/IntakeOut"
+         },
+         "title": "Response Documents Api Investigations  Investigation Id  Documents Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/investigations/{investigation_id}/documents/{document_id}": {
+   "get": {
+    "summary": "Document",
+    "description": "Privacy scan inspection: sanitised text and scan summary. Raw content is never served.",
+    "operationId": "document_api_investigations__investigation_id__documents__document_id__get",
+    "parameters": [
+     {
+      "name": "investigation_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Investigation Id"
+      }
+     },
+     {
+      "name": "document_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Document Id"
+      }
+     },
+     {
+      "name": "x-user-id",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Id"
+      }
+     },
+     {
+      "name": "x-user-name",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Name"
+      }
+     },
+     {
+      "name": "x-user-roles",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Roles"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/DocumentOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/investigations/{investigation_id}/claims/{claim_id}": {
+   "get": {
+    "summary": "Claim Chain",
+    "operationId": "claim_chain_api_investigations__investigation_id__claims__claim_id__get",
+    "parameters": [
+     {
+      "name": "investigation_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Investigation Id"
+      }
+     },
+     {
+      "name": "claim_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Claim Id"
+      }
+     },
+     {
+      "name": "x-user-id",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Id"
+      }
+     },
+     {
+      "name": "x-user-name",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Name"
+      }
+     },
+     {
+      "name": "x-user-roles",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Roles"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ClaimChain"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/investigations/{investigation_id}/sources/{source_id}": {
+   "get": {
+    "summary": "Source",
+    "operationId": "source_api_investigations__investigation_id__sources__source_id__get",
+    "parameters": [
+     {
+      "name": "investigation_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Investigation Id"
+      }
+     },
+     {
+      "name": "source_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Source Id"
+      }
+     },
+     {
+      "name": "x-user-id",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Id"
+      }
+     },
+     {
+      "name": "x-user-name",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Name"
+      }
+     },
+     {
+      "name": "x-user-roles",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Roles"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/SourceOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/investigations/{investigation_id}/audit": {
+   "get": {
+    "summary": "Audit Trail",
+    "description": "Most recent events first. ``limit`` is capped at 2000; ``audit_count`` on the detail gives the total.",
+    "operationId": "audit_trail_api_investigations__investigation_id__audit_get",
+    "parameters": [
+     {
+      "name": "investigation_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Investigation Id"
+      }
+     },
+     {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "default": 500,
+       "title": "Limit"
+      }
+     },
+     {
+      "name": "x-user-id",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Id"
+      }
+     },
+     {
+      "name": "x-user-name",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Name"
+      }
+     },
+     {
+      "name": "x-user-roles",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Roles"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/AuditOut"
+         },
+         "title": "Response Audit Trail Api Investigations  Investigation Id  Audit Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/investigations/{investigation_id}/{collection}": {
+   "get": {
+    "summary": "Collection",
+    "operationId": "collection_api_investigations__investigation_id___collection__get",
+    "parameters": [
+     {
+      "name": "investigation_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Investigation Id"
+      }
+     },
+     {
+      "name": "collection",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Collection"
+      }
+     },
+     {
+      "name": "x-user-id",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Id"
+      }
+     },
+     {
+      "name": "x-user-name",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Name"
+      }
+     },
+     {
+      "name": "x-user-roles",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Roles"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {},
+         "title": "Response Collection Api Investigations  Investigation Id   Collection  Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/investigations/{investigation_id}/reviews/{review_id}/respond": {
+   "post": {
+    "summary": "Respond",
+    "operationId": "respond_api_investigations__investigation_id__reviews__review_id__respond_post",
+    "parameters": [
+     {
+      "name": "investigation_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Investigation Id"
+      }
+     },
+     {
+      "name": "review_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Review Id"
+      }
+     },
+     {
+      "name": "x-user-id",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Id"
+      }
+     },
+     {
+      "name": "x-user-name",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Name"
+      }
+     },
+     {
+      "name": "x-user-roles",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "X-User-Roles"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ReviewResponseIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/InvestigationSummary"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/health": {
+   "get": {
+    "summary": "Health",
+    "operationId": "health_health_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": {
+          "type": "string"
+         },
+         "type": "object",
+         "title": "Response Health Health Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "components": {
+  "schemas": {
+   "Actor": {
+    "properties": {
+     "kind": {
+      "$ref": "#/components/schemas/ActorKind"
+     },
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "display_name": {
+      "type": "string",
+      "title": "Display Name"
+     },
+     "roles": {
+      "items": {
+       "$ref": "#/components/schemas/Role"
+      },
+      "type": "array",
+      "title": "Roles"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "kind",
+     "id",
+     "display_name"
+    ],
+    "title": "Actor"
+   },
+   "ActorKind": {
+    "type": "string",
+    "enum": [
+     "human",
+     "agent",
+     "system"
+    ],
+    "title": "ActorKind"
+   },
+   "AnalysisRequest": {
+    "properties": {
+     "operation": {
+      "type": "string",
+      "title": "Operation"
+     },
+     "dataset_id": {
+      "type": "string",
+      "title": "Dataset Id"
+     },
+     "params": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Params"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "operation",
+     "dataset_id"
+    ],
+    "title": "AnalysisRequest",
+    "description": "A request for a deterministic analytical operation (see ``sip.tools.analytics``)."
+   },
+   "AuditOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "At"
+     },
+     "actor_kind": {
+      "type": "string",
+      "title": "Actor Kind"
+     },
+     "actor_id": {
+      "type": "string",
+      "title": "Actor Id"
+     },
+     "action": {
+      "type": "string",
+      "title": "Action"
+     },
+     "subject_type": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Subject Type"
+     },
+     "subject_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Subject Id"
+     },
+     "policy_rule_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Policy Rule Id"
+     },
+     "summary": {
+      "type": "string",
+      "title": "Summary"
+     },
+     "details": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Details"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "at",
+     "actor_kind",
+     "actor_id",
+     "action",
+     "subject_type",
+     "subject_id",
+     "policy_rule_id",
+     "summary",
+     "details"
+    ],
+    "title": "AuditOut"
+   },
+   "AuthorityTier": {
+    "type": "string",
+    "enum": [
+     "primary",
+     "secondary",
+     "tertiary",
+     "unsuitable"
+    ],
+    "title": "AuthorityTier"
+   },
+   "Body_upload_api_investigations__investigation_id__documents_post": {
+    "properties": {
+     "file": {
+      "type": "string",
+      "contentMediaType": "application/octet-stream",
+      "title": "File"
+     },
+     "title": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 300
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Title"
+     },
+     "source_type": {
+      "$ref": "#/components/schemas/SourceType",
+      "default": "internal_document"
+     },
+     "confidentiality": {
+      "$ref": "#/components/schemas/Confidentiality",
+      "default": "internal"
+     }
+    },
+    "type": "object",
+    "required": [
+     "file"
+    ],
+    "title": "Body_upload_api_investigations__investigation_id__documents_post"
+   },
+   "Challenge": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "target_type": {
+      "type": "string",
+      "title": "Target Type"
+     },
+     "target_id": {
+      "type": "string",
+      "title": "Target Id"
+     },
+     "kind": {
+      "$ref": "#/components/schemas/ChallengeKind"
+     },
+     "severity": {
+      "$ref": "#/components/schemas/Severity"
+     },
+     "argument": {
+      "type": "string",
+      "title": "Argument"
+     },
+     "research_question": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Research Question"
+     },
+     "suggested_analysis": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/AnalysisRequest"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "research_attempted": {
+      "type": "boolean",
+      "title": "Research Attempted",
+      "default": false
+     },
+     "status": {
+      "$ref": "#/components/schemas/ChallengeStatus",
+      "default": "open"
+     },
+     "resolution_note": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Resolution Note"
+     },
+     "raised_by": {
+      "$ref": "#/components/schemas/Actor"
+     },
+     "iteration": {
+      "type": "integer",
+      "title": "Iteration",
+      "default": 0
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "target_type",
+     "target_id",
+     "kind",
+     "severity",
+     "argument",
+     "raised_by"
+    ],
+    "title": "Challenge"
+   },
+   "ChallengeKind": {
+    "type": "string",
+    "enum": [
+     "unsupported_by_evidence",
+     "correlation_not_causation",
+     "ignored_contradiction",
+     "stale_evidence",
+     "weak_source",
+     "overgeneralisation",
+     "hypothesis_presented_as_finding",
+     "alternative_explanation",
+     "material_gap",
+     "premature_convergence",
+     "injection_suspected",
+     "human_challenge"
+    ],
+    "title": "ChallengeKind"
+   },
+   "ChallengeStatus": {
+    "type": "string",
+    "enum": [
+     "open",
+     "addressed",
+     "accepted_as_limitation",
+     "dismissed_by_human"
+    ],
+    "title": "ChallengeStatus"
+   },
+   "Claim": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "statement": {
+      "type": "string",
+      "title": "Statement"
+     },
+     "classification": {
+      "$ref": "#/components/schemas/Classification"
+     },
+     "proposed_classification": {
+      "$ref": "#/components/schemas/Classification"
+     },
+     "confidence": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/ConfidenceAssessment"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "causal": {
+      "type": "boolean",
+      "title": "Causal",
+      "default": false
+     },
+     "supporting_evidence_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Supporting Evidence Ids"
+     },
+     "contradicting_evidence_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Contradicting Evidence Ids"
+     },
+     "source_quality_summary": {
+      "type": "string",
+      "title": "Source Quality Summary",
+      "default": ""
+     },
+     "reasoning_summary": {
+      "type": "string",
+      "title": "Reasoning Summary",
+      "default": ""
+     },
+     "inferential_step": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Inferential Step"
+     },
+     "limitations": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Limitations"
+     },
+     "missing_evidence": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Missing Evidence"
+     },
+     "related_hypothesis_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Related Hypothesis Ids"
+     },
+     "next_question": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Next Question"
+     },
+     "created_by": {
+      "$ref": "#/components/schemas/Actor"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     },
+     "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Updated At"
+     },
+     "review_state": {
+      "$ref": "#/components/schemas/ReviewState",
+      "default": "unreviewed"
+     },
+     "human_override": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/HumanOverride"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "iteration": {
+      "type": "integer",
+      "title": "Iteration",
+      "default": 0
+     },
+     "active": {
+      "type": "boolean",
+      "title": "Active",
+      "default": true
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "statement",
+     "classification",
+     "proposed_classification",
+     "created_by"
+    ],
+    "title": "Claim"
+   },
+   "ClaimChain": {
+    "properties": {
+     "claim": {
+      "$ref": "#/components/schemas/Claim"
+     },
+     "evidence": {
+      "items": {
+       "$ref": "#/components/schemas/Evidence"
+      },
+      "type": "array",
+      "title": "Evidence"
+     },
+     "sources": {
+      "items": {
+       "$ref": "#/components/schemas/Source"
+      },
+      "type": "array",
+      "title": "Sources"
+     },
+     "findings": {
+      "items": {
+       "$ref": "#/components/schemas/Finding"
+      },
+      "type": "array",
+      "title": "Findings"
+     },
+     "options": {
+      "items": {
+       "$ref": "#/components/schemas/StrategicOption"
+      },
+      "type": "array",
+      "title": "Options"
+     },
+     "challenges": {
+      "items": {
+       "$ref": "#/components/schemas/Challenge"
+      },
+      "type": "array",
+      "title": "Challenges"
+     }
+    },
+    "type": "object",
+    "required": [
+     "claim",
+     "evidence",
+     "sources",
+     "findings",
+     "options",
+     "challenges"
+    ],
+    "title": "ClaimChain",
+    "description": "Option -> finding -> claim -> evidence -> source, for one claim."
+   },
+   "Classification": {
+    "type": "string",
+    "enum": [
+     "known",
+     "inferred",
+     "hypothesis",
+     "unknown"
+    ],
+    "title": "Classification"
+   },
+   "ClassificationOverride": {
+    "properties": {
+     "claim_id": {
+      "type": "string",
+      "title": "Claim Id"
+     },
+     "classification": {
+      "$ref": "#/components/schemas/Classification"
+     },
+     "reason": {
+      "type": "string",
+      "title": "Reason"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "claim_id",
+     "classification",
+     "reason"
+    ],
+    "title": "ClassificationOverride"
+   },
+   "ConfidenceAssessment": {
+    "properties": {
+     "band": {
+      "$ref": "#/components/schemas/ConfidenceBand"
+     },
+     "score": {
+      "type": "integer",
+      "title": "Score"
+     },
+     "factors": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Factors"
+     },
+     "classification_ceiling": {
+      "$ref": "#/components/schemas/Classification"
+     },
+     "ceiling_reasons": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Ceiling Reasons"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "band",
+     "score",
+     "classification_ceiling"
+    ],
+    "title": "ConfidenceAssessment"
+   },
+   "ConfidenceBand": {
+    "type": "string",
+    "enum": [
+     "high",
+     "moderate",
+     "low",
+     "very_low"
+    ],
+    "title": "ConfidenceBand",
+    "description": "Ordinal band, NOT a probability. See docs/evaluation.md#confidence."
+   },
+   "Confidentiality": {
+    "type": "string",
+    "enum": [
+     "public",
+     "internal",
+     "commercially_confidential",
+     "restricted"
+    ],
+    "title": "Confidentiality"
+   },
+   "Contradiction": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "description": {
+      "type": "string",
+      "title": "Description"
+     },
+     "hypothesis_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Hypothesis Id"
+     },
+     "claim_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Claim Id"
+     },
+     "supporting_evidence_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Supporting Evidence Ids"
+     },
+     "contradicting_evidence_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Contradicting Evidence Ids"
+     },
+     "status": {
+      "$ref": "#/components/schemas/ContradictionStatus",
+      "default": "unresolved"
+     },
+     "resolution_note": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Resolution Note"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "description"
+    ],
+    "title": "Contradiction"
+   },
+   "ContradictionStatus": {
+    "type": "string",
+    "enum": [
+     "unresolved",
+     "resolved_by_source_quality",
+     "explained",
+     "resolved_by_human"
+    ],
+    "title": "ContradictionStatus"
+   },
+   "CreateInvestigation": {
+    "properties": {
+     "question": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 2000
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Question"
+     },
+     "scenario_id": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 64
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Scenario Id"
+     },
+     "organisation": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 200
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Organisation"
+     },
+     "context": {
+      "type": "string",
+      "maxLength": 4000,
+      "title": "Context",
+      "default": ""
+     },
+     "budget": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/ResearchBudget"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "CreateInvestigation"
+   },
+   "DataClassification": {
+    "properties": {
+     "confidentiality": {
+      "$ref": "#/components/schemas/Confidentiality",
+      "default": "public"
+     },
+     "personal_data": {
+      "$ref": "#/components/schemas/PersonalData",
+      "default": "none"
+     },
+     "pseudonymised": {
+      "type": "boolean",
+      "title": "Pseudonymised",
+      "default": false
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "DataClassification"
+   },
+   "Decision": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "decision_type": {
+      "$ref": "#/components/schemas/DecisionType"
+     },
+     "statement": {
+      "type": "string",
+      "title": "Statement"
+     },
+     "rationale": {
+      "type": "string",
+      "title": "Rationale"
+     },
+     "option_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Option Ids"
+     },
+     "conditions": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Conditions"
+     },
+     "uncertainties_acknowledged": {
+      "type": "boolean",
+      "title": "Uncertainties Acknowledged"
+     },
+     "acknowledged_unknown_claim_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Acknowledged Unknown Claim Ids"
+     },
+     "decided_by": {
+      "$ref": "#/components/schemas/Actor"
+     },
+     "decided_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Decided At"
+     },
+     "review_id": {
+      "type": "string",
+      "title": "Review Id"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "decision_type",
+     "statement",
+     "rationale",
+     "uncertainties_acknowledged",
+     "decided_by",
+     "review_id"
+    ],
+    "title": "Decision"
+   },
+   "DecisionPayload": {
+    "properties": {
+     "decision_type": {
+      "type": "string",
+      "title": "Decision Type"
+     },
+     "statement": {
+      "type": "string",
+      "title": "Statement"
+     },
+     "rationale": {
+      "type": "string",
+      "title": "Rationale"
+     },
+     "option_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Option Ids"
+     },
+     "conditions": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Conditions"
+     },
+     "uncertainties_acknowledged": {
+      "type": "boolean",
+      "title": "Uncertainties Acknowledged",
+      "default": false
+     },
+     "acknowledged_unknown_claim_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Acknowledged Unknown Claim Ids"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "decision_type",
+     "statement",
+     "rationale"
+    ],
+    "title": "DecisionPayload"
+   },
+   "DecisionType": {
+    "type": "string",
+    "enum": [
+     "adopt_option",
+     "adopt_modified_option",
+     "commission_further_investigation",
+     "defer",
+     "reject_all_options"
+    ],
+    "title": "DecisionType"
+   },
+   "DocumentOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "scan": {
+      "$ref": "#/components/schemas/PrivacyScanSummary"
+     },
+     "sanitised_text": {
+      "type": "string",
+      "title": "Sanitised Text"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "title",
+     "status",
+     "scan",
+     "sanitised_text"
+    ],
+    "title": "DocumentOut",
+    "description": "Privacy-scan inspection view: sanitised text and scan summary only."
+   },
+   "EntityCount": {
+    "properties": {
+     "entity_type": {
+      "$ref": "#/components/schemas/EntityType"
+     },
+     "count": {
+      "type": "integer",
+      "title": "Count"
+     },
+     "low_confidence": {
+      "type": "integer",
+      "title": "Low Confidence",
+      "default": 0
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "entity_type",
+     "count"
+    ],
+    "title": "EntityCount"
+   },
+   "EntityType": {
+    "type": "string",
+    "enum": [
+     "PERSON",
+     "STAFF",
+     "EMPLOYER",
+     "EMAIL",
+     "PHONE",
+     "POSTCODE",
+     "NATIONAL_ID",
+     "SPECIAL_CATEGORY"
+    ],
+    "title": "EntityType"
+   },
+   "Evidence": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "source_id": {
+      "type": "string",
+      "title": "Source Id"
+     },
+     "task_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Task Id"
+     },
+     "statement": {
+      "type": "string",
+      "title": "Statement"
+     },
+     "quote": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Quote"
+     },
+     "locator": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Locator"
+     },
+     "kind": {
+      "$ref": "#/components/schemas/EvidenceKind"
+     },
+     "need": {
+      "$ref": "#/components/schemas/EvidenceNeed"
+     },
+     "observed_period": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Observed Period"
+     },
+     "observed_on": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Observed On"
+     },
+     "relevance": {
+      "$ref": "#/components/schemas/Level",
+      "default": "medium"
+     },
+     "metrics": {
+      "items": {
+       "$ref": "#/components/schemas/Metric"
+      },
+      "type": "array",
+      "title": "Metrics"
+     },
+     "segments": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Segments"
+     },
+     "links": {
+      "items": {
+       "$ref": "#/components/schemas/HypothesisLink"
+      },
+      "type": "array",
+      "title": "Links"
+     },
+     "quality": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/SourceQualityAssessment"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "verification": {
+      "$ref": "#/components/schemas/QuoteVerification",
+      "default": "not_found"
+     },
+     "flags": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Flags"
+     },
+     "extracted_by": {
+      "$ref": "#/components/schemas/Actor"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "source_id",
+     "statement",
+     "kind",
+     "need",
+     "extracted_by"
+    ],
+    "title": "Evidence"
+   },
+   "EvidenceKind": {
+    "type": "string",
+    "enum": [
+     "measurement",
+     "documented_fact",
+     "source_assertion",
+     "correlation",
+     "anecdote"
+    ],
+    "title": "EvidenceKind"
+   },
+   "EvidenceNeed": {
+    "type": "string",
+    "enum": [
+     "statistic",
+     "policy",
+     "competitor_offer",
+     "market_interpretation",
+     "internal_performance",
+     "customer_feedback"
+    ],
+    "title": "EvidenceNeed",
+    "description": "What the evidence is being used to establish. Source quality is judged relative to this."
+   },
+   "Finding": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "statement": {
+      "type": "string",
+      "title": "Statement"
+     },
+     "claim_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Claim Ids"
+     },
+     "hypothesis_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Hypothesis Ids"
+     },
+     "classification": {
+      "$ref": "#/components/schemas/Classification"
+     },
+     "confidence_band": {
+      "$ref": "#/components/schemas/ConfidenceBand"
+     },
+     "criteria_met": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Criteria Met"
+     },
+     "status": {
+      "$ref": "#/components/schemas/FindingStatus",
+      "default": "draft"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "title",
+     "statement",
+     "claim_ids",
+     "classification",
+     "confidence_band"
+    ],
+    "title": "Finding",
+    "description": "A conclusion sufficiently supported under defined criteria (see ``promotion_criteria``)."
+   },
+   "FindingStatus": {
+    "type": "string",
+    "enum": [
+     "draft",
+     "accepted",
+     "rejected"
+    ],
+    "title": "FindingStatus"
+   },
+   "Freshness": {
+    "type": "string",
+    "enum": [
+     "current",
+     "ageing",
+     "stale",
+     "undated"
+    ],
+    "title": "Freshness"
+   },
+   "HTTPValidationError": {
+    "properties": {
+     "detail": {
+      "items": {
+       "$ref": "#/components/schemas/ValidationError"
+      },
+      "type": "array",
+      "title": "Detail"
+     }
+    },
+    "type": "object",
+    "title": "HTTPValidationError"
+   },
+   "HumanChallenge": {
+    "properties": {
+     "target_id": {
+      "type": "string",
+      "title": "Target Id"
+     },
+     "argument": {
+      "type": "string",
+      "title": "Argument"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "target_id",
+     "argument"
+    ],
+    "title": "HumanChallenge"
+   },
+   "HumanOverride": {
+    "properties": {
+     "actor": {
+      "$ref": "#/components/schemas/Actor"
+     },
+     "previous": {
+      "$ref": "#/components/schemas/Classification"
+     },
+     "new": {
+      "$ref": "#/components/schemas/Classification"
+     },
+     "reason": {
+      "type": "string",
+      "title": "Reason"
+     },
+     "at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "At"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "actor",
+     "previous",
+     "new",
+     "reason"
+    ],
+    "title": "HumanOverride"
+   },
+   "HumanReview": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "kind": {
+      "$ref": "#/components/schemas/ReviewKind"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "reason": {
+      "type": "string",
+      "title": "Reason"
+     },
+     "subject_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Subject Ids"
+     },
+     "policy_rule_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Policy Rule Ids"
+     },
+     "required_role": {
+      "$ref": "#/components/schemas/Role"
+     },
+     "allowed_actions": {
+      "items": {
+       "$ref": "#/components/schemas/ReviewAction"
+      },
+      "type": "array",
+      "title": "Allowed Actions"
+     },
+     "context": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Context"
+     },
+     "status": {
+      "$ref": "#/components/schemas/ReviewStatus",
+      "default": "pending"
+     },
+     "requested_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Requested At"
+     },
+     "response": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/ReviewResponse"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "kind",
+     "title",
+     "reason",
+     "required_role",
+     "allowed_actions"
+    ],
+    "title": "HumanReview"
+   },
+   "Hypothesis": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "statement": {
+      "type": "string",
+      "title": "Statement"
+     },
+     "rationale": {
+      "type": "string",
+      "title": "Rationale"
+     },
+     "category": {
+      "type": "string",
+      "title": "Category"
+     },
+     "segment": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Segment"
+     },
+     "parent_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Parent Id"
+     },
+     "origin": {
+      "$ref": "#/components/schemas/HypothesisOrigin",
+      "default": "initial"
+     },
+     "would_support": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Would Support"
+     },
+     "would_contradict": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Would Contradict"
+     },
+     "suggested_source_types": {
+      "items": {
+       "$ref": "#/components/schemas/SourceType"
+      },
+      "type": "array",
+      "title": "Suggested Source Types"
+     },
+     "priority": {
+      "$ref": "#/components/schemas/Level",
+      "default": "medium"
+     },
+     "status": {
+      "$ref": "#/components/schemas/HypothesisStatus",
+      "default": "proposed"
+     },
+     "status_reason": {
+      "type": "string",
+      "title": "Status Reason",
+      "default": ""
+     },
+     "created_from_evidence_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Created From Evidence Ids"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     },
+     "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Updated At"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "statement",
+     "rationale",
+     "category"
+    ],
+    "title": "Hypothesis"
+   },
+   "HypothesisLink": {
+    "properties": {
+     "hypothesis_id": {
+      "type": "string",
+      "title": "Hypothesis Id"
+     },
+     "stance": {
+      "$ref": "#/components/schemas/Stance"
+     },
+     "rationale": {
+      "type": "string",
+      "title": "Rationale",
+      "default": ""
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "hypothesis_id",
+     "stance"
+    ],
+    "title": "HypothesisLink"
+   },
+   "HypothesisOrigin": {
+    "type": "string",
+    "enum": [
+     "initial",
+     "emergent",
+     "challenger",
+     "human"
+    ],
+    "title": "HypothesisOrigin"
+   },
+   "HypothesisStatus": {
+    "type": "string",
+    "enum": [
+     "proposed",
+     "investigating",
+     "supported",
+     "weakened",
+     "contradicted",
+     "unresolved",
+     "split"
+    ],
+    "title": "HypothesisStatus"
+   },
+   "IntakeOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "kind": {
+      "type": "string",
+      "title": "Kind"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "filename": {
+      "type": "string",
+      "title": "Filename"
+     },
+     "source_type": {
+      "type": "string",
+      "title": "Source Type"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "scan": {
+      "$ref": "#/components/schemas/PrivacyScanSummary"
+     },
+     "uploaded_by": {
+      "type": "string",
+      "title": "Uploaded By"
+     },
+     "uploaded_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Uploaded At"
+     },
+     "sanitised_preview": {
+      "type": "string",
+      "title": "Sanitised Preview"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "kind",
+     "title",
+     "filename",
+     "source_type",
+     "status",
+     "scan",
+     "uploaded_by",
+     "uploaded_at",
+     "sanitised_preview"
+    ],
+    "title": "IntakeOut"
+   },
+   "InvestigationDetail": {
+    "properties": {
+     "summary": {
+      "$ref": "#/components/schemas/InvestigationSummary"
+     },
+     "frame": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/InvestigationFrame"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "budget": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/ResearchBudget"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "usage": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Usage"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "iteration": {
+      "type": "integer",
+      "title": "Iteration"
+     },
+     "routing": {
+      "items": {
+       "$ref": "#/components/schemas/RoutingDecision"
+      },
+      "type": "array",
+      "title": "Routing"
+     },
+     "pending_review_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Pending Review Id"
+     },
+     "hypotheses": {
+      "items": {
+       "$ref": "#/components/schemas/Hypothesis"
+      },
+      "type": "array",
+      "title": "Hypotheses"
+     },
+     "tasks": {
+      "items": {
+       "$ref": "#/components/schemas/ResearchTask"
+      },
+      "type": "array",
+      "title": "Tasks"
+     },
+     "sources": {
+      "items": {
+       "$ref": "#/components/schemas/Source"
+      },
+      "type": "array",
+      "title": "Sources"
+     },
+     "evidence": {
+      "items": {
+       "$ref": "#/components/schemas/Evidence"
+      },
+      "type": "array",
+      "title": "Evidence"
+     },
+     "claims": {
+      "items": {
+       "$ref": "#/components/schemas/Claim"
+      },
+      "type": "array",
+      "title": "Claims"
+     },
+     "findings": {
+      "items": {
+       "$ref": "#/components/schemas/Finding"
+      },
+      "type": "array",
+      "title": "Findings"
+     },
+     "contradictions": {
+      "items": {
+       "$ref": "#/components/schemas/Contradiction"
+      },
+      "type": "array",
+      "title": "Contradictions"
+     },
+     "challenges": {
+      "items": {
+       "$ref": "#/components/schemas/Challenge"
+      },
+      "type": "array",
+      "title": "Challenges"
+     },
+     "options": {
+      "items": {
+       "$ref": "#/components/schemas/StrategicOption"
+      },
+      "type": "array",
+      "title": "Options"
+     },
+     "reviews": {
+      "items": {
+       "$ref": "#/components/schemas/HumanReview"
+      },
+      "type": "array",
+      "title": "Reviews"
+     },
+     "decision": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Decision"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "intake": {
+      "items": {
+       "$ref": "#/components/schemas/IntakeOut"
+      },
+      "type": "array",
+      "title": "Intake"
+     },
+     "audit_count": {
+      "type": "integer",
+      "title": "Audit Count"
+     },
+     "segment_names": {
+      "additionalProperties": {
+       "type": "string"
+      },
+      "type": "object",
+      "title": "Segment Names"
+     }
+    },
+    "type": "object",
+    "required": [
+     "summary",
+     "frame",
+     "budget",
+     "usage",
+     "iteration",
+     "routing",
+     "pending_review_id",
+     "hypotheses",
+     "tasks",
+     "sources",
+     "evidence",
+     "claims",
+     "findings",
+     "contradictions",
+     "challenges",
+     "options",
+     "reviews",
+     "decision",
+     "intake",
+     "audit_count"
+    ],
+    "title": "InvestigationDetail"
+   },
+   "InvestigationFrame": {
+    "properties": {
+     "question": {
+      "type": "string",
+      "title": "Question"
+     },
+     "question_types": {
+      "items": {
+       "$ref": "#/components/schemas/QuestionType"
+      },
+      "type": "array",
+      "title": "Question Types"
+     },
+     "subject": {
+      "type": "string",
+      "title": "Subject"
+     },
+     "organisation": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Organisation"
+     },
+     "direction": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Direction"
+     },
+     "decision_context": {
+      "type": "string",
+      "title": "Decision Context"
+     },
+     "scope": {
+      "type": "string",
+      "title": "Scope"
+     },
+     "out_of_scope": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Out Of Scope"
+     },
+     "objectives": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Objectives"
+     },
+     "assumptions": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Assumptions"
+     },
+     "ambiguities": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Ambiguities"
+     },
+     "constraints": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Constraints"
+     },
+     "needs_clarification": {
+      "type": "boolean",
+      "title": "Needs Clarification",
+      "default": false
+     },
+     "clarification_questions": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Clarification Questions"
+     },
+     "as_of": {
+      "type": "string",
+      "format": "date",
+      "title": "As Of"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "question",
+     "question_types",
+     "subject",
+     "decision_context",
+     "scope",
+     "as_of"
+    ],
+    "title": "InvestigationFrame",
+    "description": "The Investigation Lead's output. It frames the problem; it does not try to answer it."
+   },
+   "InvestigationSummary": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "question": {
+      "type": "string",
+      "title": "Question"
+     },
+     "scenario_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Scenario Id"
+     },
+     "organisation": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Organisation"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "reasoner": {
+      "type": "string",
+      "title": "Reasoner"
+     },
+     "as_of": {
+      "type": "string",
+      "title": "As Of"
+     },
+     "created_by": {
+      "type": "string",
+      "title": "Created By"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     },
+     "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Updated At"
+     },
+     "error": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Error"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "question",
+     "scenario_id",
+     "organisation",
+     "status",
+     "reasoner",
+     "as_of",
+     "created_by",
+     "created_at",
+     "updated_at"
+    ],
+    "title": "InvestigationSummary"
+   },
+   "ItemDecision": {
+    "properties": {
+     "item_id": {
+      "type": "string",
+      "title": "Item Id"
+     },
+     "action": {
+      "$ref": "#/components/schemas/ReviewAction"
+     },
+     "note": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Note"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "item_id",
+     "action"
+    ],
+    "title": "ItemDecision",
+    "description": "Per-item response inside a batch review (e.g. one document in a privacy review)."
+   },
+   "Level": {
+    "type": "string",
+    "enum": [
+     "low",
+     "medium",
+     "high"
+    ],
+    "title": "Level",
+    "description": "Generic ordinal scale used for priority, relevance, value of information, etc."
+   },
+   "Metric": {
+    "properties": {
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "value": {
+      "type": "number",
+      "title": "Value"
+     },
+     "unit": {
+      "type": "string",
+      "title": "Unit",
+      "default": ""
+     },
+     "period": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Period"
+     },
+     "segment": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Segment"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "name",
+     "value"
+    ],
+    "title": "Metric"
+   },
+   "OptionReviewStatus": {
+    "type": "string",
+    "enum": [
+     "draft",
+     "pending_review",
+     "approved_for_decision",
+     "modified",
+     "rejected"
+    ],
+    "title": "OptionReviewStatus"
+   },
+   "PersonalData": {
+    "type": "string",
+    "enum": [
+     "none",
+     "personal",
+     "special_category"
+    ],
+    "title": "PersonalData"
+   },
+   "PrivacyScanSummary": {
+    "properties": {
+     "detector": {
+      "type": "string",
+      "title": "Detector"
+     },
+     "entity_counts": {
+      "items": {
+       "$ref": "#/components/schemas/EntityCount"
+      },
+      "type": "array",
+      "title": "Entity Counts"
+     },
+     "low_confidence_detections": {
+      "type": "integer",
+      "title": "Low Confidence Detections",
+      "default": 0
+     },
+     "special_category_spans": {
+      "type": "integer",
+      "title": "Special Category Spans",
+      "default": 0
+     },
+     "special_category_types": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Special Category Types"
+     },
+     "confidentiality_markers": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Confidentiality Markers"
+     },
+     "classification": {
+      "$ref": "#/components/schemas/DataClassification"
+     },
+     "declared_classification": {
+      "$ref": "#/components/schemas/DataClassification"
+     },
+     "pseudonym_tokens": {
+      "type": "integer",
+      "title": "Pseudonym Tokens",
+      "default": 0
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "detector",
+     "classification",
+     "declared_classification"
+    ],
+    "title": "PrivacyScanSummary",
+    "description": "What a reviewer (and the agent boundary) may know about a scan: counts and categories only."
+   },
+   "QuestionType": {
+    "type": "string",
+    "enum": [
+     "diagnostic",
+     "prescriptive",
+     "evaluative",
+     "exploratory"
+    ],
+    "title": "QuestionType"
+   },
+   "QuoteVerification": {
+    "type": "string",
+    "enum": [
+     "verified",
+     "not_found",
+     "computed"
+    ],
+    "title": "QuoteVerification"
+   },
+   "ResearchBudget": {
+    "properties": {
+     "max_iterations": {
+      "type": "integer",
+      "title": "Max Iterations",
+      "default": 4
+     },
+     "max_tasks": {
+      "type": "integer",
+      "title": "Max Tasks",
+      "default": 48
+     },
+     "max_searches": {
+      "type": "integer",
+      "title": "Max Searches",
+      "default": 40
+     },
+     "max_fetches": {
+      "type": "integer",
+      "title": "Max Fetches",
+      "default": 80
+     },
+     "max_llm_calls": {
+      "type": "integer",
+      "title": "Max Llm Calls",
+      "default": 250
+     },
+     "max_cost_usd": {
+      "type": "number",
+      "title": "Max Cost Usd",
+      "default": 5.0
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "ResearchBudget"
+   },
+   "ResearchMethod": {
+    "type": "string",
+    "enum": [
+     "web_search",
+     "internal_documents",
+     "dataset_analysis"
+    ],
+    "title": "ResearchMethod"
+   },
+   "ResearchTask": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "question": {
+      "type": "string",
+      "title": "Question"
+     },
+     "hypothesis_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Hypothesis Ids"
+     },
+     "required_evidence": {
+      "type": "string",
+      "title": "Required Evidence",
+      "default": ""
+     },
+     "method": {
+      "$ref": "#/components/schemas/ResearchMethod"
+     },
+     "preferred_source_types": {
+      "items": {
+       "$ref": "#/components/schemas/SourceType"
+      },
+      "type": "array",
+      "title": "Preferred Source Types"
+     },
+     "queries": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Queries"
+     },
+     "analysis": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/AnalysisRequest"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "required_dataset_role": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Required Dataset Role"
+     },
+     "origin": {
+      "$ref": "#/components/schemas/TaskOrigin",
+      "default": "planner"
+     },
+     "priority": {
+      "$ref": "#/components/schemas/Level",
+      "default": "medium"
+     },
+     "expected_value": {
+      "$ref": "#/components/schemas/Level",
+      "default": "medium"
+     },
+     "expected_value_rationale": {
+      "type": "string",
+      "title": "Expected Value Rationale",
+      "default": ""
+     },
+     "completion_criteria": {
+      "type": "string",
+      "title": "Completion Criteria",
+      "default": ""
+     },
+     "status": {
+      "$ref": "#/components/schemas/TaskStatus",
+      "default": "pending"
+     },
+     "status_reason": {
+      "type": "string",
+      "title": "Status Reason",
+      "default": ""
+     },
+     "result_summary": {
+      "type": "string",
+      "title": "Result Summary",
+      "default": ""
+     },
+     "evidence_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Evidence Ids"
+     },
+     "source_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Source Ids"
+     },
+     "iteration": {
+      "type": "integer",
+      "title": "Iteration",
+      "default": 0
+     },
+     "challenge_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Challenge Id"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     },
+     "completed_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Completed At"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "question",
+     "method"
+    ],
+    "title": "ResearchTask"
+   },
+   "RetrievalMethod": {
+    "type": "string",
+    "enum": [
+     "web_search",
+     "direct_fetch",
+     "upload",
+     "dataset_query",
+     "scenario_fixture"
+    ],
+    "title": "RetrievalMethod"
+   },
+   "ReviewAction": {
+    "type": "string",
+    "enum": [
+     "approve",
+     "reject",
+     "modify",
+     "request_further_investigation",
+     "decide"
+    ],
+    "title": "ReviewAction"
+   },
+   "ReviewKind": {
+    "type": "string",
+    "enum": [
+     "clarification",
+     "privacy_release",
+     "findings",
+     "options",
+     "decision"
+    ],
+    "title": "ReviewKind"
+   },
+   "ReviewResponse": {
+    "properties": {
+     "action": {
+      "$ref": "#/components/schemas/ReviewAction"
+     },
+     "note": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Note"
+     },
+     "actor": {
+      "$ref": "#/components/schemas/Actor"
+     },
+     "items": {
+      "items": {
+       "$ref": "#/components/schemas/ItemDecision"
+      },
+      "type": "array",
+      "title": "Items"
+     },
+     "classification_overrides": {
+      "items": {
+       "$ref": "#/components/schemas/ClassificationOverride"
+      },
+      "type": "array",
+      "title": "Classification Overrides"
+     },
+     "challenges": {
+      "items": {
+       "$ref": "#/components/schemas/HumanChallenge"
+      },
+      "type": "array",
+      "title": "Challenges"
+     },
+     "research_requests": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Research Requests"
+     },
+     "option_edits": {
+      "additionalProperties": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "object",
+      "title": "Option Edits"
+     },
+     "decision": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/DecisionPayload"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "additional_iterations": {
+      "type": "integer",
+      "maximum": 3.0,
+      "minimum": 0.0,
+      "title": "Additional Iterations",
+      "default": 0
+     },
+     "responded_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Responded At"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "action",
+     "actor"
+    ],
+    "title": "ReviewResponse"
+   },
+   "ReviewResponseIn": {
+    "properties": {
+     "action": {
+      "$ref": "#/components/schemas/ReviewAction"
+     },
+     "note": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 4000
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Note"
+     },
+     "items": {
+      "items": {
+       "$ref": "#/components/schemas/ItemDecision"
+      },
+      "type": "array",
+      "title": "Items"
+     },
+     "classification_overrides": {
+      "items": {
+       "$ref": "#/components/schemas/ClassificationOverride"
+      },
+      "type": "array",
+      "title": "Classification Overrides"
+     },
+     "challenges": {
+      "items": {
+       "$ref": "#/components/schemas/HumanChallenge"
+      },
+      "type": "array",
+      "title": "Challenges"
+     },
+     "research_requests": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "maxItems": 10,
+      "title": "Research Requests"
+     },
+     "option_edits": {
+      "additionalProperties": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "object",
+      "title": "Option Edits"
+     },
+     "decision": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/DecisionPayload"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "additional_iterations": {
+      "type": "integer",
+      "maximum": 3.0,
+      "minimum": 0.0,
+      "title": "Additional Iterations",
+      "default": 0
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "action"
+    ],
+    "title": "ReviewResponseIn",
+    "description": "The responding actor is deliberately absent: it is taken from the authenticated principal."
+   },
+   "ReviewState": {
+    "type": "string",
+    "enum": [
+     "unreviewed",
+     "challenged",
+     "accepted",
+     "overridden",
+     "rejected"
+    ],
+    "title": "ReviewState"
+   },
+   "ReviewStatus": {
+    "type": "string",
+    "enum": [
+     "pending",
+     "resolved"
+    ],
+    "title": "ReviewStatus"
+   },
+   "Role": {
+    "type": "string",
+    "enum": [
+     "viewer",
+     "investigator",
+     "privacy_reviewer",
+     "governance_reviewer",
+     "decision_maker",
+     "admin"
+    ],
+    "title": "Role",
+    "description": "RBAC roles. Mapped from Entra ID app roles in deployed environments."
+   },
+   "RoutingDecision": {
+    "properties": {
+     "iteration": {
+      "type": "integer",
+      "title": "Iteration"
+     },
+     "continue_research": {
+      "type": "boolean",
+      "title": "Continue Research"
+     },
+     "stop_reason": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/StopReason"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "rationale": {
+      "type": "string",
+      "title": "Rationale"
+     },
+     "open_blocking_challenges": {
+      "type": "integer",
+      "title": "Open Blocking Challenges",
+      "default": 0
+     },
+     "new_evidence_last_round": {
+      "type": "integer",
+      "title": "New Evidence Last Round",
+      "default": 0
+     },
+     "at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "At"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "iteration",
+     "continue_research",
+     "rationale"
+    ],
+    "title": "RoutingDecision",
+    "description": "Why the graph looped or stopped after a challenge round. Persisted for audit and UI."
+   },
+   "ScenarioOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "organisation": {
+      "type": "string",
+      "title": "Organisation"
+     },
+     "question": {
+      "type": "string",
+      "title": "Question"
+     },
+     "datasets": {
+      "type": "integer",
+      "title": "Datasets"
+     },
+     "documents": {
+      "type": "integer",
+      "title": "Documents"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "title",
+     "organisation",
+     "question",
+     "datasets",
+     "documents"
+    ],
+    "title": "ScenarioOut"
+   },
+   "Severity": {
+    "type": "string",
+    "enum": [
+     "blocking",
+     "major",
+     "minor"
+    ],
+    "title": "Severity"
+   },
+   "Source": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "origin": {
+      "$ref": "#/components/schemas/SourceOrigin"
+     },
+     "source_type": {
+      "$ref": "#/components/schemas/SourceType"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "publisher": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Publisher"
+     },
+     "canonical_url": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Canonical Url"
+     },
+     "domain": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Domain"
+     },
+     "retrieved_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Retrieved At"
+     },
+     "published_on": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Published On"
+     },
+     "updated_on": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Updated On"
+     },
+     "content_hash": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Content Hash"
+     },
+     "classification": {
+      "$ref": "#/components/schemas/DataClassification"
+     },
+     "retrieval_method": {
+      "$ref": "#/components/schemas/RetrievalMethod"
+     },
+     "retrieval_provider": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Retrieval Provider"
+     },
+     "discovered_by_task_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Discovered By Task Id"
+     },
+     "synthetic": {
+      "type": "boolean",
+      "title": "Synthetic",
+      "default": false
+     },
+     "injection_flags": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Injection Flags"
+     },
+     "privacy_document_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Privacy Document Id"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "origin",
+     "source_type",
+     "title",
+     "retrieval_method"
+    ],
+    "title": "Source"
+   },
+   "SourceOrigin": {
+    "type": "string",
+    "enum": [
+     "external_web",
+     "internal",
+     "human"
+    ],
+    "title": "SourceOrigin"
+   },
+   "SourceOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "origin": {
+      "$ref": "#/components/schemas/SourceOrigin"
+     },
+     "source_type": {
+      "$ref": "#/components/schemas/SourceType"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "publisher": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Publisher"
+     },
+     "canonical_url": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Canonical Url"
+     },
+     "domain": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Domain"
+     },
+     "retrieved_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Retrieved At"
+     },
+     "published_on": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Published On"
+     },
+     "updated_on": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Updated On"
+     },
+     "content_hash": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Content Hash"
+     },
+     "classification": {
+      "$ref": "#/components/schemas/DataClassification"
+     },
+     "retrieval_method": {
+      "$ref": "#/components/schemas/RetrievalMethod"
+     },
+     "retrieval_provider": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Retrieval Provider"
+     },
+     "discovered_by_task_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Discovered By Task Id"
+     },
+     "synthetic": {
+      "type": "boolean",
+      "title": "Synthetic",
+      "default": false
+     },
+     "injection_flags": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Injection Flags"
+     },
+     "privacy_document_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Privacy Document Id"
+     },
+     "content": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Content"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "origin",
+     "source_type",
+     "title",
+     "retrieval_method"
+    ],
+    "title": "SourceOut"
+   },
+   "SourceQualityAssessment": {
+    "properties": {
+     "need": {
+      "$ref": "#/components/schemas/EvidenceNeed"
+     },
+     "tier": {
+      "$ref": "#/components/schemas/AuthorityTier"
+     },
+     "freshness": {
+      "$ref": "#/components/schemas/Freshness"
+     },
+     "age_days": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Age Days"
+     },
+     "rationale": {
+      "type": "string",
+      "title": "Rationale"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "need",
+     "tier",
+     "freshness",
+     "rationale"
+    ],
+    "title": "SourceQualityAssessment"
+   },
+   "SourceType": {
+    "type": "string",
+    "enum": [
+     "official_statistics",
+     "government_policy",
+     "regulator",
+     "standards_body",
+     "industry_body",
+     "academic",
+     "competitor_official",
+     "organisation_official",
+     "news",
+     "trade_press",
+     "commentary",
+     "internal_dataset",
+     "internal_document",
+     "crm_record",
+     "human_supplied",
+     "unknown"
+    ],
+    "title": "SourceType",
+    "description": "What kind of publisher/artefact a source is. Authority is *not* stored here: it depends on\nwhat the evidence is being used for (see ``sip.evidence.source_quality``)."
+   },
+   "Stance": {
+    "type": "string",
+    "enum": [
+     "supports",
+     "contradicts",
+     "context"
+    ],
+    "title": "Stance"
+   },
+   "StopReason": {
+    "type": "string",
+    "enum": [
+     "sufficient_evidence",
+     "budget_exhausted",
+     "max_iterations_reached",
+     "no_further_tasks_of_value",
+     "diminishing_returns"
+    ],
+    "title": "StopReason"
+   },
+   "StrategicOption": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "description": {
+      "type": "string",
+      "title": "Description"
+     },
+     "rationale": {
+      "type": "string",
+      "title": "Rationale"
+     },
+     "finding_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Finding Ids"
+     },
+     "claim_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Claim Ids"
+     },
+     "expected_benefits": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Expected Benefits"
+     },
+     "risks": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Risks"
+     },
+     "uncertainties": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Uncertainties"
+     },
+     "dependencies": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Dependencies"
+     },
+     "reversibility": {
+      "$ref": "#/components/schemas/Level",
+      "default": "medium"
+     },
+     "reversibility_note": {
+      "type": "string",
+      "title": "Reversibility Note",
+      "default": ""
+     },
+     "consequence": {
+      "$ref": "#/components/schemas/Level",
+      "default": "medium"
+     },
+     "additional_evidence_needed": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Additional Evidence Needed"
+     },
+     "confidence_band": {
+      "$ref": "#/components/schemas/ConfidenceBand",
+      "default": "low"
+     },
+     "review_status": {
+      "$ref": "#/components/schemas/OptionReviewStatus",
+      "default": "draft"
+     },
+     "reviewer_note": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Reviewer Note"
+     },
+     "created_by": {
+      "$ref": "#/components/schemas/Actor"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "title",
+     "description",
+     "rationale",
+     "created_by"
+    ],
+    "title": "StrategicOption"
+   },
+   "TaskOrigin": {
+    "type": "string",
+    "enum": [
+     "planner",
+     "challenger",
+     "human"
+    ],
+    "title": "TaskOrigin"
+   },
+   "TaskStatus": {
+    "type": "string",
+    "enum": [
+     "pending",
+     "done",
+     "failed",
+     "skipped_duplicate",
+     "skipped_budget",
+     "blocked_unavailable"
+    ],
+    "title": "TaskStatus"
+   },
+   "Usage": {
+    "properties": {
+     "searches": {
+      "type": "integer",
+      "title": "Searches",
+      "default": 0
+     },
+     "fetches": {
+      "type": "integer",
+      "title": "Fetches",
+      "default": 0
+     },
+     "analyses": {
+      "type": "integer",
+      "title": "Analyses",
+      "default": 0
+     },
+     "llm_calls": {
+      "type": "integer",
+      "title": "Llm Calls",
+      "default": 0
+     },
+     "input_tokens": {
+      "type": "integer",
+      "title": "Input Tokens",
+      "default": 0
+     },
+     "output_tokens": {
+      "type": "integer",
+      "title": "Output Tokens",
+      "default": 0
+     },
+     "cost_usd": {
+      "type": "number",
+      "title": "Cost Usd",
+      "default": 0.0
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "Usage",
+    "description": "Accumulated resource usage. Summed by a LangGraph reducer across parallel branches."
+   },
+   "ValidationError": {
+    "properties": {
+     "loc": {
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "integer"
+        }
+       ]
+      },
+      "type": "array",
+      "title": "Location"
+     },
+     "msg": {
+      "type": "string",
+      "title": "Message"
+     },
+     "type": {
+      "type": "string",
+      "title": "Error Type"
+     },
+     "input": {
+      "title": "Input"
+     },
+     "ctx": {
+      "type": "object",
+      "title": "Context"
+     }
+    },
+    "type": "object",
+    "required": [
+     "loc",
+     "msg",
+     "type"
+    ],
+    "title": "ValidationError"
+   }
+  }
+ }
+}

@@ -1,0 +1,171 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens. Neutral enterprise palette; colour is never the only signal (every classification
+ * and status also carries a text label, and UNKNOWN additionally uses a dashed border).
+ */
+:root {
+  --canvas: #f5f6f8;
+  --surface: #ffffff;
+  --surface-muted: #f0f2f5;
+  --line: #dde1e7;
+  --line-strong: #c3c9d2;
+  --ink: #18202a;
+  --ink-muted: #556070;
+  --ink-subtle: #77818f;
+  --accent: #1d4f91;
+  --accent-soft: #e7eef8;
+  --focus: #2563eb;
+
+  --known-fg: #0c6248;
+  --known-bg: #e2f2ea;
+  --known-line: #0c6248;
+  --inferred-fg: #1d4f91;
+  --inferred-bg: #e6eef9;
+  --inferred-line: #1d4f91;
+  --hypothesis-fg: #855400;
+  --hypothesis-bg: #fcf1d8;
+  --hypothesis-line: #b77a10;
+  --unknown-fg: #4f5967;
+  --unknown-bg: #f6f7f9;
+  --unknown-line: #8a94a2;
+
+  --ok-fg: #0c6248;
+  --ok-bg: #e2f2ea;
+  --warn-fg: #855400;
+  --warn-bg: #fcf1d8;
+  --danger-fg: #a12a2a;
+  --danger-bg: #fbe7e6;
+  --info-fg: #1d4f91;
+  --info-bg: #e7eef8;
+  --ai-fg: #5a3e9e;
+  --ai-bg: #f0ebfa;
+  --ai-line: #8b72c9;
+  --human-fg: #ffffff;
+  --human-bg: #18202a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --canvas: #0e1217;
+    --surface: #151a21;
+    --surface-muted: #1b222b;
+    --line: #29313c;
+    --line-strong: #3a4452;
+    --ink: #e5e8ed;
+    --ink-muted: #a3acb8;
+    --ink-subtle: #7f8996;
+    --accent: #84aee8;
+    --accent-soft: #18263a;
+    --focus: #84aee8;
+
+    --known-fg: #6fd3ac;
+    --known-bg: #0f2a21;
+    --known-line: #3fa47e;
+    --inferred-fg: #93b8ee;
+    --inferred-bg: #142237;
+    --inferred-line: #5d8ccf;
+    --hypothesis-fg: #eabb58;
+    --hypothesis-bg: #2b2311;
+    --hypothesis-line: #b48a2f;
+    --unknown-fg: #aab3bf;
+    --unknown-bg: #151a21;
+    --unknown-line: #6b7583;
+
+    --ok-fg: #6fd3ac;
+    --ok-bg: #0f2a21;
+    --warn-fg: #eabb58;
+    --warn-bg: #2b2311;
+    --danger-fg: #f09a95;
+    --danger-bg: #351817;
+    --info-fg: #93b8ee;
+    --info-bg: #142237;
+    --ai-fg: #c3b2f0;
+    --ai-bg: #231d38;
+    --ai-line: #7d67bf;
+    --human-fg: #151a21;
+    --human-bg: #e5e8ed;
+  }
+}
+
+@theme inline {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-subtle: var(--ink-subtle);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-focus: var(--focus);
+
+  --color-known-fg: var(--known-fg);
+  --color-known-bg: var(--known-bg);
+  --color-known-line: var(--known-line);
+  --color-inferred-fg: var(--inferred-fg);
+  --color-inferred-bg: var(--inferred-bg);
+  --color-inferred-line: var(--inferred-line);
+  --color-hypothesis-fg: var(--hypothesis-fg);
+  --color-hypothesis-bg: var(--hypothesis-bg);
+  --color-hypothesis-line: var(--hypothesis-line);
+  --color-unknown-fg: var(--unknown-fg);
+  --color-unknown-bg: var(--unknown-bg);
+  --color-unknown-line: var(--unknown-line);
+
+  --color-ok-fg: var(--ok-fg);
+  --color-ok-bg: var(--ok-bg);
+  --color-warn-fg: var(--warn-fg);
+  --color-warn-bg: var(--warn-bg);
+  --color-danger-fg: var(--danger-fg);
+  --color-danger-bg: var(--danger-bg);
+  --color-info-fg: var(--info-fg);
+  --color-info-bg: var(--info-bg);
+  --color-ai-fg: var(--ai-fg);
+  --color-ai-bg: var(--ai-bg);
+  --color-ai-line: var(--ai-line);
+  --color-human-fg: var(--human-fg);
+  --color-human-bg: var(--human-bg);
+}
+
+html {
+  color-scheme: light dark;
+}
+
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+details > summary {
+  cursor: pointer;
+  list-style: none;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+details > summary .chevron {
+  transition: transform 120ms ease;
+}
+details[open] > summary .chevron {
+  transform: rotate(90deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

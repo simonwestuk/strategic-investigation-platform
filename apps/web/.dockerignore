@@ -1,0 +1,13 @@
+node_modules
+.next
+out
+coverage
+test-results
+playwright-report
+npm-debug.log*
+.env
+.env.*
+!.env.example
+Dockerfile
+.dockerignore
+.DS_Store
