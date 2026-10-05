@@ -197,6 +197,11 @@ class FindingView(_Draft):
     segments: list[str]
 
 
+class SourceTypeDraft(_Draft):
+    source_type: SourceType = Field(description="What kind of publisher this is. Use 'unknown' if unsure.")
+    publisher: str | None = Field(description="The organisation that published the page, if identifiable.")
+
+
 class Calls(list[ModelCall]):
     """Model calls made while producing a result (for usage and cost accounting)."""
 
@@ -227,6 +232,10 @@ class Reasoner(Protocol):
     async def challenge(
         self, frame: InvestigationFrame, claims: list[dict[str, object]], evidence: list[EvidenceView]
     ) -> tuple[list[ChallengeDraft], Calls]: ...
+
+    async def classify_source(
+        self, title: str, domain: str | None, excerpt: str
+    ) -> tuple[SourceTypeDraft | None, Calls]: ...
 
     async def synthesise(
         self, frame: InvestigationFrame, findings: list[FindingView], unknowns: list[str], caveats: list[str]

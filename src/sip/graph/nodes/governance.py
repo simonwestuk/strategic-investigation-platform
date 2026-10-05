@@ -42,6 +42,7 @@ from sip.domain import (
     Role,
     Severity,
     StrategicOption,
+    TaskStatus,
     utcnow,
 )
 from sip.evidence.confidence import FINDING_CRITERIA, meets_finding_criteria
@@ -112,10 +113,23 @@ async def findings_gate(state: InvestigationState, runtime: Runtime[Investigatio
                     "status_reason": "Research stopped without evidence that discriminates for or against it.",
                 }
             )
+    leftover = {
+        t.id: t.model_copy(
+            update={"status": TaskStatus.SKIPPED_BUDGET, "status_reason": "Research stopped before this task ran."}
+        )
+        for t in (state.get("tasks") or {}).values()
+        if t.status == TaskStatus.PENDING
+    }
     open_blocking = [c for c in challenges if c.status == ChallengeStatus.OPEN and c.severity == Severity.BLOCKING]
     decision = ctx.governance.evaluate("publish_findings", open_blocking_challenges=len(open_blocking))
     events.append(policy_event(GATE, decision))
-    out: dict[str, Any] = {"findings": findings, "hypotheses": hyp_updates, "audit": events, "pending_review_id": None}
+    out: dict[str, Any] = {
+        "tasks": leftover,
+        "findings": findings,
+        "hypotheses": hyp_updates,
+        "audit": events,
+        "pending_review_id": None,
+    }
     if decision.requires_human_approval:
         review = HumanReview(
             kind=ReviewKind.FINDINGS,

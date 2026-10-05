@@ -81,7 +81,9 @@ async def me(actor: CurrentActor) -> Actor:
 
 
 @router.get("/scenarios", response_model=list[ScenarioOut])
-async def scenarios(svc: Service, _: CurrentActor) -> list[ScenarioOut]:
+async def scenarios(svc: Service, _: CurrentActor, request: Request) -> list[ScenarioOut]:
+    if not request.app.state.settings.sip_show_scenarios:
+        return []
     return [
         ScenarioOut(
             id=s.id,
@@ -97,8 +99,13 @@ async def scenarios(svc: Service, _: CurrentActor) -> list[ScenarioOut]:
 
 @router.post("/investigations", response_model=InvestigationSummary, status_code=201)
 async def create(
-    body: CreateInvestigation, svc: Service, actor: Annotated[Actor, Depends(require(Role.INVESTIGATOR))]
+    body: CreateInvestigation,
+    svc: Service,
+    actor: Annotated[Actor, Depends(require(Role.INVESTIGATOR))],
+    request: Request,
 ) -> InvestigationSummary:
+    if body.scenario_id and not request.app.state.settings.sip_show_scenarios:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Example scenarios are hidden (SIP_SHOW_SCENARIOS=false).")
     try:
         inv_id = await svc.create(
             actor=actor,

@@ -116,3 +116,9 @@ def test_upload_goes_through_privacy_gateway(client: TestClient) -> None:
 def test_dev_auth_is_refused_in_production(settings: Settings) -> None:
     with pytest.raises(RuntimeError):
         create_app(settings.model_copy(update={"sip_env": "production"}))
+
+
+def test_scenarios_hidden_by_default(settings: Settings) -> None:
+    with TestClient(create_app(settings.model_copy(update={"sip_show_scenarios": False}))) as c:
+        assert c.get("/api/scenarios").json() == []
+        assert c.post("/api/investigations", json={"scenario_id": "northstar"}).status_code == 400

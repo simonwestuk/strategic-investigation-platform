@@ -46,7 +46,7 @@ from sip.graph.helpers import audit, policy_event, usage_from
 from sip.graph.state import ResearchOutput
 from sip.research.injection import is_suspicious
 from sip.research.search.base import FetchError, SearchError
-from sip.research.text import Passage, normalise, split_passages, verify_quote
+from sip.research.text import Passage, normalise, snap_quote, split_passages
 from sip.retrieval.bm25 import BM25Index
 from sip.tools.analytics import AnalysisError, run_operation
 
@@ -255,7 +255,9 @@ def _evidence_from_draft(
     passage = by_index.get(d.passage_index)
     if passage is None:
         return None
-    verified = verify_quote(d.quote, passage.text)
+    snapped = snap_quote(d.quote, passage.text)
+    verified = snapped is not None
+    quote = snapped or d.quote
     links = [
         HypothesisLink(hypothesis_id=lk.hypothesis_id, stance=lk.stance, rationale=lk.rationale)
         for lk in d.links
@@ -270,17 +272,17 @@ def _evidence_from_draft(
         ]
         need = cats[0].evidence_need if cats else EvidenceNeed.MARKET_INTERPRETATION
     flags = []
-    if d.passage_index in flagged or is_suspicious(d.quote):
+    if d.passage_index in flagged or is_suspicious(quote):
         flags.append("injection_suspected")
     if not verified:
         flags.append("quote_not_verified")
-    entities, _dims = ctx.catalog.resolve_mentions(d.quote)
+    entities, _dims = ctx.catalog.resolve_mentions(quote)
     ev = Evidence(
-        id=stable_id("evd", src.id, normalise(d.quote)),
+        id=stable_id("evd", src.id, normalise(quote)),
         source_id=src.id,
         task_id=task.id,
         statement=d.statement,
-        quote=d.quote,
+        quote=quote,
         locator=f"passage {d.passage_index}",
         kind=d.kind,
         need=need,
@@ -351,12 +353,26 @@ async def _web(task: ResearchTask, payload: dict[str, Any], ctx: InvestigationCo
         except FetchError as exc:
             local.append(audit(WEB, AuditAction.TASK_SKIPPED, f"Fetch refused/failed: {exc}", subject_id=task.id))
             return None, "", [], Usage(), local
+        source_type = page.source_type_hint or SourceType.UNKNOWN
+        publisher = page.publisher
+        typing_usage = Usage()
+        if source_type == SourceType.UNKNOWN:
+            # Domain rules did not recognise the publisher: ask the (cheap) extraction model.
+            try:
+                guess, calls = await ctx.reasoner.classify_source(page.title, page.domain, page.text[:1500])
+                typing_usage = usage_from(calls)
+                if guess is not None:
+                    source_type = guess.source_type
+                    if guess.publisher and (not publisher or publisher == page.domain):
+                        publisher = guess.publisher[:200]
+            except Exception:  # best-effort: an unrecognised source is simply weighted low
+                log.warning("research.source_typing_failed", url=page.url)
         src = Source(
             id=stable_id("src", page.url),
             origin=SourceOrigin.EXTERNAL_WEB,
-            source_type=page.source_type_hint or SourceType.UNKNOWN,
+            source_type=source_type,
             title=page.title,
-            publisher=page.publisher,
+            publisher=publisher,
             canonical_url=page.url,
             domain=page.domain,
             published_on=page.published_on,
@@ -380,7 +396,7 @@ async def _web(task: ResearchTask, payload: dict[str, Any], ctx: InvestigationCo
                 )
             )
         found, u = await _extract(task, src, split_passages(page.text)[:40], payload, ctx, WEB)
-        return src, page.text, found, u + Usage(fetches=1), local
+        return src, page.text, found, u + typing_usage + Usage(fetches=1), local
 
     for src, text, found, u, local in await asyncio.gather(*(read(url) for url in fresh)):
         events.extend(local)

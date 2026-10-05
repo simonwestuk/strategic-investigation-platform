@@ -27,6 +27,7 @@ def settings(tmp_path: Path) -> Settings:
         vault_database_url=f"sqlite+aiosqlite:///{tmp_path}/vault.db",
         sip_var_dir=tmp_path,
         sip_env="test",
+        sip_show_scenarios=True,
     )
 
 

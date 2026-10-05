@@ -39,7 +39,11 @@ PLANNER = Actor.agent("research_planner")
 MAX_TASKS_PER_ROUND = 16
 
 
-def signature(method: ResearchMethod, analysis: Any, queries: list[str], question: str) -> str:
+def signature(
+    method: ResearchMethod, analysis: Any, queries: list[str], question: str, required_role: str | None = None
+) -> str:
+    if analysis is None and required_role:
+        return f"{method}:role:{required_role}"  # one "data not available" task per missing kind of data
     if analysis is not None:
         return f"{method}:{analysis.operation}:{json.dumps(analysis.params, sort_keys=True)}"
     basis = sorted(normalise(q) for q in queries) or [normalise(question)]
@@ -62,9 +66,7 @@ async def plan(state: InvestigationState, runtime: Runtime[InvestigationContext]
     actionable = [
         c
         for c in challenges.values()
-        if c.status == ChallengeStatus.OPEN
-        and c.severity in {Severity.BLOCKING, Severity.MAJOR}
-        and not c.research_attempted
+        if c.status == ChallengeStatus.OPEN and c.severity == Severity.BLOCKING and not c.research_attempted
     ]
     questions = [c.research_question for c in actionable if c.research_question and not c.suggested_analysis]
     human_requests = list(state.get("research_requests") or [])
@@ -106,14 +108,16 @@ async def plan(state: InvestigationState, runtime: Runtime[InvestigationContext]
         if origins[i] == TaskOrigin.PLANNER and normalise(d.question) in human_q:
             origins[i] = TaskOrigin.HUMAN
 
-    existing = {signature(t.method, t.analysis, t.queries, t.question): t for t in tasks.values()}
+    existing = {
+        signature(t.method, t.analysis, t.queries, t.question, t.required_dataset_role): t for t in tasks.values()
+    }
     new: dict[str, ResearchTask] = {}
     merged: dict[str, ResearchTask] = {}
     events = [policy_event(PLANNER, decision)]
     duplicates = 0
     for d, origin, chl in zip(drafts, origins, challenge_for, strict=True):
         hyp_ids = [h for h in d.hypothesis_ids if h in hyps]
-        sig = signature(d.method, d.analysis, d.queries, d.question)
+        sig = signature(d.method, d.analysis, d.queries, d.question, d.required_dataset_role)
         if sig in existing:
             prior = existing[sig]
             if prior.id in new and set(hyp_ids) - set(prior.hypothesis_ids):
@@ -152,15 +156,26 @@ async def plan(state: InvestigationState, runtime: Runtime[InvestigationContext]
         existing[sig] = task
 
     # budget: total task cap and per-round cap, highest priority x value first
-    pending = sorted(
-        (t for t in new.values() if t.status == TaskStatus.PENDING),
-        key=lambda t: -(t.priority.rank * t.expected_value.rank),
-    )
-    room = max(0, min(MAX_TASKS_PER_ROUND, budget.max_tasks - len(tasks)))
-    for t in pending[room:]:
+    def value(t: ResearchTask) -> int:
+        return -(t.priority.rank * t.expected_value.rank)
+
+    # Total budget: new tasks beyond it are dropped for good.
+    fresh = sorted((t for t in new.values() if t.status == TaskStatus.PENDING), key=value)
+    total_room = max(0, budget.max_tasks - len(tasks))
+    for t in fresh[total_room:]:
         new[t.id] = t.model_copy(
-            update={"status": TaskStatus.SKIPPED_BUDGET, "status_reason": "Research budget or per-round cap reached."}
+            update={"status": TaskStatus.SKIPPED_BUDGET, "status_reason": "Total research task budget reached."}
         )
+    # Per-round cap: run the most valuable tasks now (including ones deferred from earlier rounds);
+    # the rest stay pending for the next round rather than being dropped.
+    deferred = [t for t in tasks.values() if t.status == TaskStatus.PENDING and t.id not in new]
+    candidates = sorted([*deferred, *(t for t in new.values() if t.status == TaskStatus.PENDING)], key=value)
+    run_now = candidates[:MAX_TASKS_PER_ROUND]
+    for t in candidates[MAX_TASKS_PER_ROUND:]:
+        new[t.id] = t.model_copy(update={"status_reason": "Deferred to a later round (per-round limit)."})
+    for t in run_now:
+        if t.id not in new:  # a deferred task now being run
+            new[t.id] = t.model_copy(update={"iteration": iteration, "status_reason": ""})
     for t in new.values():
         action = AuditAction.TASK_CREATED if t.status == TaskStatus.PENDING else AuditAction.TASK_SKIPPED
         events.append(
@@ -192,7 +207,7 @@ async def plan(state: InvestigationState, runtime: Runtime[InvestigationContext]
     return {
         "tasks": {**merged, **new},
         "iteration": iteration,
-        "round_task_ids": [t.id for t in new.values() if t.status == TaskStatus.PENDING],
+        "round_task_ids": [t.id for t in run_now],
         "hypotheses": hyp_updates,
         "challenges": chl_updates,
         "research_requests": [],

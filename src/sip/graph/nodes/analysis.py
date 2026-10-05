@@ -43,6 +43,7 @@ from sip.graph.state import RESET, InvestigationState
 from sip.research.text import normalise
 
 MANAGER = Actor.agent("evidence_manager")
+MAX_CLAIMS_PER_HYPOTHESIS = 5
 ANALYST = Actor.agent("analyst")
 SCEPTIC = Actor.agent("sceptic")
 
@@ -197,6 +198,8 @@ async def analyse(state: InvestigationState, runtime: Runtime[InvestigationConte
     for (h, _, is_blocked), (drafts, calls) in zip(jobs, results, strict=True):
         calls_all.extend(calls)
         verdict_cls: tuple[str, Classification, bool] | None = None
+        # Keep the verdict on the hypothesis first, then the most important supporting claims.
+        drafts = sorted(drafts, key=lambda d: d.hypothesis_verdict == "none")[:MAX_CLAIMS_PER_HYPOTHESIS]
         for d in drafts:
             support = [i for i in d.supporting_evidence_ids if i in evidence]
             against = [i for i in d.contradicting_evidence_ids if i in evidence]
@@ -460,7 +463,9 @@ def decide_routing(state: InvestigationState, challenges: dict[str, Challenge]) 
     actionable = [
         c
         for c in open_challenges
-        if c.severity in {Severity.BLOCKING, Severity.MAJOR}
+        # Only blocking objections send research round again; major/minor ones become stated caveats.
+        # (Letting every major objection loop meant new claims kept generating new work.)
+        if c.severity == Severity.BLOCKING
         and (c.research_question or c.suggested_analysis)
         and not c.research_attempted
     ]
@@ -485,8 +490,11 @@ def decide_routing(state: InvestigationState, challenges: dict[str, Challenge]) 
             StopReason.MAX_ITERATIONS,
             f"Stopping: reached the maximum of {budget.max_iterations} research rounds.",
         )
-    if actionable or proposed or state.get("research_requests"):
+    deferred = [t for t in (state.get("tasks") or {}).values() if t.status == TaskStatus.PENDING]
+    if actionable or proposed or deferred or state.get("research_requests"):
         parts = []
+        if deferred:
+            parts.append(f"{len(deferred)} planned task(s) still to run")
         if actionable:
             parts.append(f"{len(actionable)} open challenge(s) ask for further research")
         if proposed:

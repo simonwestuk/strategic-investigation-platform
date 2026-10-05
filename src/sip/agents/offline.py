@@ -28,6 +28,7 @@ from sip.agents.contracts import (
     LinkDraft,
     OptionDraft,
     PlanningContext,
+    SourceTypeDraft,
     SourceView,
     TaskDraft,
 )
@@ -490,6 +491,11 @@ class OfflineReasoner:
         return [], Calls()
 
     # ---------------------------------------------------------------------------------------------
+    async def classify_source(
+        self, title: str, domain: str | None, excerpt: str
+    ) -> tuple[SourceTypeDraft | None, Calls]:
+        return None, Calls()  # offline: rely on domain rules only
+
     async def synthesise(
         self, frame: InvestigationFrame, findings: list[FindingView], unknowns: list[str], caveats: list[str]
     ) -> tuple[list[OptionDraft], Calls]:

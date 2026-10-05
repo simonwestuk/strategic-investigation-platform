@@ -77,6 +77,9 @@ class Settings(BaseSettings):
     sip_reasoner: ReasonerMode = ReasonerMode.OFFLINE
     sip_search_provider: SearchProviderName = SearchProviderName.OFFLINE_CORPUS
     sip_data_dir: Path = REPO_ROOT / "data" / "synthetic"
+    # Show the fictional example scenarios in the app. Hidden by default: the app is for live questions.
+    # Tests, `sip run` and `sip eval` use the scenarios regardless of this setting.
+    sip_show_scenarios: bool = False
     sip_var_dir: Path = REPO_ROOT / "var"
     sip_log_level: str = "INFO"
     sip_log_json: bool = False

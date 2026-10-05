@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 import unicodedata
 from dataclasses import dataclass
+from itertools import pairwise
 
 _ZERO_WIDTH = re.compile(r"[​-‏‪-‮⁠-⁤﻿]")
 _HTML_COMMENT = re.compile(r"<!--.*?-->", re.S)
@@ -61,3 +62,28 @@ def verify_quote(quote: str | None, content: str) -> bool:
     if not quote or len(quote.strip()) < 8:
         return False
     return normalise(quote) in normalise(content)
+
+
+def snap_quote(quote: str | None, content: str, threshold: float = 0.85) -> str | None:
+    """Return the exact source text a near-verbatim quote refers to, or None.
+
+    Small models often paraphrase slightly ("rose by" vs "increased by"). Rather than lowering the
+    verbatim guarantee, we find the source sentence (or pair of sentences) most similar to the quote
+    and, if it is close enough, use *that exact source text* as the quote. Evidence therefore always
+    quotes the source verbatim; only the model's wording is corrected.
+    """
+    from difflib import SequenceMatcher
+
+    if not quote or len(quote.strip()) < 8:
+        return None
+    if verify_quote(quote, content):
+        return quote
+    sentences = split_sentences(content)
+    candidates = sentences + [f"{a} {b}" for a, b in pairwise(sentences)]
+    target = normalise(quote)
+    best, best_score = None, 0.0
+    for cand in candidates:
+        score = SequenceMatcher(None, target, normalise(cand), autojunk=False).ratio()
+        if score > best_score:
+            best, best_score = cand, score
+    return best if best is not None and best_score >= threshold else None

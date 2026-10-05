@@ -32,6 +32,7 @@ from sip.agents.contracts import (
     OptionDraft,
     OptionDrafts,
     PlanningContext,
+    SourceTypeDraft,
     SourceView,
     TaskDraft,
 )
@@ -210,6 +211,31 @@ class LLMReasoner:
             metadata={"source_id": source.id},
         )
         return out.evidence, Calls([call])
+
+    async def classify_source(
+        self, title: str, domain: str | None, excerpt: str
+    ) -> tuple[SourceTypeDraft | None, Calls]:
+        view = SourceView(
+            id="unclassified",
+            title=title,
+            publisher=None,
+            source_type=SourceType.UNKNOWN,
+            dated=None,
+            url=None,
+            synthetic=False,
+        )
+        text = (
+            f"Domain (trusted): {domain or 'unknown'}\nTitle (untrusted): {title[:200]}\n\n"
+            f"{untrusted(view, [Passage(0, excerpt[:1500])])}"
+        )
+        out, call = await self.model.generate(
+            task="classify_source",
+            tier=ModelTier.EXTRACTION,
+            instructions=instructions("classify_source"),
+            schema=SourceTypeDraft,
+            input=text,
+        )
+        return out, Calls([call])
 
     async def draft_claims(
         self,
