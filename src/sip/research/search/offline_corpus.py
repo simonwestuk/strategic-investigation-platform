@@ -42,20 +42,33 @@ class OfflineCorpus:
             text = clean_untrusted(body).strip()
             url = meta["url"]
             page = FetchedPage(
-                url=url, title=meta["title"], text=text, content_type="text/markdown",
-                sha256=hashlib.sha256(body.encode()).hexdigest(), publisher=meta.get("publisher"),
-                domain=urlsplit(url).hostname, published_on=_as_date(meta.get("published_on")),
+                url=url,
+                title=meta["title"],
+                text=text,
+                content_type="text/markdown",
+                sha256=hashlib.sha256(body.encode()).hexdigest(),
+                publisher=meta.get("publisher"),
+                domain=urlsplit(url).hostname,
+                published_on=_as_date(meta.get("published_on")),
                 updated_on=_as_date(meta.get("updated_on")),
-                source_type_hint=SourceType(meta["source_type"]), synthetic=True,
-                injection_flags=flags, provider=self.name,
+                source_type_hint=SourceType(meta["source_type"]),
+                synthetic=True,
+                injection_flags=flags,
+                provider=self.name,
             )
             self.pages[url] = page
             self.index.add(url, f"{page.title} {page.title} {text}")
 
     async def search(self, query: str, max_results: int = 5) -> list[SearchResult]:
         return [
-            SearchResult(url=url, title=self.pages[url].title, snippet=self.pages[url].text[:200],
-                         published_on=self.pages[url].published_on, score=score, provider=self.name)
+            SearchResult(
+                url=url,
+                title=self.pages[url].title,
+                snippet=self.pages[url].text[:200],
+                published_on=self.pages[url].published_on,
+                score=score,
+                provider=self.name,
+            )
             for url, score in self.index.search(query, max_results)
         ]
 

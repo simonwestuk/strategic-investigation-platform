@@ -20,6 +20,7 @@ from sip.agents.contracts import EvidenceDraft, SourceView
 from sip.domain import (
     Actor,
     AuditAction,
+    AuditEvent,
     Evidence,
     EvidenceNeed,
     Freshness,
@@ -69,16 +70,23 @@ _DEFAULT_NEED = {
 
 
 def _source_view(s: Source) -> SourceView:
-    return SourceView(id=s.id, title=s.title, publisher=s.publisher, source_type=s.source_type,
-                      dated=s.effective_date.isoformat() if s.effective_date else None,
-                      url=s.canonical_url, synthetic=s.synthetic)
+    return SourceView(
+        id=s.id,
+        title=s.title,
+        publisher=s.publisher,
+        source_type=s.source_type,
+        dated=s.effective_date.isoformat() if s.effective_date else None,
+        url=s.canonical_url,
+        synthetic=s.synthetic,
+    )
 
 
 async def research(payload: dict[str, Any], runtime: Runtime[InvestigationContext]) -> dict[str, Any]:
     ctx = runtime.context
     task: ResearchTask = payload["task"]
-    with tracing_context(metadata={"research_task_id": task.id, "method": task.method.value,
-                                   "hypothesis_ids": task.hypothesis_ids}):
+    with tracing_context(
+        metadata={"research_task_id": task.id, "method": task.method.value, "hypothesis_ids": task.hypothesis_ids}
+    ):
         try:
             if task.method == ResearchMethod.DATASET_ANALYSIS:
                 out, usage, events = await _dataset(task, payload, ctx)
@@ -88,11 +96,26 @@ async def research(payload: dict[str, Any], runtime: Runtime[InvestigationContex
                 out, usage, events = await _documents(task, payload, ctx)
         except Exception as exc:  # a failed task must not fail the investigation
             log.warning("research.task_failed", task_id=task.id, error=exc.__class__.__name__)
-            failed = task.model_copy(update={"status": TaskStatus.FAILED, "completed_at": utcnow(),
-                                             "status_reason": f"{exc.__class__.__name__}: {str(exc)[:200]}"})
-            return {"staging": [ResearchOutput(task=failed)],
-                    "audit": [audit(Actor.system(), AuditAction.TASK_COMPLETED, f"Task failed: {task.question[:120]}",
-                                    subject_type="task", subject_id=task.id, status="failed")]}
+            failed = task.model_copy(
+                update={
+                    "status": TaskStatus.FAILED,
+                    "completed_at": utcnow(),
+                    "status_reason": f"{exc.__class__.__name__}: {str(exc)[:200]}",
+                }
+            )
+            return {
+                "staging": [ResearchOutput(task=failed)],
+                "audit": [
+                    audit(
+                        Actor.system(),
+                        AuditAction.TASK_COMPLETED,
+                        f"Task failed: {task.question[:120]}",
+                        subject_type="task",
+                        subject_id=task.id,
+                        status="failed",
+                    )
+                ],
+            }
     return {"staging": [out], "usage": usage, "audit": events}
 
 
@@ -103,9 +126,15 @@ def _remaining(payload: dict[str, Any]) -> tuple[int, int]:
 
 
 def _done(task: ResearchTask, summary: str, evidence: list[Evidence], sources: list[Source]) -> ResearchTask:
-    return task.model_copy(update={
-        "status": TaskStatus.DONE, "completed_at": utcnow(), "result_summary": summary,
-        "evidence_ids": [e.id for e in evidence], "source_ids": sorted({s.id for s in sources})})
+    return task.model_copy(
+        update={
+            "status": TaskStatus.DONE,
+            "completed_at": utcnow(),
+            "result_summary": summary,
+            "evidence_ids": [e.id for e in evidence],
+            "source_ids": sorted({s.id for s in sources}),
+        }
+    )
 
 
 # ---- dataset analysis -----------------------------------------------------------------------------
@@ -115,35 +144,62 @@ async def _dataset(task: ResearchTask, payload: dict[str, Any], ctx: Investigati
     released: dict[str, str] = payload["released_dataset_ids"]
     ds = ctx.catalog.get(a.dataset_id)
     decision = ctx.governance.evaluate(
-        "analyse_internal_dataset", personal_data=ds.manifest.classification.personal_data.value,
-        confidentiality=ds.manifest.classification.confidentiality.value)
+        "analyse_internal_dataset",
+        personal_data=ds.manifest.classification.personal_data.value,
+        confidentiality=ds.manifest.classification.confidentiality.value,
+    )
     events = [policy_event(ANALYST, decision, "task", task.id)]
     if not decision.agent_may_proceed:
-        blocked = task.model_copy(update={"status": TaskStatus.BLOCKED_UNAVAILABLE,
-                                          "status_reason": decision.reason, "completed_at": utcnow()})
+        blocked = task.model_copy(
+            update={
+                "status": TaskStatus.BLOCKED_UNAVAILABLE,
+                "status_reason": decision.reason,
+                "completed_at": utcnow(),
+            }
+        )
         return ResearchOutput(task=blocked), Usage(), events
     try:
         result = run_operation(ctx.catalog, a.operation, a.dataset_id, a.params)
     except AnalysisError as exc:
-        failed = task.model_copy(update={"status": TaskStatus.FAILED, "status_reason": str(exc),
-                                         "completed_at": utcnow()})
+        failed = task.model_copy(
+            update={"status": TaskStatus.FAILED, "status_reason": str(exc), "completed_at": utcnow()}
+        )
         return ResearchOutput(task=failed), Usage(analyses=1), events
     # Evidence is attributed to the dataset that carries the measured quantity of interest.
     primary_id = result.dataset_ids[0]
     source_id = released[primary_id]
     # Placeholder source object for typing; the canonical Source is already in state from intake.
     m = ctx.catalog.get(primary_id).manifest
-    src = Source(id=source_id, origin=SourceOrigin.INTERNAL, source_type=m.source_type, title=m.title,
-                 retrieval_method=RetrievalMethod.DATASET_QUERY, published_on=m.published_on)
+    src = Source(
+        id=source_id,
+        origin=SourceOrigin.INTERNAL,
+        source_type=m.source_type,
+        title=m.title,
+        retrieval_method=RetrievalMethod.DATASET_QUERY,
+        published_on=m.published_on,
+    )
     evidence = evidence_from_analysis(result, task, src, payload["hypotheses"], ctx.taxonomy)
     if len(result.dataset_ids) > 1:  # e.g. own vs market: the market side is primary evidence too
-        evidence = [e.model_copy(update={"locator": (e.locator or "") + f" datasets={result.dataset_ids}"})
-                    for e in evidence]
+        evidence = [
+            e.model_copy(update={"locator": (e.locator or "") + f" datasets={result.dataset_ids}"}) for e in evidence
+        ]
     evidence = [_with_quality(e, src, ctx, payload["as_of"]) for e in evidence]
-    events.append(audit(ANALYST, AuditAction.TASK_COMPLETED, result.summary[:200], subject_type="task",
-                        subject_id=task.id, operation=a.operation, evidence=len(evidence)))
-    return (ResearchOutput(task=_done(task, result.summary, evidence, []), evidence=evidence),
-            Usage(analyses=1), events)
+    events.append(
+        audit(
+            ANALYST,
+            AuditAction.TASK_COMPLETED,
+            result.summary[:200],
+            subject_type="task",
+            subject_id=task.id,
+            operation=a.operation,
+            evidence=len(evidence),
+        )
+    )
+    return (
+        ResearchOutput(task=_done(task, result.summary, evidence, []), evidence=evidence),
+        Usage(analyses=1),
+        events,
+    )
 
 
 def _with_quality(e: Evidence, src: Source, ctx: InvestigationContext, as_of: date) -> Evidence:
@@ -153,8 +209,14 @@ def _with_quality(e: Evidence, src: Source, ctx: InvestigationContext, as_of: da
 
 
 # ---- extraction shared by web and documents --------------------------------------------------------
-async def _extract(task: ResearchTask, src: Source, passages: list[Passage], payload: dict[str, Any],
-                   ctx: InvestigationContext, actor: Actor) -> tuple[list[Evidence], Usage]:
+async def _extract(
+    task: ResearchTask,
+    src: Source,
+    passages: list[Passage],
+    payload: dict[str, Any],
+    ctx: InvestigationContext,
+    actor: Actor,
+) -> tuple[list[Evidence], Usage]:
     hyps: list[Hypothesis] = payload["hypotheses"]
     by_index = {p.index: p for p in passages}
     flagged = {p.index for p in passages if is_suspicious(p.text)}
@@ -168,19 +230,33 @@ async def _extract(task: ResearchTask, src: Source, passages: list[Passage], pay
     return out, usage_from(calls)
 
 
-def _evidence_from_draft(d: EvidenceDraft, task: ResearchTask, src: Source, by_index: dict[int, Passage],
-                         flagged: set[int], hyps: dict[str, Hypothesis], ctx: InvestigationContext,
-                         as_of: date, actor: Actor) -> Evidence | None:
+def _evidence_from_draft(
+    d: EvidenceDraft,
+    task: ResearchTask,
+    src: Source,
+    by_index: dict[int, Passage],
+    flagged: set[int],
+    hyps: dict[str, Hypothesis],
+    ctx: InvestigationContext,
+    as_of: date,
+    actor: Actor,
+) -> Evidence | None:
     passage = by_index.get(d.passage_index)
     if passage is None:
         return None
     verified = verify_quote(d.quote, passage.text)
-    links = [HypothesisLink(hypothesis_id=lk.hypothesis_id, stance=lk.stance, rationale=lk.rationale)
-             for lk in d.links if lk.hypothesis_id in hyps]
+    links = [
+        HypothesisLink(hypothesis_id=lk.hypothesis_id, stance=lk.stance, rationale=lk.rationale)
+        for lk in d.links
+        if lk.hypothesis_id in hyps
+    ]
     need = _DEFAULT_NEED.get(src.source_type)
     if need is None:
-        cats = [ctx.taxonomy.categories[hyps[lk.hypothesis_id].category] for lk in links
-                if hyps[lk.hypothesis_id].category in ctx.taxonomy.categories]
+        cats = [
+            ctx.taxonomy.categories[hyps[lk.hypothesis_id].category]
+            for lk in links
+            if hyps[lk.hypothesis_id].category in ctx.taxonomy.categories
+        ]
         need = cats[0].evidence_need if cats else EvidenceNeed.MARKET_INTERPRETATION
     flags = []
     if d.passage_index in flagged or is_suspicious(d.quote):
@@ -189,21 +265,37 @@ def _evidence_from_draft(d: EvidenceDraft, task: ResearchTask, src: Source, by_i
         flags.append("quote_not_verified")
     entities, _dims = ctx.catalog.resolve_mentions(d.quote)
     ev = Evidence(
-        id=stable_id("evd", src.id, normalise(d.quote)), source_id=src.id, task_id=task.id,
-        statement=d.statement, quote=d.quote, locator=f"passage {d.passage_index}", kind=d.kind, need=need,
-        relevance=d.relevance, links=links, segments=sorted(entities),
+        id=stable_id("evd", src.id, normalise(d.quote)),
+        source_id=src.id,
+        task_id=task.id,
+        statement=d.statement,
+        quote=d.quote,
+        locator=f"passage {d.passage_index}",
+        kind=d.kind,
+        need=need,
+        relevance=d.relevance,
+        links=links,
+        segments=sorted(entities),
         verification=QuoteVerification.VERIFIED if verified else QuoteVerification.NOT_FOUND,
-        flags=flags, extracted_by=actor, observed_on=src.effective_date)
+        flags=flags,
+        extracted_by=actor,
+        observed_on=src.effective_date,
+    )
     return _with_quality(ev, src, ctx, as_of)
 
 
 # ---- web ------------------------------------------------------------------------------------------
 async def _web(task: ResearchTask, payload: dict[str, Any], ctx: InvestigationContext):  # type: ignore[no-untyped-def]
-    events = []
+    events: list[AuditEvent] = []
     usage = Usage()
     if ctx.search is None or ctx.fetcher is None:
-        blocked = task.model_copy(update={"status": TaskStatus.BLOCKED_UNAVAILABLE, "completed_at": utcnow(),
-                                          "status_reason": "No search provider configured."})
+        blocked = task.model_copy(
+            update={
+                "status": TaskStatus.BLOCKED_UNAVAILABLE,
+                "completed_at": utcnow(),
+                "status_reason": "No search provider configured.",
+            }
+        )
         return ResearchOutput(task=blocked), usage, events
     decision = ctx.governance.evaluate("search_public_web")
     events.append(policy_event(WEB, decision, "task", task.id))
@@ -235,27 +327,51 @@ async def _web(task: ResearchTask, payload: dict[str, Any], ctx: InvestigationCo
             events.append(audit(WEB, AuditAction.TASK_SKIPPED, f"Fetch refused/failed: {exc}", subject_id=task.id))
             continue
         usage.fetches += 1
-        src = Source(id=stable_id("src", page.url), origin=SourceOrigin.EXTERNAL_WEB,
-                     source_type=page.source_type_hint or SourceType.UNKNOWN, title=page.title,
-                     publisher=page.publisher, canonical_url=page.url, domain=page.domain,
-                     published_on=page.published_on, updated_on=page.updated_on, content_hash=page.sha256,
-                     retrieval_method=RetrievalMethod.WEB_SEARCH, retrieval_provider=ctx.search.name,
-                     discovered_by_task_id=task.id, synthetic=page.synthetic,
-                     injection_flags=page.injection_flags)
+        src = Source(
+            id=stable_id("src", page.url),
+            origin=SourceOrigin.EXTERNAL_WEB,
+            source_type=page.source_type_hint or SourceType.UNKNOWN,
+            title=page.title,
+            publisher=page.publisher,
+            canonical_url=page.url,
+            domain=page.domain,
+            published_on=page.published_on,
+            updated_on=page.updated_on,
+            content_hash=page.sha256,
+            retrieval_method=RetrievalMethod.WEB_SEARCH,
+            retrieval_provider=ctx.search.name,
+            discovered_by_task_id=task.id,
+            synthetic=page.synthetic,
+            injection_flags=page.injection_flags,
+        )
         sources.append(src)
         documents[src.id] = page.text
         if page.injection_flags:
-            events.append(audit(WEB, AuditAction.INJECTION_FLAGGED,
-                                f"Instruction-like content in '{page.title}'", subject_type="source",
-                                subject_id=src.id, flags=page.injection_flags))
+            events.append(
+                audit(
+                    WEB,
+                    AuditAction.INJECTION_FLAGGED,
+                    f"Instruction-like content in '{page.title}'",
+                    subject_type="source",
+                    subject_id=src.id,
+                    flags=page.injection_flags,
+                )
+            )
         found, u = await _extract(task, src, split_passages(page.text)[:40], payload, ctx, WEB)
         evidence.extend(found)
         usage = usage + u
-    summary = (f"{usage.searches} search(es), {len(sources)} new source(s), {duplicates} already-known "
-               f"source(s) skipped, {len(evidence)} evidence item(s).")
+    summary = (
+        f"{usage.searches} search(es), {len(sources)} new source(s), {duplicates} already-known "
+        f"source(s) skipped, {len(evidence)} evidence item(s)."
+    )
     events.append(audit(WEB, AuditAction.TASK_COMPLETED, summary, subject_type="task", subject_id=task.id))
-    out = ResearchOutput(task=_done(task, summary, evidence, sources), sources=sources, documents=documents,
-                         evidence=evidence, duplicates_skipped=duplicates)
+    out = ResearchOutput(
+        task=_done(task, summary, evidence, sources),
+        sources=sources,
+        documents=documents,
+        evidence=evidence,
+        duplicates_skipped=duplicates,
+    )
     return out, usage, events
 
 
@@ -284,5 +400,8 @@ async def _documents(task: ResearchTask, payload: dict[str, Any], ctx: Investiga
         usage = usage + u
     summary = f"Searched {len(docs)} released document(s); {len(evidence)} evidence item(s)."
     events.append(audit(DOCS, AuditAction.TASK_COMPLETED, summary, subject_type="task", subject_id=task.id))
-    return (ResearchOutput(task=_done(task, summary, evidence, [srcs[s] for s in chosen]), evidence=evidence),
-            usage, events)
+    return (
+        ResearchOutput(task=_done(task, summary, evidence, [srcs[s] for s in chosen]), evidence=evidence),
+        usage,
+        events,
+    )

@@ -17,6 +17,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
 
+from langchain_core.runnables import RunnableConfig
 from langgraph.types import Command
 
 from sip.agents.contracts import Reasoner
@@ -30,9 +31,12 @@ from sip.privacy.vault import InMemoryVault
 from sip.scenarios.loader import Scenario
 from sip.services.bootstrap import build_context, ingest_scenario, make_gateway
 
-SCRIPTED_REVIEWER = Actor(kind=ActorKind.HUMAN, id="scripted:reviewer", display_name="Scripted reviewer",
-                          roles=[Role.PRIVACY_REVIEWER, Role.GOVERNANCE_REVIEWER, Role.DECISION_MAKER,
-                                 Role.INVESTIGATOR])
+SCRIPTED_REVIEWER = Actor(
+    kind=ActorKind.HUMAN,
+    id="scripted:reviewer",
+    display_name="Scripted reviewer",
+    roles=[Role.PRIVACY_REVIEWER, Role.GOVERNANCE_REVIEWER, Role.DECISION_MAKER, Role.INVESTIGATOR],
+)
 
 
 def scripted_response(review: HumanReview) -> dict[str, Any]:
@@ -41,16 +45,28 @@ def scripted_response(review: HumanReview) -> dict[str, Any]:
         items = []
         for d in review.context.get("documents", []):
             special = bool(d.get("special_category_types"))
-            items.append({"item_id": d["id"], "action": "reject" if special else "approve",
-                          "note": "Special-category data is not needed for this question." if special else None})
+            items.append(
+                {
+                    "item_id": d["id"],
+                    "action": "reject" if special else "approve",
+                    "note": "Special-category data is not needed for this question." if special else None,
+                }
+            )
         return {"action": "approve", "actor": actor, "items": items}
     if review.kind == ReviewKind.DECISION:
         unknowns = [u["id"] for u in review.context.get("unknowns_to_acknowledge", [])]
-        return {"action": "decide", "actor": actor, "decision": {
-            "decision_type": "commission_further_investigation",
-            "statement": "Commission research on the unresolved questions before committing to a portfolio change.",
-            "rationale": "Scripted evaluation reviewer: material unknowns remain.",
-            "option_ids": [], "uncertainties_acknowledged": True, "acknowledged_unknown_claim_ids": unknowns}}
+        return {
+            "action": "decide",
+            "actor": actor,
+            "decision": {
+                "decision_type": "commission_further_investigation",
+                "statement": "Commission research on the unresolved questions before committing to a portfolio change.",
+                "rationale": "Scripted evaluation reviewer: material unknowns remain.",
+                "option_ids": [],
+                "uncertainties_acknowledged": True,
+                "acknowledged_unknown_claim_ids": unknowns,
+            },
+        }
     if review.kind == ReviewKind.CLARIFICATION:
         return {"action": "approve", "actor": actor, "note": "Proceed with the question as framed."}
     return {"action": "approve", "actor": actor}
@@ -65,9 +81,13 @@ class RunResult:
 
 
 async def run_scenario_to_completion(
-    scenario: Scenario, settings: Settings, *, reasoner: Reasoner | None = None,
+    scenario: Scenario,
+    settings: Settings,
+    *,
+    reasoner: Reasoner | None = None,
     budget: ResearchBudget | None = None,
-    respond: Callable[[HumanReview], dict[str, Any]] = scripted_response, max_interrupts: int = 12,
+    respond: Callable[[HumanReview], dict[str, Any]] = scripted_response,
+    max_interrupts: int = 12,
     on_update: Callable[[str, Any], None] | None = None,
 ) -> RunResult:
     started = time.perf_counter()
@@ -78,11 +98,21 @@ async def run_scenario_to_completion(
     interrupts: list[dict[str, Any]] = []
     async with open_checkpointer("memory") as cp:
         graph = build_graph(cp)
-        cfg = {"configurable": {"thread_id": inv}, "recursion_limit": RECURSION_LIMIT,
-               "metadata": {"investigation_id": inv, "scenario": scenario.id}}
-        command: Any = {"investigation_id": inv, "scenario_id": scenario.id, "question": scenario.question,
-                        "organisation": scenario.organisation, "context": scenario.context, "as_of": scenario.as_of,
-                        "budget": budget or ResearchBudget(), "iteration": 0}
+        cfg: RunnableConfig = {
+            "configurable": {"thread_id": inv},
+            "recursion_limit": RECURSION_LIMIT,
+            "metadata": {"investigation_id": inv, "scenario": scenario.id},
+        }
+        command: Any = {
+            "investigation_id": inv,
+            "scenario_id": scenario.id,
+            "question": scenario.question,
+            "organisation": scenario.organisation,
+            "context": scenario.context,
+            "as_of": scenario.as_of,
+            "budget": budget or ResearchBudget(),
+            "iteration": 0,
+        }
         for _ in range(max_interrupts):
             async for update in graph.astream(command, cfg, context=ctx, stream_mode="updates"):
                 for node, value in update.items():
@@ -93,9 +123,19 @@ async def run_scenario_to_completion(
                 break
             review = snap.values["reviews"][snap.values["pending_review_id"]]
             response = respond(review)
-            interrupts.append({"kind": review.kind.value, "review_id": review.id, "action": response["action"],
-                               "policy_rule_ids": review.policy_rule_ids})
+            interrupts.append(
+                {
+                    "kind": review.kind.value,
+                    "review_id": review.id,
+                    "action": response["action"],
+                    "policy_rule_ids": review.policy_rule_ids,
+                }
+            )
             command = Command(resume=response)
         snap = await graph.aget_state(cfg)
-    return RunResult(investigation_id=inv, state=dict(snap.values), interrupts=interrupts,
-                     elapsed_s=round(time.perf_counter() - started, 2))
+    return RunResult(
+        investigation_id=inv,
+        state=dict(snap.values),
+        interrupts=interrupts,
+        elapsed_s=round(time.perf_counter() - started, 2),
+    )

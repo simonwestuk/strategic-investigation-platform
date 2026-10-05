@@ -30,8 +30,13 @@ _CATEGORY_MAP = {
 class AzureLanguageDetector:
     name = "azure-ai-language-pii"
 
-    def __init__(self, endpoint: str, api_key: str | None, client: httpx.AsyncClient | None = None,
-                 token_provider: object | None = None) -> None:
+    def __init__(
+        self,
+        endpoint: str,
+        api_key: str | None,
+        client: httpx.AsyncClient | None = None,
+        token_provider: object | None = None,
+    ) -> None:
         self.endpoint = endpoint.rstrip("/")
         self.api_key = api_key
         self.client = client or httpx.AsyncClient(timeout=30)
@@ -47,12 +52,11 @@ class AzureLanguageDetector:
         raise RuntimeError("Azure AI Language requires an API key or Entra ID token provider.")
 
     async def detect(self, text: str) -> list[Detection]:
-        detections = [d for d in self._local.detect_sync(text)
-                      if d.entity_type == EntityType.SPECIAL_CATEGORY]
+        detections = [d for d in self._local.detect_sync(text) if d.entity_type == EntityType.SPECIAL_CATEGORY]
         url = f"{self.endpoint}/language/:analyze-text?api-version={API_VERSION}"
         headers = await self._headers()
         for offset in range(0, len(text), MAX_CHARS):
-            chunk = text[offset: offset + MAX_CHARS]
+            chunk = text[offset : offset + MAX_CHARS]
             body = {
                 "kind": "PiiEntityRecognition",
                 "parameters": {"modelVersion": "latest", "loggingOptOut": True},
@@ -67,9 +71,17 @@ class AzureLanguageDetector:
                         continue
                     start = offset + ent["offset"]
                     end = start + ent["length"]
-                    detections.append(Detection(et, start, end, text[start:end],
-                                                float(ent["confidenceScore"]), self.name,
-                                                ent.get("subcategory")))
+                    detections.append(
+                        Detection(
+                            et,
+                            start,
+                            end,
+                            text[start:end],
+                            float(ent["confidenceScore"]),
+                            self.name,
+                            ent.get("subcategory"),
+                        )
+                    )
         detections.sort(key=lambda d: d.start)
         taken: list[tuple[int, int]] = []
         result = []

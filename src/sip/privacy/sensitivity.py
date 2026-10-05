@@ -9,12 +9,17 @@ from sip.privacy.models import Detection, EntityType
 
 _MARKERS: list[tuple[re.Pattern[str], Confidentiality]] = [
     (re.compile(r"\b(STRICTLY CONFIDENTIAL|RESTRICTED|LEGALLY PRIVILEGED|SECRET)\b"), Confidentiality.RESTRICTED),
-    (re.compile(r"\b(COMMERCIAL(LY)? (IN )?CONFIDEN(CE|TIAL)|CONFIDENTIAL|BOARD PAPER)\b", re.I),
-     Confidentiality.COMMERCIALLY_CONFIDENTIAL),
+    (
+        re.compile(r"\b(COMMERCIAL(LY)? (IN )?CONFIDEN(CE|TIAL)|CONFIDENTIAL|BOARD PAPER)\b", re.I),
+        Confidentiality.COMMERCIALLY_CONFIDENTIAL,
+    ),
     (re.compile(r"\b(INTERNAL( USE)? ONLY|INTERNAL)\b"), Confidentiality.INTERNAL),
 ]
-_COMMERCIAL_CUES = re.compile(r"\b(margin|pricing strategy|price list|discount|contract value|pipeline value|"
-                              r"forecast revenue|redundanc\w*|acquisition target)\b", re.I)
+_COMMERCIAL_CUES = re.compile(
+    r"\b(margin|pricing strategy|price list|discount|contract value|pipeline value|"
+    r"forecast revenue|redundanc\w*|acquisition target)\b",
+    re.I,
+)
 
 
 def classify(
@@ -39,7 +44,6 @@ def classify(
     elif any(t.is_personal for t in types) and personal == PersonalData.NONE:
         personal = PersonalData.PERSONAL
     return (
-        DataClassification(confidentiality=level, personal_data=personal,
-                           pseudonymised=bool(detections)),
+        DataClassification(confidentiality=level, personal_data=personal, pseudonymised=bool(detections)),
         markers,
     )

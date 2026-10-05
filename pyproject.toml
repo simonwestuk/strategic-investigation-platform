@@ -44,6 +44,8 @@ dev = [
   "pip-audit>=2.9",
 ]
 
+azure = ["azure-monitor-opentelemetry>=1.6"]
+
 [project.scripts]
 sip = "sip.cli:main"
 
@@ -54,7 +56,9 @@ packages = ["src/sip"]
 pythonpath = ["src", "."]
 testpaths = ["tests"]
 asyncio_mode = "auto"
-asyncio_default_fixture_loop_scope = "function"
+markers = ["postgres: requires a PostgreSQL DATABASE_URL"]
+asyncio_default_fixture_loop_scope = "session"
+asyncio_default_test_loop_scope = "session"
 filterwarnings = ["ignore::DeprecationWarning:langgraph.*"]
 
 [tool.ruff]
@@ -70,6 +74,7 @@ ignore = [
   "B008",    # FastAPI Depends() in defaults is idiomatic
   "RUF001",  # typographic dashes/quotes are intentional in user-facing text
   "PT018",
+  "ASYNC240", # small report writes in CLI paths
 ]
 
 [tool.ruff.lint.per-file-ignores]

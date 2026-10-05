@@ -13,7 +13,47 @@ from dataclasses import dataclass, field
 
 _TOKEN = re.compile(r"[a-z0-9]+")
 STOPWORDS = frozenset(
-    ["a", "an", "and", "are", "as", "at", "be", "by", "for", "from", "has", "have", "in", "is", "it", "its", "of", "on", "or", "that", "the", "to", "was", "were", "will", "with", "what", "why", "how", "which", "who", "this", "these", "those", "our", "their", "your", "we", "they"]
+    [
+        "a",
+        "an",
+        "and",
+        "are",
+        "as",
+        "at",
+        "be",
+        "by",
+        "for",
+        "from",
+        "has",
+        "have",
+        "in",
+        "is",
+        "it",
+        "its",
+        "of",
+        "on",
+        "or",
+        "that",
+        "the",
+        "to",
+        "was",
+        "were",
+        "will",
+        "with",
+        "what",
+        "why",
+        "how",
+        "which",
+        "who",
+        "this",
+        "these",
+        "those",
+        "our",
+        "their",
+        "your",
+        "we",
+        "they",
+    ]
 )
 
 

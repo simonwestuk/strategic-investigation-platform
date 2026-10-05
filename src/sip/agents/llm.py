@@ -51,7 +51,7 @@ OPERATIONS_CATALOGUE = {
     "own_vs_market": "Own volume vs market volume per entity, with share; no params.",
     "funnel_conversion": "Stage conversion per entity over time; params: by (optional dimension).",
     "compare_groups": "Did the measure change differently in one group than elsewhere? params: dimension, group, "
-                      "entity (optional).",
+    "entity (optional).",
 }
 
 
@@ -69,9 +69,11 @@ def untrusted(source: SourceView, passages: list[Passage]) -> str:
         return t.replace("<", "&lt;").replace(">", "&gt;")
 
     body = "\n".join(f'<passage index="{p.index}">{esc(p.text)}</passage>' for p in passages)
-    return (f'<untrusted_source id="{source.id}" type="{source.source_type.value}" '
-            f'publisher="{esc(source.publisher or "unknown")}" dated="{source.dated or "undated"}">\n'
-            f"{body}\n</untrusted_source>")
+    return (
+        f'<untrusted_source id="{source.id}" type="{source.source_type.value}" '
+        f'publisher="{esc(source.publisher or "unknown")}" dated="{source.dated or "undated"}">\n'
+        f"{body}\n</untrusted_source>"
+    )
 
 
 def _json(obj: Any) -> str:
@@ -116,88 +118,158 @@ class LLMReasoner:
 
     async def frame(self, question: str, organisation: str | None, context: str) -> tuple[FrameDraft, Calls]:
         out, call = await self.model.generate(
-            task="frame", tier=ModelTier.REASONING, instructions=instructions("frame"), schema=FrameDraft,
-            input=_json({"question": question, "organisation": organisation, "context": context}))
+            task="frame",
+            tier=ModelTier.REASONING,
+            instructions=instructions("frame"),
+            schema=FrameDraft,
+            input=_json({"question": question, "organisation": organisation, "context": context}),
+        )
         return out, Calls([call])
 
-    async def hypothesise(self, frame: InvestigationFrame, datasets: list[dict[str, object]]
-                          ) -> tuple[list[HypothesisDraft], Calls]:
-        taxonomy = {k: {"label": c.label, "description": c.statement, "rationale": c.rationale}
-                    for k, c in self.taxonomy.categories.items()}
+    async def hypothesise(
+        self, frame: InvestigationFrame, datasets: list[dict[str, object]]
+    ) -> tuple[list[HypothesisDraft], Calls]:
+        taxonomy = {
+            k: {"label": c.label, "description": c.statement, "rationale": c.rationale}
+            for k, c in self.taxonomy.categories.items()
+        }
         out, call = await self.model.generate(
-            task="hypothesise", tier=ModelTier.REASONING, instructions=instructions("hypothesise"),
+            task="hypothesise",
+            tier=ModelTier.REASONING,
+            instructions=instructions("hypothesise"),
             schema=HypothesisDrafts,
-            input=_json({"frame": frame.model_dump(mode="json"), "driver_taxonomy": taxonomy, "datasets": datasets}))
+            input=_json({"frame": frame.model_dump(mode="json"), "driver_taxonomy": taxonomy, "datasets": datasets}),
+        )
         return out.hypotheses, Calls([call])
 
     async def plan(self, ctx: PlanningContext) -> tuple[list[TaskDraft], Calls]:
         payload = {
-            "frame": {"subject": ctx.frame.subject, "organisation": ctx.frame.organisation,
-                      "objectives": ctx.frame.objectives},
-            "hypotheses": [{"id": h.id, "statement": h.statement, "category": h.category, "segment": h.segment,
-                            "status": h.status.value, "would_support": h.would_support,
-                            "would_contradict": h.would_contradict} for h in ctx.hypotheses],
+            "frame": {
+                "subject": ctx.frame.subject,
+                "organisation": ctx.frame.organisation,
+                "objectives": ctx.frame.objectives,
+            },
+            "hypotheses": [
+                {
+                    "id": h.id,
+                    "statement": h.statement,
+                    "category": h.category,
+                    "segment": h.segment,
+                    "status": h.status.value,
+                    "would_support": h.would_support,
+                    "would_contradict": h.would_contradict,
+                }
+                for h in ctx.hypotheses
+            ],
             "completed_questions": ctx.completed_task_questions[-40:],
             "open_research_questions": ctx.open_research_questions,
             "datasets": ctx.datasets,
-            "operations": {k: {"description": v, "requires_roles": [r.value for r in OPERATION_ROLES[k]]}
-                           for k, v in OPERATIONS_CATALOGUE.items()},
+            "operations": {
+                k: {"description": v, "requires_roles": [r.value for r in OPERATION_ROLES[k]]}
+                for k, v in OPERATIONS_CATALOGUE.items()
+            },
             "internal_documents_available": ctx.has_documents,
             "iteration": ctx.iteration,
         }
         out, call = await self.model.generate(
-            task="plan", tier=ModelTier.REASONING, instructions=instructions("plan"), schema=TaskDraftsLLM,
-            input=_json(payload))
+            task="plan",
+            tier=ModelTier.REASONING,
+            instructions=instructions("plan"),
+            schema=TaskDraftsLLM,
+            input=_json(payload),
+        )
         drafts = []
         for t in out.tasks:
             analysis = None
             if t.analysis is not None:
-                params = {k: v for k, v in t.analysis.model_dump().items()
-                          if k not in {"operation", "dataset_id"} and v is not None}
-                analysis = AnalysisRequest(operation=t.analysis.operation, dataset_id=t.analysis.dataset_id,
-                                           params=params)
+                params = {
+                    k: v
+                    for k, v in t.analysis.model_dump().items()
+                    if k not in {"operation", "dataset_id"} and v is not None
+                }
+                analysis = AnalysisRequest(
+                    operation=t.analysis.operation, dataset_id=t.analysis.dataset_id, params=params
+                )
             drafts.append(TaskDraft(**t.model_dump(exclude={"analysis"}), analysis=analysis))
         return drafts, Calls([call])
 
-    async def extract(self, question: str, hypotheses: list[Hypothesis], source: SourceView,
-                      passages: list[Passage]) -> tuple[list[EvidenceDraft], Calls]:
+    async def extract(
+        self, question: str, hypotheses: list[Hypothesis], source: SourceView, passages: list[Passage]
+    ) -> tuple[list[EvidenceDraft], Calls]:
         hyps = [{"id": h.id, "statement": h.statement} for h in hypotheses if h.status.value != "split"]
-        text = (f"Research question: {question}\n\nHypotheses:\n{_json(hyps)}\n\n"
-                f"Source metadata (trusted): {_json(source.model_dump(mode='json'))}\n\n{untrusted(source, passages)}")
+        text = (
+            f"Research question: {question}\n\nHypotheses:\n{_json(hyps)}\n\n"
+            f"Source metadata (trusted): {_json(source.model_dump(mode='json'))}\n\n{untrusted(source, passages)}"
+        )
         out, call = await self.model.generate(
-            task="extract", tier=ModelTier.EXTRACTION, instructions=instructions("extract"),
-            schema=EvidenceDrafts, input=text, metadata={"source_id": source.id})
+            task="extract",
+            tier=ModelTier.EXTRACTION,
+            instructions=instructions("extract"),
+            schema=EvidenceDrafts,
+            input=text,
+            metadata={"source_id": source.id},
+        )
         return out.evidence, Calls([call])
 
-    async def draft_claims(self, frame: InvestigationFrame, hypothesis: Hypothesis, evidence: list[EvidenceView],
-                           blocked_reasons: list[str]) -> tuple[list[ClaimDraft], Calls]:
-        payload = {"subject": frame.subject,
-                   "hypothesis": {"id": hypothesis.id, "statement": hypothesis.statement,
-                                  "category": hypothesis.category, "segment": hypothesis.segment},
-                   "evidence": [e.model_dump(mode="json") for e in evidence],
-                   "blocked_reasons": blocked_reasons}
+    async def draft_claims(
+        self,
+        frame: InvestigationFrame,
+        hypothesis: Hypothesis,
+        evidence: list[EvidenceView],
+        blocked_reasons: list[str],
+    ) -> tuple[list[ClaimDraft], Calls]:
+        payload = {
+            "subject": frame.subject,
+            "hypothesis": {
+                "id": hypothesis.id,
+                "statement": hypothesis.statement,
+                "category": hypothesis.category,
+                "segment": hypothesis.segment,
+            },
+            "evidence": [e.model_dump(mode="json") for e in evidence],
+            "blocked_reasons": blocked_reasons,
+        }
         out, call = await self.model.generate(
-            task="draft_claims", tier=ModelTier.REASONING, instructions=instructions("claims"),
-            schema=ClaimDrafts, input=_json(payload), metadata={"hypothesis_id": hypothesis.id})
+            task="draft_claims",
+            tier=ModelTier.REASONING,
+            instructions=instructions("claims"),
+            schema=ClaimDrafts,
+            input=_json(payload),
+            metadata={"hypothesis_id": hypothesis.id},
+        )
         return out.claims, Calls([call])
 
-    async def challenge(self, frame: InvestigationFrame, claims: list[dict[str, object]],
-                        evidence: list[EvidenceView]) -> tuple[list[ChallengeDraft], Calls]:
+    async def challenge(
+        self, frame: InvestigationFrame, claims: list[dict[str, object]], evidence: list[EvidenceView]
+    ) -> tuple[list[ChallengeDraft], Calls]:
         if not claims:
             return [], Calls()
         out, call = await self.model.generate(
-            task="challenge", tier=ModelTier.REASONING, instructions=instructions("challenge"),
+            task="challenge",
+            tier=ModelTier.REASONING,
+            instructions=instructions("challenge"),
             schema=ChallengeDrafts,
-            input=_json({"subject": frame.subject, "claims": claims,
-                         "evidence": [e.model_dump(mode="json") for e in evidence]}))
+            input=_json(
+                {"subject": frame.subject, "claims": claims, "evidence": [e.model_dump(mode="json") for e in evidence]}
+            ),
+        )
         return out.challenges, Calls([call])
 
-    async def synthesise(self, frame: InvestigationFrame, findings: list[FindingView], unknowns: list[str],
-                         caveats: list[str]) -> tuple[list[OptionDraft], Calls]:
+    async def synthesise(
+        self, frame: InvestigationFrame, findings: list[FindingView], unknowns: list[str], caveats: list[str]
+    ) -> tuple[list[OptionDraft], Calls]:
         out, call = await self.model.generate(
-            task="synthesise", tier=ModelTier.REASONING, instructions=instructions("synthesise"),
+            task="synthesise",
+            tier=ModelTier.REASONING,
+            instructions=instructions("synthesise"),
             schema=OptionDrafts,
-            input=_json({"frame": {"subject": frame.subject, "decision_context": frame.decision_context},
-                         "findings": [f.model_dump(mode="json") for f in findings],
-                         "unknowns": unknowns, "caveats": caveats}))
+            input=_json(
+                {
+                    "frame": {"subject": frame.subject, "decision_context": frame.decision_context},
+                    "findings": [f.model_dump(mode="json") for f in findings],
+                    "unknowns": unknowns,
+                    "caveats": caveats,
+                }
+            ),
+        )
         return out.options, Calls([call])

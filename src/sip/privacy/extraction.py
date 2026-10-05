@@ -6,8 +6,13 @@ import io
 import json
 from pathlib import PurePath
 
-ALLOWED_EXTENSIONS = {".txt": "text/plain", ".md": "text/markdown", ".csv": "text/csv",
-                      ".json": "application/json", ".pdf": "application/pdf"}
+ALLOWED_EXTENSIONS = {
+    ".txt": "text/plain",
+    ".md": "text/markdown",
+    ".csv": "text/csv",
+    ".json": "application/json",
+    ".pdf": "application/pdf",
+}
 MAX_PDF_PAGES = 200
 
 

@@ -6,6 +6,7 @@ the gateway returns sanitised intake records, and only those reach the investiga
 
 from __future__ import annotations
 
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 
 from sip.agents.contracts import Reasoner
@@ -34,10 +35,30 @@ def build_reasoner(settings: Settings) -> Reasoner:
     return OfflineReasoner()
 
 
+def azure_token_provider(scope: str) -> Callable[[], Awaitable[str]]:
+    """Entra ID bearer tokens via DefaultAzureCredential (managed identity in Azure)."""
+    from azure.identity.aio import DefaultAzureCredential, get_bearer_token_provider
+
+    return get_bearer_token_provider(DefaultAzureCredential(), scope)
+
+
+def build_quarantine(settings: Settings) -> RawContentStore:
+    if settings.sip_quarantine_blob_url:
+        from sip.privacy.quarantine import BlobQuarantine
+
+        return BlobQuarantine(
+            settings.sip_quarantine_blob_url, azure_token_provider("https://storage.azure.com/.default")
+        )
+    from sip.privacy.quarantine import LocalQuarantine
+
+    return LocalQuarantine(settings.sip_var_dir / "quarantine")
+
+
 def build_detector(settings: Settings) -> PIIDetector:
     if settings.sip_pii_detector == PIIDetectorName.AZURE_LANGUAGE and settings.azure_language_endpoint:
         key = settings.azure_language_api_key.get_secret_value() if settings.azure_language_api_key else None
-        return AzureLanguageDetector(settings.azure_language_endpoint, key)
+        provider = None if key else azure_token_provider("https://cognitiveservices.azure.com/.default")
+        return AzureLanguageDetector(settings.azure_language_endpoint, key, token_provider=provider)
     return LocalDetector()
 
 
@@ -47,8 +68,11 @@ def build_research(settings: Settings, scenario: Scenario | None) -> tuple[Searc
             return None, None
         corpus = OfflineCorpus(scenario.corpus_dir)
         return corpus, corpus
-    fetcher = SafeFetcher(timeout_s=settings.sip_fetch_timeout_s, max_bytes=settings.sip_fetch_max_bytes,
-                          allowed_ports=settings.allowed_fetch_ports)
+    fetcher = SafeFetcher(
+        timeout_s=settings.sip_fetch_timeout_s,
+        max_bytes=settings.sip_fetch_max_bytes,
+        allowed_ports=settings.allowed_fetch_ports,
+    )
     if settings.sip_search_provider == SearchProviderName.TAVILY and settings.tavily_api_key:
         from sip.research.search.tavily import TavilySearch
 
@@ -60,11 +84,13 @@ def build_research(settings: Settings, scenario: Scenario | None) -> tuple[Searc
     raise RuntimeError(f"Search provider {settings.sip_search_provider} selected but no API key configured.")
 
 
-def make_gateway(settings: Settings, vault: PseudonymVault, quarantine: RawContentStore,
-                 scenario: Scenario | None = None) -> PrivacyGateway:
+def make_gateway(
+    settings: Settings, vault: PseudonymVault, quarantine: RawContentStore, scenario: Scenario | None = None
+) -> PrivacyGateway:
     allow = set(scenario.privacy.allowlist) if scenario else set()
-    return PrivacyGateway(build_detector(settings), vault, quarantine, max_bytes=settings.sip_upload_max_bytes,
-                          allowlist=allow)
+    return PrivacyGateway(
+        build_detector(settings), vault, quarantine, max_bytes=settings.sip_upload_max_bytes, allowlist=allow
+    )
 
 
 @dataclass
@@ -73,33 +99,57 @@ class ScenarioIntake:
     catalog: DatasetCatalog
 
 
-async def ingest_scenario(scenario: Scenario, gateway: PrivacyGateway, investigation_id: str,
-                          uploaded_by: str = "system:scenario-loader") -> ScenarioIntake:
+async def ingest_scenario(
+    scenario: Scenario, gateway: PrivacyGateway, investigation_id: str, uploaded_by: str = "system:scenario-loader"
+) -> ScenarioIntake:
     docs: list[IntakeDocument] = []
     datasets: list[Dataset] = []
     for m in scenario.datasets:
         assert m.file
         raw = scenario.path(m.file).read_bytes()
-        doc = await gateway.ingest(filename=scenario.path(m.file).name, content=raw, title=m.title,
-                                   source_type=m.source_type, declared=m.classification, uploaded_by=uploaded_by,
-                                   investigation_id=investigation_id, kind=IntakeKind.DATASET,
-                                   published_on=m.published_on.isoformat() if m.published_on else None)
+        doc = await gateway.ingest(
+            filename=scenario.path(m.file).name,
+            content=raw,
+            title=m.title,
+            source_type=m.source_type,
+            declared=m.classification,
+            uploaded_by=uploaded_by,
+            investigation_id=investigation_id,
+            kind=IntakeKind.DATASET,
+            published_on=m.published_on.isoformat() if m.published_on else None,
+        )
         doc = doc.model_copy(update={"dataset_id": m.id})
         docs.append(doc)
         datasets.append(Dataset.from_csv(m, doc.sanitised_text))  # analysis runs on the sanitised copy
     for d in scenario.documents:
         path = scenario.path(d.file)
-        doc = await gateway.ingest(filename=path.name, content=path.read_bytes(), title=d.title,
-                                   source_type=d.source_type, declared=d.declared, uploaded_by=uploaded_by,
-                                   investigation_id=investigation_id,
-                                   published_on=d.published_on.isoformat() if d.published_on else None)
+        doc = await gateway.ingest(
+            filename=path.name,
+            content=path.read_bytes(),
+            title=d.title,
+            source_type=d.source_type,
+            declared=d.declared,
+            uploaded_by=uploaded_by,
+            investigation_id=investigation_id,
+            published_on=d.published_on.isoformat() if d.published_on else None,
+        )
         docs.append(doc)
     return ScenarioIntake(documents=docs, catalog=DatasetCatalog(datasets))
 
 
-def build_context(settings: Settings, scenario: Scenario | None, catalog: DatasetCatalog,
-                  intake: IntakeReader | None = None, reasoner: Reasoner | None = None) -> InvestigationContext:
+def build_context(
+    settings: Settings,
+    scenario: Scenario | None,
+    catalog: DatasetCatalog,
+    intake: IntakeReader | None = None,
+    reasoner: Reasoner | None = None,
+) -> InvestigationContext:
     search, fetcher = build_research(settings, scenario)
-    return InvestigationContext(reasoner=reasoner or build_reasoner(settings), search=search, fetcher=fetcher,
-                                catalog=catalog, intake=intake or InMemoryIntake(),
-                                environment=settings.sip_env.value)
+    return InvestigationContext(
+        reasoner=reasoner or build_reasoner(settings),
+        search=search,
+        fetcher=fetcher,
+        catalog=catalog,
+        intake=intake or InMemoryIntake(),
+        environment=settings.sip_env.value,
+    )

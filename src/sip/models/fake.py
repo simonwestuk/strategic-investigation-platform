@@ -30,13 +30,20 @@ class ScriptedModel:
     responders: dict[str, Callable[[str], BaseModel]] = field(default_factory=dict)
     calls: list[RecordedCall] = field(default_factory=list)
 
-    async def generate(self, *, task: str, tier: ModelTier, instructions: str, input: str,
-                       schema: type[T], metadata: dict[str, Any] | None = None) -> tuple[T, ModelCall]:
+    async def generate(
+        self,
+        *,
+        task: str,
+        tier: ModelTier,
+        instructions: str,
+        input: str,
+        schema: type[T],
+        metadata: dict[str, Any] | None = None,
+    ) -> tuple[T, ModelCall]:
         self.calls.append(RecordedCall(task, tier, instructions, input))
         if task not in self.responders:
             raise ModelError(f"No scripted response for task '{task}'")
         result = self.responders[task](input)
         if not isinstance(result, schema):
             result = schema.model_validate(result.model_dump())
-        return result, ModelCall(task=task, model="scripted", input_tokens=len(input) // 4,
-                                 output_tokens=50)
+        return result, ModelCall(task=task, model="scripted", input_tokens=len(input) // 4, output_tokens=50)

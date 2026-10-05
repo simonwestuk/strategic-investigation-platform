@@ -94,18 +94,27 @@ class SqlVault:
     async def pseudonym_for(self, entity_type: EntityType, value: str) -> str:
         digest = hmac.new(self._hmac_key, _normalise(value).encode(), hashlib.sha256).hexdigest()
         async with self.engine.begin() as conn:
-            row = (await conn.execute(
-                select(pseudonyms.c.token).where(
-                    pseudonyms.c.entity_type == entity_type.value, pseudonyms.c.value_hmac == digest)
-            )).first()
+            row = (
+                await conn.execute(
+                    select(pseudonyms.c.token).where(
+                        pseudonyms.c.entity_type == entity_type.value, pseudonyms.c.value_hmac == digest
+                    )
+                )
+            ).first()
             if row:
                 return str(row[0])
-            count = (await conn.execute(
-                select(func.count()).select_from(pseudonyms).where(
-                    pseudonyms.c.entity_type == entity_type.value)
-            )).scalar_one()
+            count = (
+                await conn.execute(
+                    select(func.count()).select_from(pseudonyms).where(pseudonyms.c.entity_type == entity_type.value)
+                )
+            ).scalar_one()
             token = f"{entity_type.value}_{count + 1:04d}"
-            await conn.execute(pseudonyms.insert().values(
-                entity_type=entity_type.value, value_hmac=digest, token=token,
-                value_encrypted=self._fernet.encrypt(value.encode()).decode()))
+            await conn.execute(
+                pseudonyms.insert().values(
+                    entity_type=entity_type.value,
+                    value_hmac=digest,
+                    token=token,
+                    value_encrypted=self._fernet.encrypt(value.encode()).decode(),
+                )
+            )
             return token

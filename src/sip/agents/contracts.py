@@ -204,23 +204,30 @@ class Calls(list[ModelCall]):
 class Reasoner(Protocol):
     name: str
 
-    async def frame(self, question: str, organisation: str | None, context: str
-                    ) -> tuple[FrameDraft, Calls]: ...
+    async def frame(self, question: str, organisation: str | None, context: str) -> tuple[FrameDraft, Calls]: ...
 
-    async def hypothesise(self, frame: InvestigationFrame, datasets: list[dict[str, object]]
-                          ) -> tuple[list[HypothesisDraft], Calls]: ...
+    async def hypothesise(
+        self, frame: InvestigationFrame, datasets: list[dict[str, object]]
+    ) -> tuple[list[HypothesisDraft], Calls]: ...
 
     async def plan(self, ctx: PlanningContext) -> tuple[list[TaskDraft], Calls]: ...
 
-    async def extract(self, question: str, hypotheses: list[Hypothesis], source: SourceView,
-                      passages: list[Passage]) -> tuple[list[EvidenceDraft], Calls]: ...
+    async def extract(
+        self, question: str, hypotheses: list[Hypothesis], source: SourceView, passages: list[Passage]
+    ) -> tuple[list[EvidenceDraft], Calls]: ...
 
-    async def draft_claims(self, frame: InvestigationFrame, hypothesis: Hypothesis,
-                           evidence: list[EvidenceView], blocked_reasons: list[str]
-                           ) -> tuple[list[ClaimDraft], Calls]: ...
+    async def draft_claims(
+        self,
+        frame: InvestigationFrame,
+        hypothesis: Hypothesis,
+        evidence: list[EvidenceView],
+        blocked_reasons: list[str],
+    ) -> tuple[list[ClaimDraft], Calls]: ...
 
-    async def challenge(self, frame: InvestigationFrame, claims: list[dict[str, object]],
-                        evidence: list[EvidenceView]) -> tuple[list[ChallengeDraft], Calls]: ...
+    async def challenge(
+        self, frame: InvestigationFrame, claims: list[dict[str, object]], evidence: list[EvidenceView]
+    ) -> tuple[list[ChallengeDraft], Calls]: ...
 
-    async def synthesise(self, frame: InvestigationFrame, findings: list[FindingView],
-                         unknowns: list[str], caveats: list[str]) -> tuple[list[OptionDraft], Calls]: ...
+    async def synthesise(
+        self, frame: InvestigationFrame, findings: list[FindingView], unknowns: list[str], caveats: list[str]
+    ) -> tuple[list[OptionDraft], Calls]: ...

@@ -19,13 +19,14 @@ class BraveSearch:
     async def search(self, query: str, max_results: int = 5) -> list[SearchResult]:
         try:
             resp = await self._client.get(
-                ENDPOINT, params={"q": query, "count": min(max_results, 20)},
-                headers={"X-Subscription-Token": self._key, "Accept": "application/json"})
+                ENDPOINT,
+                params={"q": query, "count": min(max_results, 20)},
+                headers={"X-Subscription-Token": self._key, "Accept": "application/json"},
+            )
             resp.raise_for_status()
         except httpx.HTTPError as exc:
             raise SearchError(f"Brave search failed: {exc.__class__.__name__}") from exc
         return [
-            SearchResult(url=r["url"], title=r.get("title", ""), snippet=r.get("description", ""),
-                         provider=self.name)
+            SearchResult(url=r["url"], title=r.get("title", ""), snippet=r.get("description", ""), provider=self.name)
             for r in resp.json().get("web", {}).get("results", [])
         ]

@@ -54,11 +54,10 @@ class ResearchOutput(BaseModel):
     duplicates_skipped: int = 0
 
 
-def staged(left: list[ResearchOutput] | None, right: list[ResearchOutput] | str | None
-           ) -> list[ResearchOutput]:
+def staged(left: list[ResearchOutput] | None, right: list[ResearchOutput] | str | None) -> list[ResearchOutput]:
     if right == RESET:
         return []
-    return [*(left or []), *(right or [])]  # type: ignore[misc]
+    return [*(left or []), *(right if isinstance(right, list) else [])]
 
 
 class InvestigationState(TypedDict, total=False):

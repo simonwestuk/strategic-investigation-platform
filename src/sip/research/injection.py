@@ -16,13 +16,24 @@ import re
 from dataclasses import dataclass
 
 _PATTERNS = [
-    (re.compile(r"\b(ignore|disregard|forget)\b.{0,40}\b(previous|prior|above|earlier|all|your)\b.{0,20}"
-                r"\b(instructions?|rules?|prompts?)\b", re.I | re.S), "override_instructions"),
+    (
+        re.compile(
+            r"\b(ignore|disregard|forget)\b.{0,40}\b(previous|prior|above|earlier|all|your)\b.{0,20}"
+            r"\b(instructions?|rules?|prompts?)\b",
+            re.I | re.S,
+        ),
+        "override_instructions",
+    ),
     (re.compile(r"\byou are now\b", re.I), "role_reassignment"),
     (re.compile(r"\b(system|developer)\s+(prompt|note|message|instruction)", re.I), "fake_system_message"),
-    (re.compile(r"\b(to|for|attention)\s+(all\s+)?(ai|llm|language[- ]model)\s+"
-                r"(assistants?|agents?|models?|systems?)\b",
-                re.I), "addresses_ai"),
+    (
+        re.compile(
+            r"\b(to|for|attention)\s+(all\s+)?(ai|llm|language[- ]model)\s+"
+            r"(assistants?|agents?|models?|systems?)\b",
+            re.I,
+        ),
+        "addresses_ai",
+    ),
     (re.compile(r"\bas an ai\b", re.I), "addresses_ai"),
     (re.compile(r"\b(record|make|issue)\s+(a\s+)?(final\s+)?decision\b", re.I), "decision_instruction"),
     (re.compile(r"\bclassify (this|it) as\b", re.I), "classification_instruction"),
@@ -41,7 +52,7 @@ def screen(text: str) -> list[InjectionFinding]:
     findings = []
     for pattern, kind in _PATTERNS:
         for m in pattern.finditer(text):
-            findings.append(InjectionFinding(kind, text[max(0, m.start() - 20): m.end() + 40]))
+            findings.append(InjectionFinding(kind, text[max(0, m.start() - 20) : m.end() + 40]))
     return findings
 
 

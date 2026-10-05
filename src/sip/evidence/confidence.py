@@ -103,8 +103,9 @@ def assess_claim(
         score += fresh
         factors.append(f"{fresh} best-tier evidence is not current")
 
-    independent = {(sources[e.source_id].publisher or e.source_id) if e.source_id in sources else e.source_id
-                   for e in support}
+    independent = {
+        (sources[e.source_id].publisher or e.source_id) if e.source_id in sources else e.source_id for e in support
+    }
     if len(independent) >= 3:
         score += 2
         factors.append(f"+2 {len(independent)} independent sources")
@@ -185,22 +186,23 @@ FINDING_CRITERIA = (
 )
 
 
-def meets_finding_criteria(
-    claim: Claim, evidence: Mapping[str, Evidence], challenges: Iterable[Challenge]
-) -> bool:
+def meets_finding_criteria(claim: Claim, evidence: Mapping[str, Evidence], challenges: Iterable[Challenge]) -> bool:
     if claim.classification not in {Classification.KNOWN, Classification.INFERRED}:
         return False
     if claim.confidence is None or claim.confidence.band not in {ConfidenceBand.HIGH, ConfidenceBand.MODERATE}:
         return False
     strong = [
-        e for i in claim.supporting_evidence_ids
-        if (e := evidence.get(i)) is not None and e.usable
+        e
+        for i in claim.supporting_evidence_ids
+        if (e := evidence.get(i)) is not None
+        and e.usable
         and _tier(e) in {AuthorityTier.PRIMARY, AuthorityTier.SECONDARY}
     ]
     if not strong:
         return False
     return not any(
-        c.target_id == claim.id and c.status == ChallengeStatus.OPEN
+        c.target_id == claim.id
+        and c.status == ChallengeStatus.OPEN
         and c.severity in {Severity.BLOCKING, Severity.MAJOR}
         for c in challenges
     )

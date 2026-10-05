@@ -20,6 +20,7 @@ from sip.domain import (
     Actor,
     ActorKind,
     AuditAction,
+    AuditEvent,
     Challenge,
     ChallengeKind,
     ChallengeStatus,
@@ -57,9 +58,20 @@ _BAND_RANK = {ConfidenceBand.VERY_LOW: 0, ConfidenceBand.LOW: 1, ConfidenceBand.
 
 
 def _request(review: HumanReview, actor: Actor = GATE) -> dict[str, Any]:
-    return {"reviews": {review.id: review}, "pending_review_id": review.id,
-            "audit": [audit(actor, AuditAction.REVIEW_REQUESTED, review.title, subject_type="review",
-                            subject_id=review.id, kind=review.kind.value)]}
+    return {
+        "reviews": {review.id: review},
+        "pending_review_id": review.id,
+        "audit": [
+            audit(
+                actor,
+                AuditAction.REVIEW_REQUESTED,
+                review.title,
+                subject_type="review",
+                subject_id=review.id,
+                kind=review.kind.value,
+            )
+        ],
+    }
 
 
 # ---- findings ------------------------------------------------------------------------------------
@@ -76,35 +88,52 @@ async def findings_gate(state: InvestigationState, runtime: Runtime[Investigatio
         fid = stable_id("fnd", c.id)
         prior = (state.get("findings") or {}).get(fid)
         findings[fid] = Finding(
-            id=fid, title=c.statement[:110] + ("…" if len(c.statement) > 110 else ""), statement=c.statement,
-            claim_ids=[c.id], hypothesis_ids=c.related_hypothesis_ids, classification=c.classification,
+            id=fid,
+            title=c.statement[:110] + ("…" if len(c.statement) > 110 else ""),
+            statement=c.statement,
+            claim_ids=[c.id],
+            hypothesis_ids=c.related_hypothesis_ids,
+            classification=c.classification,
             confidence_band=c.confidence.band if c.confidence else ConfidenceBand.LOW,
-            criteria_met=list(FINDING_CRITERIA), status=prior.status if prior else FindingStatus.DRAFT)
+            criteria_met=list(FINDING_CRITERIA),
+            status=prior.status if prior else FindingStatus.DRAFT,
+        )
         if prior is None:
-            events.append(audit(GATE, AuditAction.FINDING_PROMOTED, c.statement[:160], subject_type="finding",
-                                subject_id=fid))
+            events.append(
+                audit(GATE, AuditAction.FINDING_PROMOTED, c.statement[:160], subject_type="finding", subject_id=fid)
+            )
     hyp_updates = {}
     for h in (state.get("hypotheses") or {}).values():
         if h.status in {HypothesisStatus.PROPOSED, HypothesisStatus.INVESTIGATING}:
-            hyp_updates[h.id] = h.model_copy(update={
-                "status": HypothesisStatus.UNRESOLVED, "updated_at": utcnow(),
-                "status_reason": "Research stopped without evidence that discriminates for or against it."})
+            hyp_updates[h.id] = h.model_copy(
+                update={
+                    "status": HypothesisStatus.UNRESOLVED,
+                    "updated_at": utcnow(),
+                    "status_reason": "Research stopped without evidence that discriminates for or against it.",
+                }
+            )
     open_blocking = [c for c in challenges if c.status == ChallengeStatus.OPEN and c.severity == Severity.BLOCKING]
     decision = ctx.governance.evaluate("publish_findings", open_blocking_challenges=len(open_blocking))
     events.append(policy_event(GATE, decision))
-    out: dict[str, Any] = {"findings": findings, "hypotheses": hyp_updates, "audit": events,
-                           "pending_review_id": None}
+    out: dict[str, Any] = {"findings": findings, "hypotheses": hyp_updates, "audit": events, "pending_review_id": None}
     if decision.requires_human_approval:
         review = HumanReview(
-            kind=ReviewKind.FINDINGS, title="Findings review: research stopped with blocking challenges open",
-            reason=decision.reason, subject_ids=[c.id for c in open_blocking], policy_rule_ids=[decision.rule_id],
+            kind=ReviewKind.FINDINGS,
+            title="Findings review: research stopped with blocking challenges open",
+            reason=decision.reason,
+            subject_ids=[c.id for c in open_blocking],
+            policy_rule_ids=[decision.rule_id],
             required_role=decision.required_role or Role.GOVERNANCE_REVIEWER,
             allowed_actions=[ReviewAction.APPROVE, ReviewAction.REQUEST_FURTHER_INVESTIGATION],
-            context={"open_blocking_challenges": [{"id": c.id, "kind": c.kind.value, "target_id": c.target_id,
-                                                   "argument": c.argument} for c in open_blocking],
-                     "findings": [{"id": f.id, "statement": f.statement} for f in findings.values()],
-                     "stop_reason": (state.get("routing") or [None])[-1].rationale  # type: ignore[union-attr]
-                     if state.get("routing") else None})
+            context={
+                "open_blocking_challenges": [
+                    {"id": c.id, "kind": c.kind.value, "target_id": c.target_id, "argument": c.argument}
+                    for c in open_blocking
+                ],
+                "findings": [{"id": f.id, "statement": f.statement} for f in findings.values()],
+                "stop_reason": routing[-1].rationale if (routing := state.get("routing")) else None,
+            },
+        )
         req = _request(review)
         out |= {"reviews": req["reviews"], "pending_review_id": review.id, "audit": events + req["audit"]}
     return out
@@ -125,17 +154,29 @@ async def synthesise(state: InvestigationState, runtime: Runtime[InvestigationCo
     names = ctx.catalog.display_names()
     views = []
     for f in findings.values():
-        hs = [hyps[h] for h in f.hypothesis_ids if h in hyps and hyps[h].status in
-              {HypothesisStatus.SUPPORTED, HypothesisStatus.SPLIT}]
+        hs = [
+            hyps[h]
+            for h in f.hypothesis_ids
+            if h in hyps and hyps[h].status in {HypothesisStatus.SUPPORTED, HypothesisStatus.SPLIT}
+        ]
         if not any(claims[c].causal for c in f.claim_ids if c in claims):
             continue  # options respond to causal findings; factual findings are context
-        views.append(FindingView(id=f.id, statement=f.statement, classification=f.classification,
-                                 confidence_band=f.confidence_band.value,
-                                 hypothesis_categories=sorted({h.category for h in hs}),
-                                 segments=sorted({names.get(h.segment, h.segment) for h in hs if h.segment})))
+        views.append(
+            FindingView(
+                id=f.id,
+                statement=f.statement,
+                classification=f.classification,
+                confidence_band=f.confidence_band.value,
+                hypothesis_categories=sorted({h.category for h in hs}),
+                segments=sorted({names.get(h.segment, h.segment) for h in hs if h.segment}),
+            )
+        )
     unknowns = [c.statement for c in claims.values() if c.active and c.classification == Classification.UNKNOWN]
-    caveats = [c.argument for c in (state.get("challenges") or {}).values()
-               if c.kind == ChallengeKind.ALTERNATIVE_EXPLANATION and c.status == ChallengeStatus.OPEN]
+    caveats = [
+        c.argument
+        for c in (state.get("challenges") or {}).values()
+        if c.kind == ChallengeKind.ALTERNATIVE_EXPLANATION and c.status == ChallengeStatus.OPEN
+    ]
     drafts, calls = await ctx.reasoner.synthesise(fr, views, unknowns, caveats)
     options: dict[str, StrategicOption] = {}
     events = [policy_event(SYNTH, ctx.governance.evaluate("generate_strategic_options"))]
@@ -144,15 +185,34 @@ async def synthesise(state: InvestigationState, runtime: Runtime[InvestigationCo
         bands = [findings[f].confidence_band for f in fids]
         band = min(bands, key=lambda b: _BAND_RANK[b]) if bands else ConfidenceBand.LOW
         opt = StrategicOption(
-            id=stable_id("opt", d.title), title=d.title, description=d.description, rationale=d.rationale,
-            finding_ids=fids, claim_ids=sorted({c for f in fids for c in findings[f].claim_ids}),
-            expected_benefits=d.expected_benefits, risks=d.risks, uncertainties=d.uncertainties,
-            dependencies=d.dependencies, reversibility=d.reversibility, reversibility_note=d.reversibility_note,
-            consequence=d.consequence, additional_evidence_needed=d.additional_evidence_needed,
-            confidence_band=band, created_by=SYNTH)
+            id=stable_id("opt", d.title),
+            title=d.title,
+            description=d.description,
+            rationale=d.rationale,
+            finding_ids=fids,
+            claim_ids=sorted({c for f in fids for c in findings[f].claim_ids}),
+            expected_benefits=d.expected_benefits,
+            risks=d.risks,
+            uncertainties=d.uncertainties,
+            dependencies=d.dependencies,
+            reversibility=d.reversibility,
+            reversibility_note=d.reversibility_note,
+            consequence=d.consequence,
+            additional_evidence_needed=d.additional_evidence_needed,
+            confidence_band=band,
+            created_by=SYNTH,
+        )
         options[opt.id] = opt
-        events.append(audit(SYNTH, AuditAction.OPTION_GENERATED, opt.title, subject_type="option",
-                            subject_id=opt.id, consequence=opt.consequence.value))
+        events.append(
+            audit(
+                SYNTH,
+                AuditAction.OPTION_GENERATED,
+                opt.title,
+                subject_type="option",
+                subject_id=opt.id,
+                consequence=opt.consequence.value,
+            )
+        )
     return {"options": options, "audit": events, "usage": usage_from(calls)}
 
 
@@ -164,24 +224,45 @@ async def options_gate(state: InvestigationState, runtime: Runtime[Investigation
     max_cons = max((o.consequence for o in options), key=lambda lv: lv.rank)
     evidenced = [o for o in options if o.finding_ids]
     min_conf = min((_BAND_RANK[o.confidence_band] for o in evidenced), default=0)
-    decision = ctx.governance.evaluate("present_recommendation", max_consequence=max_cons.value,
-                                       min_confidence_rank=min_conf)
+    decision = ctx.governance.evaluate(
+        "present_recommendation", max_consequence=max_cons.value, min_confidence_rank=min_conf
+    )
     events = [policy_event(GATE, decision)]
     if decision.requires_human_approval:
         review = HumanReview(
-            kind=ReviewKind.OPTIONS, title="Review strategic options before they reach decision-makers",
-            reason=decision.reason, subject_ids=[o.id for o in options], policy_rule_ids=[decision.rule_id],
+            kind=ReviewKind.OPTIONS,
+            title="Review strategic options before they reach decision-makers",
+            reason=decision.reason,
+            subject_ids=[o.id for o in options],
+            policy_rule_ids=[decision.rule_id],
             required_role=decision.required_role or Role.GOVERNANCE_REVIEWER,
-            allowed_actions=[ReviewAction.APPROVE, ReviewAction.MODIFY, ReviewAction.REJECT,
-                             ReviewAction.REQUEST_FURTHER_INVESTIGATION],
-            context={"options": [{"id": o.id, "title": o.title, "consequence": o.consequence.value,
-                                  "confidence_band": o.confidence_band.value} for o in options]})
+            allowed_actions=[
+                ReviewAction.APPROVE,
+                ReviewAction.MODIFY,
+                ReviewAction.REJECT,
+                ReviewAction.REQUEST_FURTHER_INVESTIGATION,
+            ],
+            context={
+                "options": [
+                    {
+                        "id": o.id,
+                        "title": o.title,
+                        "consequence": o.consequence.value,
+                        "confidence_band": o.confidence_band.value,
+                    }
+                    for o in options
+                ]
+            },
+        )
         updates = {o.id: o.model_copy(update={"review_status": OptionReviewStatus.PENDING_REVIEW}) for o in options}
         req = _request(review)
-        return {"options": updates, "reviews": req["reviews"], "pending_review_id": review.id,
-                "audit": events + req["audit"]}
-    updates = {o.id: o.model_copy(update={"review_status": OptionReviewStatus.APPROVED_FOR_DECISION})
-               for o in options}
+        return {
+            "options": updates,
+            "reviews": req["reviews"],
+            "pending_review_id": review.id,
+            "audit": events + req["audit"],
+        }
+    updates = {o.id: o.model_copy(update={"review_status": OptionReviewStatus.APPROVED_FOR_DECISION}) for o in options}
     return {"options": updates, "audit": events, "pending_review_id": None}
 
 
@@ -194,16 +275,25 @@ async def decision_room(state: InvestigationState, runtime: Runtime[Investigatio
     decision = ctx.governance.evaluate("record_decision")
     claims = state.get("claims") or {}
     unknown = [c for c in claims.values() if c.active and c.classification == Classification.UNKNOWN]
-    options = [o for o in (state.get("options") or {}).values()
-               if o.review_status in {OptionReviewStatus.APPROVED_FOR_DECISION, OptionReviewStatus.MODIFIED}]
+    options = [
+        o
+        for o in (state.get("options") or {}).values()
+        if o.review_status in {OptionReviewStatus.APPROVED_FOR_DECISION, OptionReviewStatus.MODIFIED}
+    ]
     review = HumanReview(
-        kind=ReviewKind.DECISION, title="Decision required", reason=decision.reason,
-        subject_ids=[o.id for o in options], policy_rule_ids=[decision.rule_id],
+        kind=ReviewKind.DECISION,
+        title="Decision required",
+        reason=decision.reason,
+        subject_ids=[o.id for o in options],
+        policy_rule_ids=[decision.rule_id],
         required_role=decision.required_role or Role.DECISION_MAKER,
         allowed_actions=[ReviewAction.DECIDE, ReviewAction.REQUEST_FURTHER_INVESTIGATION],
-        context={"options": [{"id": o.id, "title": o.title} for o in options],
-                 "unknowns_to_acknowledge": [{"id": c.id, "statement": c.statement} for c in unknown],
-                 "decision_types": [t.value for t in DecisionType]})
+        context={
+            "options": [{"id": o.id, "title": o.title} for o in options],
+            "unknowns_to_acknowledge": [{"id": c.id, "statement": c.statement} for c in unknown],
+            "decision_types": [t.value for t in DecisionType],
+        },
+    )
     req = _request(review)
     req["audit"].insert(0, policy_event(GATE, decision))
     return req
@@ -213,9 +303,15 @@ async def decision_room(state: InvestigationState, runtime: Runtime[Investigatio
 async def await_review(state: InvestigationState, runtime: Runtime[InvestigationContext]) -> dict[str, Any]:
     ctx = runtime.context
     review = state["reviews"][state["pending_review_id"]]  # type: ignore[index]
-    raw = interrupt({"review_id": review.id, "kind": review.kind.value, "title": review.title,
-                     "required_role": review.required_role.value,
-                     "allowed_actions": [a.value for a in review.allowed_actions]})
+    raw = interrupt(
+        {
+            "review_id": review.id,
+            "kind": review.kind.value,
+            "title": review.title,
+            "required_role": review.required_role.value,
+            "allowed_actions": [a.value for a in review.allowed_actions],
+        }
+    )
     try:
         response = ReviewResponse.model_validate(raw)
     except ValidationError as exc:
@@ -229,11 +325,16 @@ async def await_review(state: InvestigationState, runtime: Runtime[Investigation
         return _refuse(review, f"Action '{response.action.value}' is not allowed for this review.")
 
     out: dict[str, Any] = {}
-    events = []
+    events: list[AuditEvent] = []
     for k, v in _apply_common(state, response, ctx, events).items():
         out[k] = v
-    handler = {ReviewKind.CLARIFICATION: _clarification, ReviewKind.PRIVACY_RELEASE: _privacy,
-               ReviewKind.FINDINGS: _findings, ReviewKind.OPTIONS: _options, ReviewKind.DECISION: _decision}
+    handler = {
+        ReviewKind.CLARIFICATION: _clarification,
+        ReviewKind.PRIVACY_RELEASE: _privacy,
+        ReviewKind.FINDINGS: _findings,
+        ReviewKind.OPTIONS: _options,
+        ReviewKind.DECISION: _decision,
+    }
     result = await handler[review.kind](state, review, response, ctx, events)
     if result is None:  # handler refused (e.g. invalid decision)
         return {"audit": events, "next_after_review": "await_review"}
@@ -245,19 +346,32 @@ async def await_review(state: InvestigationState, runtime: Runtime[Investigation
     resolved = review.model_copy(update={"status": ReviewStatus.RESOLVED, "response": response})
     out["reviews"] = {**out.get("reviews", {}), review.id: resolved}
     out["pending_review_id"] = None
-    events.append(audit(actor, AuditAction.REVIEW_RESOLVED, f"{review.kind.value}: {response.action.value}",
-                        subject_type="review", subject_id=review.id, note_present=bool(response.note)))
+    events.append(
+        audit(
+            actor,
+            AuditAction.REVIEW_RESOLVED,
+            f"{review.kind.value}: {response.action.value}",
+            subject_type="review",
+            subject_id=review.id,
+            note_present=bool(response.note),
+        )
+    )
     out["audit"] = events
     return out
 
 
 def _refuse(review: HumanReview, reason: str) -> dict[str, Any]:
-    return {"audit": [audit(Actor.system(), AuditAction.ACTION_REFUSED, reason, subject_type="review",
-                            subject_id=review.id)], "next_after_review": "await_review"}
+    return {
+        "audit": [
+            audit(Actor.system(), AuditAction.ACTION_REFUSED, reason, subject_type="review", subject_id=review.id)
+        ],
+        "next_after_review": "await_review",
+    }
 
 
-def _apply_common(state: InvestigationState, r: ReviewResponse, ctx: InvestigationContext,
-                  events: list[Any]) -> dict[str, Any]:
+def _apply_common(
+    state: InvestigationState, r: ReviewResponse, ctx: InvestigationContext, events: list[Any]
+) -> dict[str, Any]:
     """Overrides, human challenges, research requests and extra iterations - valid on any review."""
     out: dict[str, Any] = {}
     claims = state.get("claims") or {}
@@ -269,27 +383,54 @@ def _apply_common(state: InvestigationState, r: ReviewResponse, ctx: Investigati
                 c = claims.get(o.claim_id)
                 if c is None:
                     continue
-                updates[c.id] = c.model_copy(update={
-                    "classification": o.classification, "review_state": ReviewState.OVERRIDDEN,
-                    "human_override": HumanOverride(actor=r.actor, previous=c.classification,
-                                                    new=o.classification, reason=o.reason)})
-                events.append(audit(r.actor, AuditAction.CLAIM_OVERRIDDEN,
-                                    f"{c.classification.value} -> {o.classification.value}: {o.reason[:120]}",
-                                    subject_type="claim", subject_id=c.id, policy=policy))
+                updates[c.id] = c.model_copy(
+                    update={
+                        "classification": o.classification,
+                        "review_state": ReviewState.OVERRIDDEN,
+                        "human_override": HumanOverride(
+                            actor=r.actor, previous=c.classification, new=o.classification, reason=o.reason
+                        ),
+                    }
+                )
+                events.append(
+                    audit(
+                        r.actor,
+                        AuditAction.CLAIM_OVERRIDDEN,
+                        f"{c.classification.value} -> {o.classification.value}: {o.reason[:120]}",
+                        subject_type="claim",
+                        subject_id=c.id,
+                        policy=policy,
+                    )
+                )
             out["claims"] = updates
         else:
-            events.append(audit(r.actor, AuditAction.ACTION_REFUSED,
-                                f"Classification override requires {policy.required_role}.", policy=policy))
+            events.append(
+                audit(
+                    r.actor,
+                    AuditAction.ACTION_REFUSED,
+                    f"Classification override requires {policy.required_role}.",
+                    policy=policy,
+                )
+            )
     if r.challenges:
         out["challenges"] = {}
         for hc in r.challenges:
-            ch = Challenge(target_type="claim" if hc.target_id in claims else "investigation",
-                           target_id=hc.target_id, kind=ChallengeKind.HUMAN_CHALLENGE, severity=Severity.MAJOR,
-                           argument=hc.argument, research_question=hc.argument, raised_by=r.actor,
-                           iteration=state.get("iteration", 0))
+            ch = Challenge(
+                target_type="claim" if hc.target_id in claims else "investigation",
+                target_id=hc.target_id,
+                kind=ChallengeKind.HUMAN_CHALLENGE,
+                severity=Severity.MAJOR,
+                argument=hc.argument,
+                research_question=hc.argument,
+                raised_by=r.actor,
+                iteration=state.get("iteration", 0),
+            )
             out["challenges"][ch.id] = ch
-            events.append(audit(r.actor, AuditAction.CHALLENGE_RAISED, hc.argument[:160],
-                                subject_type="challenge", subject_id=ch.id))
+            events.append(
+                audit(
+                    r.actor, AuditAction.CHALLENGE_RAISED, hc.argument[:160], subject_type="challenge", subject_id=ch.id
+                )
+            )
     if r.research_requests:
         out["research_requests"] = [*(state.get("research_requests") or []), *r.research_requests]
     if r.additional_iterations:
@@ -303,9 +444,10 @@ async def _clarification(state, review, r, ctx, events):  # type: ignore[no-unty
     if r.action == ReviewAction.REJECT:
         return {"next_after_review": END}
     note = f" Clarification from {r.actor.display_name}: {r.note}" if r.note else ""
-    return {"frame": fr.model_copy(update={"needs_clarification": False,
-                                           "decision_context": fr.decision_context + note}),
-            "next_after_review": "intake"}
+    return {
+        "frame": fr.model_copy(update={"needs_clarification": False, "decision_context": fr.decision_context + note}),
+        "next_after_review": "intake",
+    }
 
 
 async def _privacy(state, review, r, ctx, events):  # type: ignore[no-untyped-def]
@@ -319,12 +461,26 @@ async def _privacy(state, review, r, ctx, events):  # type: ignore[no-untyped-de
             for k, v in release(doc, ctx, state).items():
                 out.setdefault(k, {}).update(v)
             out["intake_status"][doc_id] = IntakeStatus.RELEASED
-            events.append(audit(r.actor, AuditAction.DOCUMENT_RELEASED, f"Approved release of '{doc.title}'.",
-                                subject_type="intake_document", subject_id=doc_id))
+            events.append(
+                audit(
+                    r.actor,
+                    AuditAction.DOCUMENT_RELEASED,
+                    f"Approved release of '{doc.title}'.",
+                    subject_type="intake_document",
+                    subject_id=doc_id,
+                )
+            )
         else:
             out["intake_status"][doc_id] = IntakeStatus.REJECTED
-            events.append(audit(r.actor, AuditAction.DOCUMENT_WITHHELD, "Release rejected by privacy reviewer.",
-                                subject_type="intake_document", subject_id=doc_id))
+            events.append(
+                audit(
+                    r.actor,
+                    AuditAction.DOCUMENT_WITHHELD,
+                    "Release rejected by privacy reviewer.",
+                    subject_type="intake_document",
+                    subject_id=doc_id,
+                )
+            )
     out["next_after_review"] = "intake"
     return out
 
@@ -332,12 +488,19 @@ async def _privacy(state, review, r, ctx, events):  # type: ignore[no-untyped-de
 async def _findings(state, review, r, ctx, events):  # type: ignore[no-untyped-def]
     if r.action == ReviewAction.REQUEST_FURTHER_INVESTIGATION:
         return {"next_after_review": "intake"}
-    chls = {c.id: c.model_copy(update={"status": ChallengeStatus.ACCEPTED_AS_LIMITATION,
-                                       "resolution_note": f"Accepted as a limitation by {r.actor.display_name}."})
-            for c in (state.get("challenges") or {}).values()
-            if c.status == ChallengeStatus.OPEN and c.severity == Severity.BLOCKING}
-    fnds = {f.id: f.model_copy(update={"status": FindingStatus.ACCEPTED})
-            for f in (state.get("findings") or {}).values()}
+    chls = {
+        c.id: c.model_copy(
+            update={
+                "status": ChallengeStatus.ACCEPTED_AS_LIMITATION,
+                "resolution_note": f"Accepted as a limitation by {r.actor.display_name}.",
+            }
+        )
+        for c in (state.get("challenges") or {}).values()
+        if c.status == ChallengeStatus.OPEN and c.severity == Severity.BLOCKING
+    }
+    fnds = {
+        f.id: f.model_copy(update={"status": FindingStatus.ACCEPTED}) for f in (state.get("findings") or {}).values()
+    }
     return {"challenges": chls, "findings": fnds, "next_after_review": "synthesise"}
 
 
@@ -346,9 +509,16 @@ _EDITABLE = {"title", "description", "risks", "uncertainties", "dependencies", "
 
 async def _options(state, review, r, ctx, events):  # type: ignore[no-untyped-def]
     if r.action == ReviewAction.REQUEST_FURTHER_INVESTIGATION:
-        reset = {o.id: o.model_copy(update={"review_status": OptionReviewStatus.REJECTED,
-                                            "reviewer_note": "Superseded: further investigation requested."})
-                 for o in (state.get("options") or {}).values() if o.id in review.subject_ids}
+        reset = {
+            o.id: o.model_copy(
+                update={
+                    "review_status": OptionReviewStatus.REJECTED,
+                    "reviewer_note": "Superseded: further investigation requested.",
+                }
+            )
+            for o in (state.get("options") or {}).values()
+            if o.id in review.subject_ids
+        }
         return {"options": reset, "next_after_review": "intake"}
     per_item = {i.item_id: i for i in r.items}
     updates = {}
@@ -363,8 +533,9 @@ async def _options(state, review, r, ctx, events):  # type: ignore[no-untyped-de
             status = OptionReviewStatus.MODIFIED
         else:
             status = OptionReviewStatus.APPROVED_FOR_DECISION
-        updates[oid] = o.model_copy(update={**edits, "review_status": status,
-                                            "reviewer_note": (item.note if item else None) or r.note})
+        updates[oid] = o.model_copy(
+            update={**edits, "review_status": status, "reviewer_note": (item.note if item else None) or r.note}
+        )
     return {"options": updates, "next_after_review": "decision_room"}
 
 
@@ -373,23 +544,37 @@ async def _decision(state, review, r, ctx, events):  # type: ignore[no-untyped-d
         return {"next_after_review": "intake"}
     policy = ctx.governance.evaluate("record_decision")
     if not policy.permits(ActorKind.HUMAN, r.actor.roles) or r.decision is None:
-        events.append(audit(r.actor, AuditAction.ACTION_REFUSED, "Decision payload missing or not permitted.",
-                            policy=policy))
+        events.append(
+            audit(r.actor, AuditAction.ACTION_REFUSED, "Decision payload missing or not permitted.", policy=policy)
+        )
         return None
     valid = set(review.subject_ids)
     try:
         decision = Decision(
-            decision_type=DecisionType(r.decision.decision_type), statement=r.decision.statement,
-            rationale=r.decision.rationale, option_ids=[o for o in r.decision.option_ids if o in valid],
-            conditions=r.decision.conditions, uncertainties_acknowledged=r.decision.uncertainties_acknowledged,
+            decision_type=DecisionType(r.decision.decision_type),
+            statement=r.decision.statement,
+            rationale=r.decision.rationale,
+            option_ids=[o for o in r.decision.option_ids if o in valid],
+            conditions=r.decision.conditions,
+            uncertainties_acknowledged=r.decision.uncertainties_acknowledged,
             acknowledged_unknown_claim_ids=r.decision.acknowledged_unknown_claim_ids,
-            decided_by=r.actor, review_id=review.id)
+            decided_by=r.actor,
+            review_id=review.id,
+        )
     except (ValidationError, ValueError) as exc:
-        events.append(audit(r.actor, AuditAction.ACTION_REFUSED, f"Decision rejected: {str(exc)[:200]}",
-                            policy=policy))
+        events.append(audit(r.actor, AuditAction.ACTION_REFUSED, f"Decision rejected: {str(exc)[:200]}", policy=policy))
         return None
-    events.append(audit(r.actor, AuditAction.DECISION_RECORDED, decision.statement[:160], subject_type="decision",
-                        subject_id=decision.id, policy=policy, decision_type=decision.decision_type.value))
+    events.append(
+        audit(
+            r.actor,
+            AuditAction.DECISION_RECORDED,
+            decision.statement[:160],
+            subject_type="decision",
+            subject_id=decision.id,
+            policy=policy,
+            decision_type=decision.decision_type.value,
+        )
+    )
     out: dict[str, Any] = {"decision": decision, "next_after_review": END}
     if decision.decision_type == DecisionType.COMMISSION_FURTHER_INVESTIGATION:
         out["research_requests"] = [decision.statement]
@@ -398,4 +583,3 @@ async def _decision(state, review, r, ctx, events):  # type: ignore[no-untyped-d
 
 def route_after_review(state: InvestigationState) -> str:
     return state.get("next_after_review") or END
-

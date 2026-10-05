@@ -1,0 +1,79 @@
+# Local stack: Postgres + API + web. Defaults give a credential-free offline demo:
+#   docker compose up --build        ->  web http://localhost:3000, API http://localhost:8000/health
+#
+# Optional overrides come from a root `.env` file (not committed; see .env.example). Compose reads it both
+# for ${VAR:-default} interpolation below and, via `env_file`, to pass extra settings (e.g. Azure OpenAI)
+# into the API container. Variables listed under `environment:` take precedence over `env_file`.
+name: sip
+
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: sip
+      POSTGRES_PASSWORD: sip   # local development only
+      POSTGRES_DB: sip
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Creates the separate `sip_vault` database + role on first start of an empty volume.
+      - ./infra/local/postgres-init:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sip -d sip"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sip-api:local
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      SIP_ENV: ${SIP_ENV:-local}
+      SIP_REASONER: ${SIP_REASONER:-offline}
+      SIP_SEARCH_PROVIDER: ${SIP_SEARCH_PROVIDER:-offline_corpus}
+      SIP_PII_DETECTOR: ${SIP_PII_DETECTOR:-local}
+      SIP_AUTH_MODE: ${SIP_AUTH_MODE:-dev}
+      SIP_CORS_ORIGINS: ${SIP_CORS_ORIGINS:-http://localhost:3000}
+      SIP_LOG_JSON: "true"
+      SIP_VAR_DIR: /app/var
+      DATABASE_URL: postgresql+psycopg://sip:sip@postgres:5432/sip
+      # Separate database *and* credential for the pseudonym vault (created by the init script).
+      VAULT_DATABASE_URL: postgresql+psycopg://sip_vault:sip_vault@postgres:5432/sip_vault
+      # SIP_VAULT_KEY is deliberately not set: the app falls back to its built-in development key.
+      # Set it in .env to exercise a real key locally.
+      LANGSMITH_TRACING: ${LANGSMITH_TRACING:-false}
+    volumes:
+      # Raw-upload quarantine lives only on this volume (never in the app DB or agent context).
+      - quarantine:/app/var
+    ports:
+      - "127.0.0.1:8000:8000"
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+      args:
+        # Called from the *browser*, so this is the host-visible API address, not the compose service name.
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8000}
+    image: sip-web:local
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:3000:3000"
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  quarantine:

@@ -1,7 +1,7 @@
 # Generic strategic driver taxonomy for "why has <metric> changed?" investigations.
 #
 # This is a consultant-style issue tree that applies to any organisation and any volume metric (sales,
-# enrolments, renewals, market share...). It contains NO domain-specific content. It is used:
+# sign-ups, renewals, market share...). It contains NO domain-specific content. It is used:
 #   * by the offline reasoner to instantiate initial hypotheses and research tasks;
 #   * by the LLM reasoner as the controlled vocabulary for hypothesis categories;
 #   * by deterministic analysis to map analytical pattern codes onto hypothesis stances.
@@ -223,7 +223,6 @@ categories:
     - emerging_market_segment_not_offered
     signals:
       support:
-      - moving apprenticeship spend
       - moved budget
       - redirected
       - replacing places
@@ -231,6 +230,10 @@ categories:
       - switching
       - instead
       - budget to
+      - spend from
+      - budget from
+      - shifted to
+      - shifting from
       contradict:
       - demand was stable
       - no switching

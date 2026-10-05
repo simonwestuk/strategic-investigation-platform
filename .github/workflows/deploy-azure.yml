@@ -1,0 +1,147 @@
+name: Deploy to Azure
+
+# Manual-only deployment of the Azure reference architecture (infra/azure). Never runs on push or PR, so
+# pull-request CI needs no cloud credentials.
+#
+# One-time setup (see docs/azure-deployment.md, "Deploy"):
+#   * Entra app registration / user-assigned identity with a federated credential for this repo +
+#     GitHub environment, holding Contributor + Role Based Access Control Administrator on the resource group.
+#   * GitHub environment (e.g. `dev`) with:
+#       vars:    AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID, AZURE_RESOURCE_GROUP, ENTRA_API_AUDIENCE
+#       secrets: SIP_VAULT_KEY, POSTGRES_ADMIN_PASSWORD
+#                optional: TAVILY_API_KEY, BRAVE_API_KEY, LANGSMITH_API_KEY
+#     (AZURE_* identifiers may be secrets instead of vars; they are not sensitive, only identifying.)
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: GitHub environment holding the Azure identifiers and secrets
+        type: choice
+        options: [dev, prod]
+        default: dev
+      parameters_file:
+        description: Bicep parameters file
+        type: string
+        default: infra/azure/main.parameters.json
+
+permissions:
+  contents: read
+  id-token: write # GitHub OIDC -> Entra workload identity federation (no stored Azure credentials)
+
+concurrency:
+  group: deploy-azure-${{ inputs.environment }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy (${{ inputs.environment }})
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+      PARAMS_FILE: ${{ inputs.parameters_file }}
+      IMAGE_TAG: ${{ github.sha }}
+      # Secrets are passed to az via environment variables, never interpolated into the script text.
+      SIP_VAULT_KEY: ${{ secrets.SIP_VAULT_KEY }}
+      POSTGRES_ADMIN_PASSWORD: ${{ secrets.POSTGRES_ADMIN_PASSWORD }}
+      TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
+      BRAVE_API_KEY: ${{ secrets.BRAVE_API_KEY }}
+      LANGSMITH_API_KEY: ${{ secrets.LANGSMITH_API_KEY }}
+      ENTRA_API_AUDIENCE: ${{ vars.ENTRA_API_AUDIENCE }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check required configuration
+        run: |
+          missing=0
+          for v in RESOURCE_GROUP SIP_VAULT_KEY POSTGRES_ADMIN_PASSWORD ENTRA_API_AUDIENCE; do
+            if [ -z "${!v}" ]; then echo "::error::$v is not configured for environment '${{ inputs.environment }}'"; missing=1; fi
+          done
+          exit $missing
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID || secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID || secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID || secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Phase 1 — platform (no apps)
+        id: platform
+        run: |
+          az deployment group create \
+            --name "sip-platform-${GITHUB_RUN_ID}" \
+            --resource-group "$RESOURCE_GROUP" \
+            --template-file infra/azure/main.bicep \
+            --parameters "@${PARAMS_FILE}" \
+            --parameters deployApps=false \
+                         entraApiAudience="$ENTRA_API_AUDIENCE" \
+                         vaultEncryptionKey="$SIP_VAULT_KEY" \
+                         postgresAdminPassword="$POSTGRES_ADMIN_PASSWORD" \
+                         tavilyApiKey="$TAVILY_API_KEY" \
+                         braveApiKey="$BRAVE_API_KEY" \
+                         langsmithApiKey="$LANGSMITH_API_KEY" \
+            --query properties.outputs -o json > outputs.json
+          echo "acr_name=$(jq -r .acrName.value outputs.json)" >> "$GITHUB_OUTPUT"
+          echo "acr_server=$(jq -r .acrLoginServer.value outputs.json)" >> "$GITHUB_OUTPUT"
+          echo "api_url=$(jq -r .apiUrl.value outputs.json)" >> "$GITHUB_OUTPUT"
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: ACR login (Entra token, no admin user)
+        run: az acr login --name "${{ steps.platform.outputs.acr_name }}"
+
+      - name: Build and push API image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: ${{ steps.platform.outputs.acr_server }}/sip-api:${{ github.sha }}
+
+      - name: Build and push web image
+        uses: docker/build-push-action@v6
+        with:
+          context: apps/web
+          file: apps/web/Dockerfile
+          push: true
+          tags: ${{ steps.platform.outputs.acr_server }}/sip-web:${{ github.sha }}
+          build-args: |
+            NEXT_PUBLIC_API_BASE_URL=${{ steps.platform.outputs.api_url }}
+
+      - name: Phase 2 — container apps
+        env:
+          ACR_SERVER: ${{ steps.platform.outputs.acr_server }}
+        run: |
+          az deployment group create \
+            --name "sip-apps-${GITHUB_RUN_ID}" \
+            --resource-group "$RESOURCE_GROUP" \
+            --template-file infra/azure/main.bicep \
+            --parameters "@${PARAMS_FILE}" \
+            --parameters deployApps=true \
+                         apiImage="${ACR_SERVER}/sip-api:${IMAGE_TAG}" \
+                         webImage="${ACR_SERVER}/sip-web:${IMAGE_TAG}" \
+                         entraApiAudience="$ENTRA_API_AUDIENCE" \
+                         vaultEncryptionKey="$SIP_VAULT_KEY" \
+                         postgresAdminPassword="$POSTGRES_ADMIN_PASSWORD" \
+                         tavilyApiKey="$TAVILY_API_KEY" \
+                         braveApiKey="$BRAVE_API_KEY" \
+                         langsmithApiKey="$LANGSMITH_API_KEY" \
+            --query properties.outputs -o json > outputs.json
+          {
+            echo "### Deployed"
+            echo "- Web: $(jq -r .webUrl.value outputs.json)"
+            echo "- API: $(jq -r .apiUrl.value outputs.json)/health"
+            echo "- Images: \`sip-api:${IMAGE_TAG}\`, \`sip-web:${IMAGE_TAG}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Smoke test API health
+        run: |
+          url="$(jq -r .apiUrl.value outputs.json)/health"
+          for i in $(seq 1 30); do
+            if curl -fsS "$url"; then exit 0; fi
+            sleep 10
+          done
+          echo "::error::API health check did not succeed: $url"
+          exit 1

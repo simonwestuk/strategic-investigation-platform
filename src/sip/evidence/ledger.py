@@ -43,8 +43,9 @@ def stable_id(prefix: str, *parts: str) -> str:
 
 
 # ---- analysis -> evidence -------------------------------------------------------------------------
-def evidence_from_analysis(result: AnalysisResult, task: ResearchTask, source: Source,
-                           hypotheses: Iterable[Hypothesis], taxonomy: Taxonomy) -> list[Evidence]:
+def evidence_from_analysis(
+    result: AnalysisResult, task: ResearchTask, source: Source, hypotheses: Iterable[Hypothesis], taxonomy: Taxonomy
+) -> list[Evidence]:
     hyps = list(hypotheses)
     if task.origin.value == "challenger" and task.hypothesis_ids:
         targets = set(task.hypothesis_ids)
@@ -52,8 +53,12 @@ def evidence_from_analysis(result: AnalysisResult, task: ResearchTask, source: S
     out: list[Evidence] = []
     # When a pattern supports a category for some sub-segment of an entity (e.g. one customer segment
     # within a product), "no change" in the entity's other sub-segments is context, not contradiction.
-    supported_entities = {(p.entity, h.category) for p in result.patterns for h in hyps
-                          if p.value is not None and taxonomy.stance_for_pattern(h.category, p.code) == "supports"}
+    supported_entities = {
+        (p.entity, h.category)
+        for p in result.patterns
+        for h in hyps
+        if p.value is not None and taxonomy.stance_for_pattern(h.category, p.code) == "supports"
+    }
     for p in result.patterns:
         links = []
         for h in hyps:
@@ -61,20 +66,29 @@ def evidence_from_analysis(result: AnalysisResult, task: ResearchTask, source: S
             if stance and (h.segment is None or h.segment == p.entity):
                 if stance == "contradicts" and p.value is not None and (p.entity, h.category) in supported_entities:
                     stance = "context"
-                links.append(HypothesisLink(hypothesis_id=h.id, stance=Stance(stance),
-                                            rationale=f"pattern '{p.code}'"))
+                links.append(HypothesisLink(hypothesis_id=h.id, stance=Stance(stance), rationale=f"pattern '{p.code}'"))
         if not links and p.code not in {"major_contributor_to_decline", "decline"}:
             continue
-        out.append(Evidence(
-            id=stable_id("evd", source.id, result.operation, p.code, p.entity or "", p.value or ""),
-            source_id=source.id, task_id=task.id, statement=p.statement, quote=None,
-            locator=f"{result.operation}({result.params}) pattern={p.code}",
-            kind=EvidenceKind.MEASUREMENT, need=EvidenceNeed.INTERNAL_PERFORMANCE
-            if source.source_type == SourceType.INTERNAL_DATASET else EvidenceNeed.STATISTIC,
-            relevance=Level.HIGH, metrics=[Metric(name=k, value=v, segment=p.entity) for k, v in p.metrics.items()],
-            segments=[p.entity] if p.entity else [], links=links,
-            verification=QuoteVerification.COMPUTED, extracted_by=ANALYST,
-        ))
+        out.append(
+            Evidence(
+                id=stable_id("evd", source.id, result.operation, p.code, p.entity or "", p.value or ""),
+                source_id=source.id,
+                task_id=task.id,
+                statement=p.statement,
+                quote=None,
+                locator=f"{result.operation}({result.params}) pattern={p.code}",
+                kind=EvidenceKind.MEASUREMENT,
+                need=EvidenceNeed.INTERNAL_PERFORMANCE
+                if source.source_type == SourceType.INTERNAL_DATASET
+                else EvidenceNeed.STATISTIC,
+                relevance=Level.HIGH,
+                metrics=[Metric(name=k, value=v, segment=p.entity) for k, v in p.metrics.items()],
+                segments=[p.entity] if p.entity else [],
+                links=links,
+                verification=QuoteVerification.COMPUTED,
+                extracted_by=ANALYST,
+            )
+        )
     return out
 
 
@@ -94,8 +108,7 @@ def route_links(evidence: Evidence, hypotheses: Mapping[str, Hypothesis]) -> Evi
             changed = True
             for k in matched:
                 if not any(nl.hypothesis_id == k.id for nl in new_links):
-                    new_links.append(HypothesisLink(hypothesis_id=k.id, stance=link.stance,
-                                                    rationale=link.rationale))
+                    new_links.append(HypothesisLink(hypothesis_id=k.id, stance=link.stance, rationale=link.rationale))
             continue
         if not any(nl.hypothesis_id == link.hypothesis_id for nl in new_links):
             new_links.append(link)
@@ -103,8 +116,12 @@ def route_links(evidence: Evidence, hypotheses: Mapping[str, Hypothesis]) -> Evi
 
 
 def split_by_segment(
-    hypotheses: Mapping[str, Hypothesis], evidence: Mapping[str, Evidence], taxonomy: Taxonomy,
-    material_segments: set[str], names: Mapping[str, str], organisation: str,
+    hypotheses: Mapping[str, Hypothesis],
+    evidence: Mapping[str, Evidence],
+    taxonomy: Taxonomy,
+    material_segments: set[str],
+    names: Mapping[str, str],
+    organisation: str,
     own_segments: set[str] | None = None,
 ) -> tuple[dict[str, Hypothesis], list[Hypothesis]]:
     """Split whole-subject hypotheses whose evidence points in different directions by segment.
@@ -141,21 +158,34 @@ def split_by_segment(
             targets |= set(ranked[:1])
         if len(targets) < 2:
             continue
-        targets = sorted(targets)
-        for seg in targets:
+        for seg in sorted(targets):
             statement = (cat.segment_statement or cat.statement).format(
-                subject=names.get(seg, seg), org=organisation, segment=names.get(seg, seg))
-            created.append(Hypothesis(
-                id=stable_id("hyp", h.id, seg), statement=statement,
-                rationale=f"Refined from '{h.statement}' because evidence differs by segment.",
-                category=h.category, segment=seg, parent_id=h.id, origin=HypothesisOrigin.EMERGENT,
-                would_support=h.would_support, would_contradict=h.would_contradict,
-                suggested_source_types=h.suggested_source_types, priority=h.priority,
-                status=HypothesisStatus.INVESTIGATING,
-                created_from_evidence_ids=evidence_by_seg[seg][:5]))
-        updated[h.id] = h.model_copy(update={
-            "status": HypothesisStatus.SPLIT, "updated_at": utcnow(),
-            "status_reason": f"Evidence diverges by segment; refined into {len(targets)} segment hypotheses."})
+                subject=names.get(seg, seg), org=organisation, segment=names.get(seg, seg)
+            )
+            created.append(
+                Hypothesis(
+                    id=stable_id("hyp", h.id, seg),
+                    statement=statement,
+                    rationale=f"Refined from '{h.statement}' because evidence differs by segment.",
+                    category=h.category,
+                    segment=seg,
+                    parent_id=h.id,
+                    origin=HypothesisOrigin.EMERGENT,
+                    would_support=h.would_support,
+                    would_contradict=h.would_contradict,
+                    suggested_source_types=h.suggested_source_types,
+                    priority=h.priority,
+                    status=HypothesisStatus.INVESTIGATING,
+                    created_from_evidence_ids=evidence_by_seg[seg][:5],
+                )
+            )
+        updated[h.id] = h.model_copy(
+            update={
+                "status": HypothesisStatus.SPLIT,
+                "updated_at": utcnow(),
+                "status_reason": f"Evidence diverges by segment; refined into {len(targets)} segment hypotheses.",
+            }
+        )
     return updated, created
 
 
@@ -173,8 +203,9 @@ def evidence_weight(e: Evidence) -> int:
 _ABSOLUTE = re.compile(r"\b(entirely|solely|wholly|all|every|wipe out|regardless)\b", re.I)
 
 
-def absolutist_contradictions(hypotheses: Mapping[str, Hypothesis], evidence: Mapping[str, Evidence]
-                              ) -> list[Contradiction]:
+def absolutist_contradictions(
+    hypotheses: Mapping[str, Hypothesis], evidence: Mapping[str, Evidence]
+) -> list[Contradiction]:
     """A source asserts a driver explains the change across the board, but the driver was rejected
     for some segments. Typical of internal narratives ("it is all down to X")."""
     out = []
@@ -186,24 +217,41 @@ def absolutist_contradictions(hypotheses: Mapping[str, Hypothesis], evidence: Ma
         if not rejected:
             continue
         family = {p.id, *(k.id for k in kids)}
-        claims_all = [e for e in evidence.values() if e.usable and e.quote and _ABSOLUTE.search(e.quote)
-                      and any(lk.hypothesis_id in family and lk.stance == Stance.SUPPORTS for lk in e.links)]
+        claims_all = [
+            e
+            for e in evidence.values()
+            if e.usable
+            and e.quote
+            and _ABSOLUTE.search(e.quote)
+            and any(lk.hypothesis_id in family and lk.stance == Stance.SUPPORTS for lk in e.links)
+        ]
         if not claims_all:
             continue
-        against = sorted({e.id for e in evidence.values() if e.usable
-                          and any(e.stance_for(k.id) == Stance.CONTRADICTS for k in rejected)})
-        out.append(Contradiction(
-            id=stable_id("ctr", "absolute", p.id),
-            description=f"Sources assert that this driver explains the change across the board, but it is "
-                        f"rejected for {len(rejected)} segment(s): {p.statement}",
-            hypothesis_id=p.id, supporting_evidence_ids=[e.id for e in claims_all],
-            contradicting_evidence_ids=against, status=ContradictionStatus.UNRESOLVED))
+        against = sorted(
+            {
+                e.id
+                for e in evidence.values()
+                if e.usable and any(e.stance_for(k.id) == Stance.CONTRADICTS for k in rejected)
+            }
+        )
+        out.append(
+            Contradiction(
+                id=stable_id("ctr", "absolute", p.id),
+                description=f"Sources assert that this driver explains the change across the board, but it is "
+                f"rejected for {len(rejected)} segment(s): {p.statement}",
+                hypothesis_id=p.id,
+                supporting_evidence_ids=[e.id for e in claims_all],
+                contradicting_evidence_ids=against,
+                status=ContradictionStatus.UNRESOLVED,
+            )
+        )
     return out
 
 
 # ---- contradictions -------------------------------------------------------------------------------
-def detect_contradictions(hypotheses: Mapping[str, Hypothesis], evidence: Mapping[str, Evidence]
-                          ) -> list[Contradiction]:
+def detect_contradictions(
+    hypotheses: Mapping[str, Hypothesis], evidence: Mapping[str, Evidence]
+) -> list[Contradiction]:
     out = []
     for h in hypotheses.values():
         sup = [e for e in evidence.values() if e.usable and e.stance_for(h.id) == Stance.SUPPORTS]
@@ -216,15 +264,22 @@ def detect_contradictions(hypotheses: Mapping[str, Hypothesis], evidence: Mappin
         if best_sup != best_con or stale_side:
             status = ContradictionStatus.RESOLVED_BY_SOURCE_QUALITY
             stronger = "contradicting" if best_con > best_sup else "supporting"
-            note = (f"The {stronger} evidence comes from higher-authority sources"
-                    + ("; one side relies only on stale sources." if stale_side else "."))
+            note = f"The {stronger} evidence comes from higher-authority sources" + (
+                "; one side relies only on stale sources." if stale_side else "."
+            )
         else:
             status, note = ContradictionStatus.UNRESOLVED, None
-        out.append(Contradiction(
-            id=stable_id("ctr", h.id),
-            description=f"Evidence conflicts on: {h.statement}",
-            hypothesis_id=h.id, supporting_evidence_ids=[e.id for e in sup],
-            contradicting_evidence_ids=[e.id for e in con], status=status, resolution_note=note))
+        out.append(
+            Contradiction(
+                id=stable_id("ctr", h.id),
+                description=f"Evidence conflicts on: {h.statement}",
+                hypothesis_id=h.id,
+                supporting_evidence_ids=[e.id for e in sup],
+                contradicting_evidence_ids=[e.id for e in con],
+                status=status,
+                resolution_note=note,
+            )
+        )
     return out
 
 
@@ -269,15 +324,20 @@ def evidence_key(e: Evidence) -> str:
 
 
 # ---- views for reasoners --------------------------------------------------------------------------
-def evidence_view(e: Evidence, sources: Mapping[str, Source], hypothesis_id: str | None = None
-                  ) -> EvidenceView:
+def evidence_view(e: Evidence, sources: Mapping[str, Source], hypothesis_id: str | None = None) -> EvidenceView:
     s = sources.get(e.source_id)
     return EvidenceView(
-        id=e.id, statement=e.statement, kind=e.kind, need=e.need.value,
+        id=e.id,
+        statement=e.statement,
+        kind=e.kind,
+        need=e.need.value,
         tier=e.quality.tier.value if e.quality else "tertiary",
         freshness=e.quality.freshness.value if e.quality else "undated",
-        source_title=s.title if s else "unknown", source_type=s.source_type if s else SourceType.UNKNOWN,
+        source_title=s.title if s else "unknown",
+        source_type=s.source_type if s else SourceType.UNKNOWN,
         publisher=s.publisher if s else None,
         dated=(s.effective_date.isoformat() if s and s.effective_date else None),
         stance=e.stance_for(hypothesis_id) if hypothesis_id else None,
-        segments=e.segments, flags=e.flags)
+        segments=e.segments,
+        flags=e.flags,
+    )

@@ -44,7 +44,7 @@ class StructuredModel(Protocol):
 
 
 def parse_prices(spec: str) -> dict[str, tuple[float, float]]:
-    """"model=in:out;model=in:out" (USD per 1M tokens) -> {model: (in, out)}."""
+    """ "model=in:out;model=in:out" (USD per 1M tokens) -> {model: (in, out)}."""
     prices: dict[str, tuple[float, float]] = {}
     for item in filter(None, (s.strip() for s in spec.split(";"))):
         name, _, rates = item.partition("=")

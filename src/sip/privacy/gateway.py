@@ -38,8 +38,14 @@ class UploadTooLarge(ValueError):
 
 
 class PrivacyGateway:
-    def __init__(self, detector: PIIDetector, vault: PseudonymVault, quarantine: RawContentStore,
-                 max_bytes: int = 10_000_000, allowlist: set[str] | None = None) -> None:
+    def __init__(
+        self,
+        detector: PIIDetector,
+        vault: PseudonymVault,
+        quarantine: RawContentStore,
+        max_bytes: int = 10_000_000,
+        allowlist: set[str] | None = None,
+    ) -> None:
         """``allowlist``: public names that must not be pseudonymised (the organisation itself, named
         public competitors). Matching is case-insensitive on the whole detected span."""
         self.allowlist = {a.lower() for a in (allowlist or set())}
@@ -89,9 +95,14 @@ class PrivacyGateway:
         )
         await self.quarantine.put(doc.id, content)
         # Log counts and classification only. Never log `text` or detection values.
-        log.info("privacy.scan", document_id=doc.id, classification=classification.label,
-                 detections=len(detections), low_confidence=summary.low_confidence_detections,
-                 special_category=summary.special_category_spans)
+        log.info(
+            "privacy.scan",
+            document_id=doc.id,
+            classification=classification.label,
+            detections=len(detections),
+            low_confidence=summary.low_confidence_detections,
+            special_category=summary.special_category_spans,
+        )
         return doc
 
     async def sanitise_text(self, text: str) -> str:
@@ -111,7 +122,7 @@ class PrivacyGateway:
         for d in sorted(detections, key=lambda d: d.start):
             if d.start < cursor:
                 continue
-            out.append(text[cursor:d.start])
+            out.append(text[cursor : d.start])
             if d.entity_type == EntityType.SPECIAL_CATEGORY:
                 # Removed wholesale: special-category content is not pseudonymised, it is withheld.
                 out.append(f"[WITHHELD:{(d.subcategory or 'special_category').upper()}]")
@@ -124,15 +135,21 @@ class PrivacyGateway:
         return "".join(out), len(tokens)
 
     @staticmethod
-    def _summarise(detections: list[Detection], classification: DataClassification,
-                   declared: DataClassification, markers: list[str], tokens: int) -> PrivacyScanSummary:
+    def _summarise(
+        detections: list[Detection],
+        classification: DataClassification,
+        declared: DataClassification,
+        markers: list[str],
+        tokens: int,
+    ) -> PrivacyScanSummary:
         counts = Counter(d.entity_type for d in detections)
         low = Counter(d.entity_type for d in detections if d.confidence < LOW_CONFIDENCE)
         special = [d for d in detections if d.entity_type == EntityType.SPECIAL_CATEGORY]
         return PrivacyScanSummary(
             detector=detections[0].detector if detections else "none",
-            entity_counts=[EntityCount(entity_type=t, count=n, low_confidence=low.get(t, 0))
-                           for t, n in sorted(counts.items())],
+            entity_counts=[
+                EntityCount(entity_type=t, count=n, low_confidence=low.get(t, 0)) for t, n in sorted(counts.items())
+            ],
             low_confidence_detections=sum(low.values()),
             special_category_spans=len(special),
             special_category_types=sorted({d.subcategory or "unspecified" for d in special}),

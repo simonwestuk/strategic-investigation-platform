@@ -45,8 +45,13 @@ def _entra_actor(token: str, settings: Settings) -> Actor:
         raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, "Entra ID is not configured.")
     try:
         key = _jwks(settings.entra_tenant_id).get_signing_key_from_jwt(token)
-        claims = jwt.decode(token, key.key, algorithms=["RS256"], audience=settings.entra_api_audience,
-                            issuer=f"https://login.microsoftonline.com/{settings.entra_tenant_id}/v2.0")
+        claims = jwt.decode(
+            token,
+            key.key,
+            algorithms=["RS256"],
+            audience=settings.entra_api_audience,
+            issuer=f"https://login.microsoftonline.com/{settings.entra_tenant_id}/v2.0",
+        )
     except jwt.PyJWTError as exc:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Invalid token.") from exc
     roles = []
@@ -55,8 +60,12 @@ def _entra_actor(token: str, settings: Settings) -> Actor:
             roles.append(Role(r))
         except ValueError:
             continue
-    return Actor(kind=ActorKind.HUMAN, id=f"entra:{claims.get('oid', claims['sub'])}",
-                 display_name=claims.get("name") or claims.get("preferred_username") or "user", roles=roles)
+    return Actor(
+        kind=ActorKind.HUMAN,
+        id=f"entra:{claims.get('oid', claims['sub'])}",
+        display_name=claims.get("name") or claims.get("preferred_username") or "user",
+        roles=roles,
+    )
 
 
 def current_actor(
@@ -71,8 +80,12 @@ def current_actor(
         if not authorization or not authorization.lower().startswith("bearer "):
             raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Bearer token required.")
         return _entra_actor(authorization.split(" ", 1)[1], settings)
-    return Actor(kind=ActorKind.HUMAN, id=f"dev:{(x_user_id or 'demo')[:64]}",
-                 display_name=(x_user_name or "Demo User")[:100], roles=_parse_roles(x_user_roles))
+    return Actor(
+        kind=ActorKind.HUMAN,
+        id=f"dev:{(x_user_id or 'demo')[:64]}",
+        display_name=(x_user_name or "Demo User")[:100],
+        roles=_parse_roles(x_user_roles),
+    )
 
 
 CurrentActor = Annotated[Actor, Depends(current_actor)]
@@ -83,4 +96,5 @@ def require(role: Role):  # type: ignore[no-untyped-def]
         if not actor.has_role(role):
             raise HTTPException(status.HTTP_403_FORBIDDEN, f"Requires role '{role.value}'.")
         return actor
+
     return check

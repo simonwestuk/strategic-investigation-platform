@@ -18,10 +18,21 @@ from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
 from pydantic import BaseModel
 
 _MODULES = [
-    "sip.domain.audit", "sip.domain.challenges", "sip.domain.claims", "sip.domain.classification",
-    "sip.domain.common", "sip.domain.decisions", "sip.domain.evidence", "sip.domain.hypotheses",
-    "sip.domain.investigation", "sip.domain.options", "sip.domain.research", "sip.domain.reviews",
-    "sip.domain.sources", "sip.graph.state", "sip.privacy.models",
+    "sip.domain.audit",
+    "sip.domain.challenges",
+    "sip.domain.claims",
+    "sip.domain.classification",
+    "sip.domain.common",
+    "sip.domain.decisions",
+    "sip.domain.evidence",
+    "sip.domain.hypotheses",
+    "sip.domain.investigation",
+    "sip.domain.options",
+    "sip.domain.research",
+    "sip.domain.reviews",
+    "sip.domain.sources",
+    "sip.graph.state",
+    "sip.privacy.models",
 ]
 
 
@@ -36,7 +47,7 @@ def allowed_types() -> list[tuple[str, str]]:
 
 
 def serializer() -> JsonPlusSerializer:
-    return JsonPlusSerializer(allowed_msgpack_modules=allowed_types())  # type: ignore[arg-type]
+    return JsonPlusSerializer(allowed_msgpack_modules=allowed_types())
 
 
 @asynccontextmanager

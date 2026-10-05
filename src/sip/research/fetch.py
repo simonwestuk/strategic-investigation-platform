@@ -18,6 +18,7 @@ import asyncio
 import hashlib
 import ipaddress
 import socket
+from collections.abc import Awaitable, Callable
 from urllib.parse import urljoin, urlsplit, urlunsplit
 
 import httpx
@@ -75,9 +76,15 @@ def validate_url(url: str, allowed_ports: set[int]) -> tuple[str, str, int]:
 
 
 class SafeFetcher:
-    def __init__(self, *, timeout_s: float = 15.0, max_bytes: int = 3_000_000,
-                 allowed_ports: set[int] | None = None, client: httpx.AsyncClient | None = None,
-                 resolver=resolve_public) -> None:  # type: ignore[no-untyped-def]
+    def __init__(
+        self,
+        *,
+        timeout_s: float = 15.0,
+        max_bytes: int = 3_000_000,
+        allowed_ports: set[int] | None = None,
+        client: httpx.AsyncClient | None = None,
+        resolver: Callable[[str, int], Awaitable[str]] = resolve_public,
+    ) -> None:
         self.timeout_s = timeout_s
         self.max_bytes = max_bytes
         self.allowed_ports = allowed_ports or {80, 443}
@@ -92,8 +99,11 @@ class SafeFetcher:
             parts = urlsplit(current)
             netloc_ip = f"[{ip}]" if ":" in ip else ip
             pinned = urlunsplit((scheme, f"{netloc_ip}:{port}", parts.path or "/", parts.query, ""))
-            headers = {"Host": parts.netloc.split("@")[-1], "User-Agent": USER_AGENT,
-                       "Accept": "text/html,application/xhtml+xml,text/plain,application/pdf"}
+            headers = {
+                "Host": parts.netloc.split("@")[-1],
+                "User-Agent": USER_AGENT,
+                "Accept": "text/html,application/xhtml+xml,text/plain,application/pdf",
+            }
             extensions = {"sni_hostname": host} if scheme == "https" else {}
             async with self._client.stream("GET", pinned, headers=headers, extensions=extensions) as resp:
                 if resp.status_code in {301, 302, 303, 307, 308}:
@@ -128,12 +138,25 @@ class SafeFetcher:
             raw_text, title, published, updated, publisher = extract_text(body, ctype), url, None, None, None
         else:
             raw_text, title, published, updated, publisher = (
-                body.decode("utf-8", errors="replace"), url, None, None, None)
+                body.decode("utf-8", errors="replace"),
+                url,
+                None,
+                None,
+                None,
+            )
         flags = sorted({f.kind for f in screen(raw_text)})
         text = clean_untrusted(raw_text)[:60_000]
         return FetchedPage(
-            url=url, title=title[:300], text=text, content_type=ctype,
-            sha256=hashlib.sha256(body).hexdigest(), publisher=publisher or host, domain=host,
-            published_on=published, updated_on=updated,
-            source_type_hint=infer_source_type(host, title), injection_flags=flags, provider="web",
+            url=url,
+            title=title[:300],
+            text=text,
+            content_type=ctype,
+            sha256=hashlib.sha256(body).hexdigest(),
+            publisher=publisher or host,
+            domain=host,
+            published_on=published,
+            updated_on=updated,
+            source_type_hint=infer_source_type(host, title),
+            injection_flags=flags,
+            provider="web",
         )

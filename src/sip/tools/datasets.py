@@ -1,5 +1,5 @@
 """Dataset catalogue. Datasets are described by a generic role manifest so that analytical operations
-are domain-agnostic: an operation asks for "the own_volume dataset", not "the enrolments CSV".
+are domain-agnostic: an operation asks for "the own_volume dataset", not "the sales CSV".
 
 Roles
 -----
@@ -99,9 +99,16 @@ class DatasetCatalog:
     def describe(self) -> list[dict[str, object]]:
         """Schema-level description for planners (no row data)."""
         return [
-            {"id": d.manifest.id, "title": d.manifest.title, "role": d.manifest.role.value,
-             "period": d.manifest.period, "periods": d.periods, "measure": d.manifest.measure,
-             "stages": d.manifest.stages, "dimensions": d.manifest.dimensions}
+            {
+                "id": d.manifest.id,
+                "title": d.manifest.title,
+                "role": d.manifest.role.value,
+                "period": d.manifest.period,
+                "periods": d.periods,
+                "measure": d.manifest.measure,
+                "stages": d.manifest.stages,
+                "dimensions": d.manifest.dimensions,
+            }
             for d in self._by_id.values()
         ]
 

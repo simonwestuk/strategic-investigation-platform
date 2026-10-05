@@ -32,7 +32,7 @@ class InvestigationFrame(DomainModel):
 
     question: str
     question_types: list[QuestionType]
-    subject: str  # what is being explained, e.g. "degree-apprenticeship enrolments"
+    subject: str  # what is being explained, e.g. "subscription renewals"
     organisation: str | None = None
     direction: str | None = None  # "decline", "increase", ...
     decision_context: str

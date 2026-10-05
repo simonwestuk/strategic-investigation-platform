@@ -6,6 +6,7 @@ reads secrets from anywhere else; in Azure the same variables are populated from
 
 from __future__ import annotations
 
+import os
 from enum import StrEnum
 from functools import lru_cache
 from pathlib import Path
@@ -13,7 +14,7 @@ from pathlib import Path
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+REPO_ROOT = Path(os.environ.get("SIP_REPO_ROOT") or Path(__file__).resolve().parents[2])
 
 
 class Environment(StrEnum):
@@ -69,9 +70,7 @@ class PIIDetectorName(StrEnum):
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(
-        env_file=".env", env_file_encoding="utf-8", extra="ignore", env_prefix=""
-    )
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore", env_prefix="")
 
     # --- runtime -------------------------------------------------------------------------------
     sip_env: Environment = Environment.LOCAL
@@ -114,6 +113,8 @@ class Settings(BaseSettings):
     azure_language_endpoint: str | None = None
     azure_language_api_key: SecretStr | None = None
     sip_upload_max_bytes: int = 10_000_000
+    # When set (Azure), raw uploads are quarantined in this private Blob container via managed identity.
+    sip_quarantine_blob_url: str | None = None
 
     # --- retrieval -----------------------------------------------------------------------------
     azure_search_endpoint: str | None = None

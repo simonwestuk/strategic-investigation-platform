@@ -19,8 +19,17 @@ class RecordingModel:
         self.inner = inner
         self.inputs: list[str] = []
 
-    async def generate(self, *, task: str, tier: ModelTier, instructions: str, input: str, schema: type[T],
-                       metadata: dict[str, Any] | None = None) -> tuple[T, ModelCall]:
+    async def generate(
+        self,
+        *,
+        task: str,
+        tier: ModelTier,
+        instructions: str,
+        input: str,
+        schema: type[T],
+        metadata: dict[str, Any] | None = None,
+    ) -> tuple[T, ModelCall]:
         self.inputs.append(f"[{task}]\n{instructions}\n{input}")
-        return await self.inner.generate(task=task, tier=tier, instructions=instructions, input=input,
-                                         schema=schema, metadata=metadata)
+        return await self.inner.generate(
+            task=task, tier=tier, instructions=instructions, input=input, schema=schema, metadata=metadata
+        )

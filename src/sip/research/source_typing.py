@@ -18,7 +18,6 @@ DOMAIN_RULES: list[tuple[str, SourceType]] = [
     ("ofsted", SourceType.REGULATOR),
     ("ofqual", SourceType.REGULATOR),
     ("skillsengland", SourceType.STANDARDS_BODY),
-    ("instituteforapprenticeships", SourceType.STANDARDS_BODY),
     (".ac.uk", SourceType.ACADEMIC),
     (".edu", SourceType.ACADEMIC),
     ("bbc.co.uk", SourceType.NEWS),

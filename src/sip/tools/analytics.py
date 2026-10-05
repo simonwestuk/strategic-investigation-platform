@@ -3,7 +3,7 @@
 Each operation returns an ``AnalysisResult`` with a human-readable summary, a small table, and a list
 of ``Pattern``s: generic, coded observations ("own_underperforms_market" for entity DTS6, ...). The
 driver taxonomy maps pattern codes to hypothesis categories, so neither this module nor the taxonomy
-knows anything about apprenticeships.
+knows anything about a particular industry.
 
 Thresholds are explicit module constants so reviewers can see (and challenge) them.
 """
@@ -55,8 +55,9 @@ def _fmt_pct(x: float | None) -> str:
     return "n/a" if x is None else f"{x * 100:+.0f}%"
 
 
-def _sum_by(ds: Dataset, measure: str, keys: Iterable[str], where: dict[str, str] | None = None
-            ) -> dict[tuple[str, ...], float]:
+def _sum_by(
+    ds: Dataset, measure: str, keys: Iterable[str], where: dict[str, str] | None = None
+) -> dict[tuple[str, ...], float]:
     keys = list(keys)
     out: dict[tuple[str, ...], float] = defaultdict(float)
     for r in ds.rows:
@@ -73,8 +74,9 @@ def _require(ds: Dataset | None, role: DatasetRole) -> Dataset:
 
 
 # ------------------------------------------------------------------------------------------------
-def trend(catalog: DatasetCatalog, dataset_id: str, by: str | None = None,
-          where: dict[str, str] | None = None) -> AnalysisResult:
+def trend(
+    catalog: DatasetCatalog, dataset_id: str, by: str | None = None, where: dict[str, str] | None = None
+) -> AnalysisResult:
     ds = catalog.get(dataset_id)
     m = ds.manifest
     if not m.measure:
@@ -97,16 +99,26 @@ def trend(catalog: DatasetCatalog, dataset_id: str, by: str | None = None,
             code = "growth"
         else:
             code = "stable"
-        patterns.append(Pattern(
-            code=code, entity=g if by == m.entity_key else None, dimension=by, value=g,
-            statement=f"{m.title}: {label} {m.measure} went from {series[0]:,.0f} in {first} to "
-                      f"{series[-1]:,.0f} in {last} ({_fmt_pct(change)}).",
-            metrics={"first": series[0], "last": series[-1], "change_pct": round((change or 0) * 100, 1)}))
+        patterns.append(
+            Pattern(
+                code=code,
+                entity=g if by == m.entity_key else None,
+                dimension=by,
+                value=g,
+                statement=f"{m.title}: {label} {m.measure} went from {series[0]:,.0f} in {first} to "
+                f"{series[-1]:,.0f} in {last} ({_fmt_pct(change)}).",
+                metrics={"first": series[0], "last": series[-1], "change_pct": round((change or 0) * 100, 1)},
+            )
+        )
     total = next((p for p in patterns if p.value is None), patterns[0])
-    return AnalysisResult(operation="trend", dataset_ids=[dataset_id],
-                          params={"by": by, "where": where or {}},
-                          summary=total.statement if not by else f"Trend of {m.measure} by {by}, {first}–{last}.",
-                          table=table, patterns=patterns)
+    return AnalysisResult(
+        operation="trend",
+        dataset_ids=[dataset_id],
+        params={"by": by, "where": where or {}},
+        summary=total.statement if not by else f"Trend of {m.measure} by {by}, {first}–{last}.",
+        table=table,
+        patterns=patterns,
+    )
 
 
 def decompose_change(catalog: DatasetCatalog, dataset_id: str, by: str) -> AnalysisResult:
@@ -125,16 +137,30 @@ def decompose_change(catalog: DatasetCatalog, dataset_id: str, by: str) -> Analy
         share = delta / total_change if total_change else 0.0
         table.append({"group": g, "change": delta, "share_of_total_change": round(share, 3)})
         if total_change < 0 and share >= 0.25:
-            patterns.append(Pattern(
-                code="major_contributor_to_decline", entity=g if by == m.entity_key else None,
-                dimension=by, value=g,
-                statement=f"{names.get(g, g)} accounts for {share * 100:.0f}% of the total change in "
-                          f"{m.measure} ({delta:+,.0f} of {total_change:+,.0f}) between {first} and {last}.",
-                metrics={"delta": delta, "share_of_change_pct": round(share * 100, 1)}))
-    summary = (f"Total {m.measure} changed by {total_change:+,.0f} between {first} and {last}; "
-               + "; ".join(f"{names.get(r['group'], r['group'])} {r['change']:+,.0f}" for r in table) + ".")
-    return AnalysisResult(operation="decompose_change", dataset_ids=[dataset_id], params={"by": by},
-                          summary=summary, table=table, patterns=patterns)
+            patterns.append(
+                Pattern(
+                    code="major_contributor_to_decline",
+                    entity=g if by == m.entity_key else None,
+                    dimension=by,
+                    value=g,
+                    statement=f"{names.get(g, g)} accounts for {share * 100:.0f}% of the total change in "
+                    f"{m.measure} ({delta:+,.0f} of {total_change:+,.0f}) between {first} and {last}.",
+                    metrics={"delta": delta, "share_of_change_pct": round(share * 100, 1)},
+                )
+            )
+    summary = (
+        f"Total {m.measure} changed by {total_change:+,.0f} between {first} and {last}; "
+        + "; ".join(f"{names.get(str(r['group']), r['group'])} {r['change']:+,.0f}" for r in table)
+        + "."
+    )
+    return AnalysisResult(
+        operation="decompose_change",
+        dataset_ids=[dataset_id],
+        params={"by": by},
+        summary=summary,
+        table=table,
+        patterns=patterns,
+    )
 
 
 def own_vs_market(catalog: DatasetCatalog) -> AnalysisResult:
@@ -157,53 +183,123 @@ def own_vs_market(catalog: DatasetCatalog) -> AnalysisResult:
         name = names.get(ent, ent)
         if ent not in own_entities:
             if m1 > 0 and (m0 == 0 or (mchg is not None and mchg >= EMERGING_GROWTH)):
-                patterns.append(Pattern(
-                    code="emerging_market_segment_not_offered", entity=ent,
-                    statement=f"The market for {name} grew from {m0:,.0f} to {m1:,.0f} between {first} and "
-                              f"{last}; the organisation does not offer {name}.",
-                    metrics={"market_first": m0, "market_last": m1}))
-            table.append({"entity": ent, "name": name, "market_first": m0, "market_last": m1,
-                          "market_change": mchg, "offered": False})
+                patterns.append(
+                    Pattern(
+                        code="emerging_market_segment_not_offered",
+                        entity=ent,
+                        statement=f"The market for {name} grew from {m0:,.0f} to {m1:,.0f} between {first} and "
+                        f"{last}; the organisation does not offer {name}.",
+                        metrics={"market_first": m0, "market_last": m1},
+                    )
+                )
+            table.append(
+                {
+                    "entity": ent,
+                    "name": name,
+                    "market_first": m0,
+                    "market_last": m1,
+                    "market_change": mchg,
+                    "offered": False,
+                }
+            )
             continue
         o0, o1 = o.get((first, ent), 0), o.get((last, ent), 0)
         ochg = _pct(o0, o1)
         s0 = o0 / m0 if m0 else None
         s1 = o1 / m1 if m1 else None
         gap = None if ochg is None or mchg is None else (ochg - mchg) * 100
-        table.append({"entity": ent, "name": name, "own_first": o0, "own_last": o1, "own_change": ochg,
-                      "market_first": m0, "market_last": m1, "market_change": mchg,
-                      "share_first": s0, "share_last": s1, "gap_pp": gap, "offered": True})
-        metrics = {"own_first": o0, "own_last": o1, "market_first": m0, "market_last": m1,
-                   "own_change_pct": round((ochg or 0) * 100, 1),
-                   "market_change_pct": round((mchg or 0) * 100, 1)}
+        table.append(
+            {
+                "entity": ent,
+                "name": name,
+                "own_first": o0,
+                "own_last": o1,
+                "own_change": ochg,
+                "market_first": m0,
+                "market_last": m1,
+                "market_change": mchg,
+                "share_first": s0,
+                "share_last": s1,
+                "gap_pp": gap,
+                "offered": True,
+            }
+        )
+        metrics = {
+            "own_first": o0,
+            "own_last": o1,
+            "market_first": m0,
+            "market_last": m1,
+            "own_change_pct": round((ochg or 0) * 100, 1),
+            "market_change_pct": round((mchg or 0) * 100, 1),
+        }
         if s0 is not None and s1 is not None:
             metrics |= {"share_first_pct": round(s0 * 100, 1), "share_last_pct": round(s1 * 100, 1)}
-        base = (f"{name}: own {om.measure} {o0:,.0f}→{o1:,.0f} ({_fmt_pct(ochg)}) vs market "
-                f"{m0:,.0f}→{m1:,.0f} ({_fmt_pct(mchg)}), {first}–{last}")
-        share_txt = (f"; share {s0 * 100:.1f}%→{s1 * 100:.1f}%" if s0 is not None and s1 is not None else "")
+        base = (
+            f"{name}: own {om.measure} {o0:,.0f}→{o1:,.0f} ({_fmt_pct(ochg)}) vs market "
+            f"{m0:,.0f}→{m1:,.0f} ({_fmt_pct(mchg)}), {first}–{last}"
+        )
+        share_txt = f"; share {s0 * 100:.1f}%→{s1 * 100:.1f}%" if s0 is not None and s1 is not None else ""
         if mchg is not None and mchg <= -MATERIAL_CHANGE:
-            patterns.append(Pattern(code="market_decline", entity=ent, metrics=metrics,
-                                    statement=f"{base}: the market itself declined{share_txt}."))
+            patterns.append(
+                Pattern(
+                    code="market_decline",
+                    entity=ent,
+                    metrics=metrics,
+                    statement=f"{base}: the market itself declined{share_txt}.",
+                )
+            )
         elif mchg is not None and mchg >= 0.03:
-            patterns.append(Pattern(code="market_growth", entity=ent, metrics=metrics,
-                                    statement=f"{base}: the market grew{share_txt}."))
+            patterns.append(
+                Pattern(
+                    code="market_growth", entity=ent, metrics=metrics, statement=f"{base}: the market grew{share_txt}."
+                )
+            )
         else:
-            patterns.append(Pattern(code="market_stable", entity=ent, metrics=metrics,
-                                    statement=f"{base}: the market was broadly stable{share_txt}."))
+            patterns.append(
+                Pattern(
+                    code="market_stable",
+                    entity=ent,
+                    metrics=metrics,
+                    statement=f"{base}: the market was broadly stable{share_txt}.",
+                )
+            )
         if gap is not None and gap <= -SHARE_GAP_PP:
-            patterns.append(Pattern(code="own_underperforms_market", entity=ent, metrics=metrics,
-                                    statement=f"{base}: the organisation under-performed the market by "
-                                              f"{abs(gap):.0f} percentage points{share_txt}."))
+            patterns.append(
+                Pattern(
+                    code="own_underperforms_market",
+                    entity=ent,
+                    metrics=metrics,
+                    statement=f"{base}: the organisation under-performed the market by "
+                    f"{abs(gap):.0f} percentage points{share_txt}.",
+                )
+            )
         elif gap is not None and gap >= SHARE_GAP_PP:
-            patterns.append(Pattern(code="own_outperforms_market", entity=ent, metrics=metrics,
-                                    statement=f"{base}: the organisation out-performed the market by "
-                                              f"{gap:.0f} percentage points{share_txt}."))
+            patterns.append(
+                Pattern(
+                    code="own_outperforms_market",
+                    entity=ent,
+                    metrics=metrics,
+                    statement=f"{base}: the organisation out-performed the market by "
+                    f"{gap:.0f} percentage points{share_txt}.",
+                )
+            )
         else:
-            patterns.append(Pattern(code="own_tracks_market", entity=ent, metrics=metrics,
-                                    statement=f"{base}: the organisation moved in line with the market{share_txt}."))
-    return AnalysisResult(operation="own_vs_market", dataset_ids=[om.id, mm.id], params={},
-                          summary=f"Own vs market comparison by {om.entity_key}, {first}–{last}.",
-                          table=table, patterns=patterns)
+            patterns.append(
+                Pattern(
+                    code="own_tracks_market",
+                    entity=ent,
+                    metrics=metrics,
+                    statement=f"{base}: the organisation moved in line with the market{share_txt}.",
+                )
+            )
+    return AnalysisResult(
+        operation="own_vs_market",
+        dataset_ids=[om.id, mm.id],
+        params={},
+        summary=f"Own vs market comparison by {om.entity_key}, {first}–{last}.",
+        table=table,
+        patterns=patterns,
+    )
 
 
 def funnel_conversion(catalog: DatasetCatalog, by: str | None = None) -> AnalysisResult:
@@ -214,8 +310,7 @@ def funnel_conversion(catalog: DatasetCatalog, by: str | None = None) -> Analysi
     periods = ds.periods
     first, last = periods[0], periods[-1]
     top, penult, final = m.stages[0], m.stages[-2], m.stages[-1]
-    keys = [m.entity_key] + ([by] if by and by != m.entity_key else [])
-    keys = [k for k in keys if k]
+    keys: list[str] = [k for k in [m.entity_key, by if by != m.entity_key else None] if k]
     names = {}
     own = catalog.by_role(DatasetRole.OWN_VOLUME)
     if own:
@@ -233,33 +328,75 @@ def funnel_conversion(catalog: DatasetCatalog, by: str | None = None) -> Analysi
         t0, t1 = per[first][top], per[last][top]
         tchg = _pct(t0, t1)
         dpp = (c1 - c0) * 100
-        table.append({"group": label, f"{penult}_to_{final}_{first}": round(c0, 3),
-                      f"{penult}_to_{final}_{last}": round(c1, 3), "conversion_change_pp": round(dpp, 1),
-                      f"{top}_change": tchg})
+        table.append(
+            {
+                "group": label,
+                f"{penult}_to_{final}_{first}": round(c0, 3),
+                f"{penult}_to_{final}_{last}": round(c1, 3),
+                "conversion_change_pp": round(dpp, 1),
+                f"{top}_change": tchg,
+            }
+        )
         ent = g[0] if keys and keys[0] == m.entity_key else None
         seg_dim = keys[1] if len(keys) > 1 else None
         seg_val = g[1] if len(g) > 1 else None
-        metrics = {"conversion_first_pct": round(c0 * 100, 1), "conversion_last_pct": round(c1 * 100, 1),
-                   "conversion_change_pp": round(dpp, 1), "top_first": t0, "top_last": t1}
-        conv_txt = (f"{label}: {penult}→{final} conversion went from {c0 * 100:.0f}% in {first} to "
-                    f"{c1 * 100:.0f}% in {last} ({dpp:+.0f} pp)")
+        metrics = {
+            "conversion_first_pct": round(c0 * 100, 1),
+            "conversion_last_pct": round(c1 * 100, 1),
+            "conversion_change_pp": round(dpp, 1),
+            "top_first": t0,
+            "top_last": t1,
+        }
+        conv_txt = (
+            f"{label}: {penult}→{final} conversion went from {c0 * 100:.0f}% in {first} to "
+            f"{c1 * 100:.0f}% in {last} ({dpp:+.0f} pp)"
+        )
         if dpp <= -CONVERSION_GAP_PP:
-            patterns.append(Pattern(code="conversion_decline", entity=ent, dimension=seg_dim, value=seg_val,
-                                    metrics=metrics, statement=conv_txt + "."))
+            patterns.append(
+                Pattern(
+                    code="conversion_decline",
+                    entity=ent,
+                    dimension=seg_dim,
+                    value=seg_val,
+                    metrics=metrics,
+                    statement=conv_txt + ".",
+                )
+            )
         else:
-            patterns.append(Pattern(code="conversion_stable", entity=ent, dimension=seg_dim, value=seg_val,
-                                    metrics=metrics, statement=conv_txt + ", which is not a material change."))
+            patterns.append(
+                Pattern(
+                    code="conversion_stable",
+                    entity=ent,
+                    dimension=seg_dim,
+                    value=seg_val,
+                    metrics=metrics,
+                    statement=conv_txt + ", which is not a material change.",
+                )
+            )
         if tchg is not None and tchg <= -0.15:
-            patterns.append(Pattern(code="top_of_funnel_decline", entity=ent, dimension=seg_dim, value=seg_val,
-                                    metrics=metrics,
-                                    statement=f"{label}: {top} fell from {t0:,.0f} to {t1:,.0f} ({_fmt_pct(tchg)})."))
-    return AnalysisResult(operation="funnel_conversion", dataset_ids=[m.id], params={"by": by},
-                          summary=f"Funnel conversion ({penult}→{final}) by {', '.join(keys)}, {first}–{last}.",
-                          table=table, patterns=patterns)
+            patterns.append(
+                Pattern(
+                    code="top_of_funnel_decline",
+                    entity=ent,
+                    dimension=seg_dim,
+                    value=seg_val,
+                    metrics=metrics,
+                    statement=f"{label}: {top} fell from {t0:,.0f} to {t1:,.0f} ({_fmt_pct(tchg)}).",
+                )
+            )
+    return AnalysisResult(
+        operation="funnel_conversion",
+        dataset_ids=[m.id],
+        params={"by": by},
+        summary=f"Funnel conversion ({penult}→{final}) by {', '.join(keys)}, {first}–{last}.",
+        table=table,
+        patterns=patterns,
+    )
 
 
-def compare_groups(catalog: DatasetCatalog, dimension: str, group: str,
-                   dataset_id: str | None = None, entity: str | None = None) -> AnalysisResult:
+def compare_groups(
+    catalog: DatasetCatalog, dimension: str, group: str, dataset_id: str | None = None, entity: str | None = None
+) -> AnalysisResult:
     """Difference-in-change test: did the measure change differently in `group` than elsewhere?
 
     Used by the challenger to test claims that an event affecting one group (a region, a segment)
@@ -284,24 +421,43 @@ def compare_groups(catalog: DatasetCatalog, dimension: str, group: str,
     gc, rc = _pct(g0, g1), _pct(r0, r1)
     diff = None if gc is None or rc is None else (gc - rc) * 100
     scope = f" for {ds.entity_names().get(entity, entity)}" if entity else ""
-    metrics = {"group_change_pct": round((gc or 0) * 100, 1), "rest_change_pct": round((rc or 0) * 100, 1),
-               "difference_pp": round(diff or 0, 1)}
-    stmt = (f"{m.measure.capitalize()}{scope} changed by {_fmt_pct(gc)} in {dimension} '{group}' and by "
-            f"{_fmt_pct(rc)} in all other {dimension} values between {first} and {last}")
+    metrics = {
+        "group_change_pct": round((gc or 0) * 100, 1),
+        "rest_change_pct": round((rc or 0) * 100, 1),
+        "difference_pp": round(diff or 0, 1),
+    }
+    stmt = (
+        f"{m.measure.capitalize()}{scope} changed by {_fmt_pct(gc)} in {dimension} '{group}' and by "
+        f"{_fmt_pct(rc)} in all other {dimension} values between {first} and {last}"
+    )
     target = entity or (group if dimension == m.entity_key else None)
     if diff is not None and abs(diff) < GROUP_GAP_PP:
-        pattern = Pattern(code="no_group_difference", dimension=dimension, value=group, entity=target,
-                          metrics=metrics,
-                          statement=stmt + f" — a difference of {abs(diff):.0f} pp, so a factor specific to "
-                                           f"'{group}' does not explain the change.")
+        pattern = Pattern(
+            code="no_group_difference",
+            dimension=dimension,
+            value=group,
+            entity=target,
+            metrics=metrics,
+            statement=stmt + f" — a difference of {abs(diff):.0f} pp, so a factor specific to "
+            f"'{group}' does not explain the change.",
+        )
     else:
-        pattern = Pattern(code="group_difference", dimension=dimension, value=group, entity=target,
-                          metrics=metrics, statement=stmt + f" — a difference of {diff or 0:+.0f} pp.")
-    return AnalysisResult(operation="compare_groups", dataset_ids=[m.id],
-                          params={"dimension": dimension, "group": group, "entity": entity},
-                          summary=pattern.statement,
-                          table=[{"group": group, "change": gc}, {"group": "rest", "change": rc}],
-                          patterns=[pattern])
+        pattern = Pattern(
+            code="group_difference",
+            dimension=dimension,
+            value=group,
+            entity=target,
+            metrics=metrics,
+            statement=stmt + f" — a difference of {diff or 0:+.0f} pp.",
+        )
+    return AnalysisResult(
+        operation="compare_groups",
+        dataset_ids=[m.id],
+        params={"dimension": dimension, "group": group, "entity": entity},
+        summary=pattern.statement,
+        table=[{"group": group, "change": gc}, {"group": "rest", "change": rc}],
+        patterns=[pattern],
+    )
 
 
 OPERATIONS: dict[str, Callable[..., AnalysisResult]] = {
@@ -322,12 +478,13 @@ OPERATION_ROLES: dict[str, list[DatasetRole]] = {
 }
 
 
-def run_operation(catalog: DatasetCatalog, operation: str, dataset_id: str | None,
-                  params: dict[str, Any]) -> AnalysisResult:
+def run_operation(
+    catalog: DatasetCatalog, operation: str, dataset_id: str | None, params: dict[str, Any]
+) -> AnalysisResult:
     if operation not in OPERATIONS:
         raise AnalysisError(f"Unknown operation '{operation}'. Allowed: {sorted(OPERATIONS)}")
     fn = OPERATIONS[operation]
-    allowed = set(fn.__code__.co_varnames[1: fn.__code__.co_argcount])
+    allowed = set(fn.__code__.co_varnames[1 : fn.__code__.co_argcount])
     clean = {k: v for k, v in params.items() if k in allowed}
     if "dataset_id" in allowed and dataset_id:
         clean["dataset_id"] = dataset_id

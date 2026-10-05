@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "namePrefix": { "value": "sip" },
+    "environmentName": { "value": "dev" },
+    "aiLocation": { "value": "swedencentral" },
+    "entraApiAudience": { "value": "api://REPLACE-WITH-API-APP-REGISTRATION-ID" },
+    "reasoner": { "value": "llm" },
+    "searchProvider": { "value": "offline_corpus" },
+    "piiDetector": { "value": "local" },
+    "traceContent": { "value": "metadata_only" },
+    "langsmithTracing": { "value": false },
+    "deploySearch": { "value": false },
+    "apiMaxReplicas": { "value": 1 },
+    "quarantineRetentionDays": { "value": 30 },
+    "postgresAdminLogin": { "value": "sipadmin" },
+    "postgresAllowedClientIp": { "value": "" },
+    "postgresEntraAdmin": { "value": {} },
+    "openAiDeployments": {
+      "value": [
+        { "name": "gpt-5.1", "model": "gpt-5.1", "version": "2025-11-13", "sku": "GlobalStandard", "capacity": 50 },
+        { "name": "gpt-5-mini", "model": "gpt-5-mini", "version": "2025-08-07", "sku": "GlobalStandard", "capacity": 100 }
+      ]
+    },
+    "reasoningDeployment": { "value": "gpt-5.1" },
+    "extractionDeployment": { "value": "gpt-5-mini" },
+    "tags": { "value": { "owner": "REPLACE-ME", "costCenter": "portfolio-demo" } }
+  }
+}

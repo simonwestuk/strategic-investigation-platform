@@ -19,11 +19,15 @@ class TavilySearch:
         self._client = client or httpx.AsyncClient(timeout=20)
 
     async def search(self, query: str, max_results: int = 5) -> list[SearchResult]:
-        body = {"query": query, "max_results": max_results, "search_depth": "basic",
-                "include_published_date": True, "include_answer": False}
+        body = {
+            "query": query,
+            "max_results": max_results,
+            "search_depth": "basic",
+            "include_published_date": True,
+            "include_answer": False,
+        }
         try:
-            resp = await self._client.post(ENDPOINT, json=body,
-                                           headers={"Authorization": f"Bearer {self._key}"})
+            resp = await self._client.post(ENDPOINT, json=body, headers={"Authorization": f"Bearer {self._key}"})
             resp.raise_for_status()
         except httpx.HTTPError as exc:
             raise SearchError(f"Tavily search failed: {exc.__class__.__name__}") from exc
@@ -35,6 +39,14 @@ class TavilySearch:
                     published = date.fromisoformat(r["published_date"][:10])
                 except ValueError:
                     published = None
-            out.append(SearchResult(url=r["url"], title=r.get("title", ""), snippet=r.get("content", ""),
-                                    published_on=published, score=r.get("score"), provider=self.name))
+            out.append(
+                SearchResult(
+                    url=r["url"],
+                    title=r.get("title", ""),
+                    snippet=r.get("content", ""),
+                    published_on=published,
+                    score=r.get("score"),
+                    provider=self.name,
+                )
+            )
         return out

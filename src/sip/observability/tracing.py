@@ -45,7 +45,7 @@ def content_filter(mode: TraceContentMode) -> Callable[[dict[str, Any]], dict[st
     if mode == TraceContentMode.METADATA_ONLY:
         return _hide
     if mode == TraceContentMode.REDACTED:
-        return scrub  # type: ignore[return-value]
+        return scrub
     return None
 
 
@@ -63,6 +63,11 @@ def configure_tracing(settings: Settings) -> Any | None:
 
 
 def run_metadata(settings: Settings, investigation_id: str, scenario_id: str | None, reasoner: str) -> dict[str, Any]:
-    return {"investigation_id": investigation_id, "scenario": scenario_id or "adhoc", "reasoner": reasoner,
-            "environment": settings.sip_env.value, "model_reasoning": settings.sip_model_reasoning,
-            "model_extraction": settings.sip_model_extraction}
+    return {
+        "investigation_id": investigation_id,
+        "scenario": scenario_id or "adhoc",
+        "reasoner": reasoner,
+        "environment": settings.sip_env.value,
+        "model_reasoning": settings.sip_model_reasoning,
+        "model_extraction": settings.sip_model_extraction,
+    }

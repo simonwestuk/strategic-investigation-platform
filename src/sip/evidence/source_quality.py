@@ -53,14 +53,12 @@ class SourceQualityPolicy(BaseModel):
                 freshness = Freshness.AGEING
             else:
                 freshness = Freshness.STALE
-        rationale = (
-            f"{source.source_type.value} is a {tier.value} source for {need.value} evidence; "
-            + (f"dated {effective.isoformat()} ({age} days before as-of), {freshness.value}."
-               if effective else "no publication date found, treated as undated.")
+        rationale = f"{source.source_type.value} is a {tier.value} source for {need.value} evidence; " + (
+            f"dated {effective.isoformat()} ({age} days before as-of), {freshness.value}."
+            if effective
+            else "no publication date found, treated as undated."
         )
-        return SourceQualityAssessment(
-            need=need, tier=tier, freshness=freshness, age_days=age, rationale=rationale
-        )
+        return SourceQualityAssessment(need=need, tier=tier, freshness=freshness, age_days=age, rationale=rationale)
 
 
 @lru_cache

@@ -1,0 +1,35 @@
+# Build context for the API image (repo root). Keep it small and secret-free.
+.git
+.github
+.venv
+venv
+**/__pycache__
+**/*.py[cod]
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.coverage
+htmlcov
+dist
+build
+*.egg-info
+
+# Secrets and local state never enter an image
+.env
+.env.*
+!.env.example
+var
+*.db
+*.sqlite
+
+# Not needed by the API image
+apps
+docs
+tests
+evals
+scratch
+infra/azure
+infra/local
+.DS_Store
+.idea
+.vscode

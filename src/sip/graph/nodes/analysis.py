@@ -7,6 +7,7 @@ from typing import Any
 
 from langgraph.runtime import Runtime
 
+from sip.agents.contracts import Calls
 from sip.domain import (
     Actor,
     AuditAction,
@@ -77,17 +78,40 @@ async def evidence_manager(state: InvestigationState, runtime: Runtime[Investiga
                 e = old.model_copy(update={"links": list(links.values())})
             evidence[e.id] = e
             kept.append(e.id)
-        tasks[out.task.id] = out.task.model_copy(update={
-            "evidence_ids": kept, "source_ids": [remap.get(s, s) for s in out.task.source_ids]})
-    events = [audit(MANAGER, AuditAction.EVIDENCE_ADDED,
-                    f"Round {state.get('iteration', 0)}: {len(evidence)} evidence item(s), {len(sources)} new "
-                    f"source(s); {len(remap)} duplicate source(s) and {dup_evidence} duplicate evidence item(s) "
-                    "merged.", new_evidence=len(evidence), duplicate_sources=len(remap))]
+        tasks[out.task.id] = out.task.model_copy(
+            update={"evidence_ids": kept, "source_ids": [remap.get(s, s) for s in out.task.source_ids]}
+        )
+    events = [
+        audit(
+            MANAGER,
+            AuditAction.EVIDENCE_ADDED,
+            f"Round {state.get('iteration', 0)}: {len(evidence)} evidence item(s), {len(sources)} new "
+            f"source(s); {len(remap)} duplicate source(s) and {dup_evidence} duplicate evidence item(s) "
+            "merged.",
+            new_evidence=len(evidence),
+            duplicate_sources=len(remap),
+        )
+    ]
     for s in sources.values():
-        events.append(audit(MANAGER, AuditAction.SOURCE_ADDED, s.title, subject_type="source", subject_id=s.id,
-                            source_type=s.source_type.value, synthetic=s.synthetic))
-    return {"sources": sources, "documents": documents, "evidence": evidence, "tasks": tasks,
-            "staging": RESET, "audit": events}
+        events.append(
+            audit(
+                MANAGER,
+                AuditAction.SOURCE_ADDED,
+                s.title,
+                subject_type="source",
+                subject_id=s.id,
+                source_type=s.source_type.value,
+                synthetic=s.synthetic,
+            )
+        )
+    return {
+        "sources": sources,
+        "documents": documents,
+        "evidence": evidence,
+        "tasks": tasks,
+        "staging": RESET,
+        "audit": events,
+    }
 
 
 # ---- analyst --------------------------------------------------------------------------------------
@@ -97,8 +121,11 @@ def _status_for(verdict: str, cls: Classification, has_against: bool, blocked: b
             return HypothesisStatus.SUPPORTED
         return HypothesisStatus.WEAKENED if has_against else HypothesisStatus.INVESTIGATING
     if verdict == "contradicts":
-        return HypothesisStatus.CONTRADICTED if cls.strength >= Classification.INFERRED.strength \
+        return (
+            HypothesisStatus.CONTRADICTED
+            if cls.strength >= Classification.INFERRED.strength
             else HypothesisStatus.WEAKENED
+        )
     if blocked or cls == Classification.UNKNOWN:
         return HypothesisStatus.UNRESOLVED
     return HypothesisStatus.INVESTIGATING
@@ -118,15 +145,25 @@ async def analyse(state: InvestigationState, runtime: Runtime[InvestigationConte
 
     # 1. Refine the hypothesis tree where evidence diverges by segment.
     names = ctx.catalog.display_names()
-    material = {seg for e in evidence.values() if "major_contributor_to_decline" in (e.locator or "")
-                for seg in e.segments}
-    parents, children = split_by_segment(hyps, evidence, ctx.taxonomy, material, names,
-                                         fr.organisation or "the organisation", ctx.catalog.own_entities())
+    material = {
+        seg for e in evidence.values() if "major_contributor_to_decline" in (e.locator or "") for seg in e.segments
+    }
+    parents, children = split_by_segment(
+        hyps, evidence, ctx.taxonomy, material, names, fr.organisation or "the organisation", ctx.catalog.own_entities()
+    )
     hyps |= parents
     for c in children:
         hyps.setdefault(c.id, c)
-        events.append(audit(ANALYST, AuditAction.HYPOTHESIS_CREATED, f"Emergent: {c.statement}",
-                            subject_type="hypothesis", subject_id=c.id, parent=c.parent_id))
+        events.append(
+            audit(
+                ANALYST,
+                AuditAction.HYPOTHESIS_CREATED,
+                f"Emergent: {c.statement}",
+                subject_type="hypothesis",
+                subject_id=c.id,
+                parent=c.parent_id,
+            )
+        )
     changed_evidence = {}
     if children:
         for e in evidence.values():
@@ -138,9 +175,11 @@ async def analyse(state: InvestigationState, runtime: Runtime[InvestigationConte
     # 2. Draft claims per leaf hypothesis (in parallel), then apply the rubric.
     def blocked_for(h: Hypothesis) -> list[str]:
         ids = {h.id, h.parent_id}
-        return [t.status_reason for t in tasks.values()
-                if t.status == TaskStatus.BLOCKED_UNAVAILABLE and ids & set(t.hypothesis_ids)
-                and t.required_dataset_role]
+        return [
+            t.status_reason
+            for t in tasks.values()
+            if t.status == TaskStatus.BLOCKED_UNAVAILABLE and ids & set(t.hypothesis_ids) and t.required_dataset_role
+        ]
 
     leaves = [h for h in hyps.values() if h.status != HypothesisStatus.SPLIT]
     jobs = []
@@ -153,9 +192,9 @@ async def analyse(state: InvestigationState, runtime: Runtime[InvestigationConte
 
     claims: dict[str, Claim] = {}
     produced: set[str] = set()
-    calls_all = []
+    calls_all = Calls()
     hyp_updates: dict[str, Hypothesis] = dict(parents)
-    for (h, _, blocked), (drafts, calls) in zip(jobs, results, strict=True):
+    for (h, _, is_blocked), (drafts, calls) in zip(jobs, results, strict=True):
         calls_all.extend(calls)
         verdict_cls: tuple[str, Classification, bool] | None = None
         for d in drafts:
@@ -167,44 +206,77 @@ async def analyse(state: InvestigationState, runtime: Runtime[InvestigationConte
             prior = existing_claims.get(cid) or claims.get(cid)
             related = sorted({h.id, *(prior.related_hypothesis_ids if prior else [])})
             claim = Claim(
-                id=cid, statement=d.statement, classification=d.proposed_classification,
-                proposed_classification=d.proposed_classification, causal=d.causal,
-                supporting_evidence_ids=support, contradicting_evidence_ids=against,
-                reasoning_summary=d.reasoning_summary, inferential_step=d.inferential_step,
-                limitations=d.limitations + ([f"{dropped} cited evidence id(s) did not exist and were removed."]
-                                             if dropped else []),
-                missing_evidence=d.missing_evidence, related_hypothesis_ids=related,
-                next_question=d.next_question, created_by=ANALYST, iteration=iteration,
+                id=cid,
+                statement=d.statement,
+                classification=d.proposed_classification,
+                proposed_classification=d.proposed_classification,
+                causal=d.causal,
+                supporting_evidence_ids=support,
+                contradicting_evidence_ids=against,
+                reasoning_summary=d.reasoning_summary,
+                inferential_step=d.inferential_step,
+                limitations=d.limitations
+                + ([f"{dropped} cited evidence id(s) did not exist and were removed."] if dropped else []),
+                missing_evidence=d.missing_evidence,
+                related_hypothesis_ids=related,
+                next_question=d.next_question,
+                created_by=ANALYST,
+                iteration=iteration,
                 created_at=prior.created_at if prior else utcnow(),
                 review_state=prior.review_state if prior else ReviewState.UNREVIEWED,
-                human_override=prior.human_override if prior else None)
+                human_override=prior.human_override if prior else None,
+            )
             result = assess_claim(claim, evidence, sources, ctx.quality)
-            tiers = sorted({evidence[i].quality.tier.value for i in support if evidence[i].quality})
-            claim = claim.model_copy(update={
-                "classification": claim.human_override.new if claim.human_override else result.classification,
-                "confidence": result.assessment,
-                "source_quality_summary": f"{len(support)} supporting ({', '.join(tiers) or 'none'}), "
-                                          f"{len(against)} contradicting."})
+            tiers = sorted({q.tier.value for i in support if (q := evidence[i].quality) is not None})
+            claim = claim.model_copy(
+                update={
+                    "classification": claim.human_override.new if claim.human_override else result.classification,
+                    "confidence": result.assessment,
+                    "source_quality_summary": f"{len(support)} supporting ({', '.join(tiers) or 'none'}), "
+                    f"{len(against)} contradicting.",
+                }
+            )
             if result.classification != d.proposed_classification:
-                events.append(audit(ANALYST, AuditAction.CLAIM_DOWNGRADED,
-                                    f"{d.proposed_classification.value} -> {result.classification.value}: "
-                                    + "; ".join(result.assessment.ceiling_reasons[:2]),
-                                    subject_type="claim", subject_id=cid))
+                events.append(
+                    audit(
+                        ANALYST,
+                        AuditAction.CLAIM_DOWNGRADED,
+                        f"{d.proposed_classification.value} -> {result.classification.value}: "
+                        + "; ".join(result.assessment.ceiling_reasons[:2]),
+                        subject_type="claim",
+                        subject_id=cid,
+                    )
+                )
             if cid not in existing_claims or existing_claims[cid].classification != claim.classification:
-                events.append(audit(ANALYST, AuditAction.CLAIM_CLASSIFIED,
-                                    f"{claim.classification.value.upper()} ({result.assessment.band.value}): "
-                                    f"{claim.statement[:140]}", subject_type="claim", subject_id=cid))
+                events.append(
+                    audit(
+                        ANALYST,
+                        AuditAction.CLAIM_CLASSIFIED,
+                        f"{claim.classification.value.upper()} ({result.assessment.band.value}): "
+                        f"{claim.statement[:140]}",
+                        subject_type="claim",
+                        subject_id=cid,
+                    )
+                )
             claims[cid] = claim
             produced.add(cid)
             if d.hypothesis_verdict != "none":
                 verdict_cls = (d.hypothesis_verdict, claim.classification, bool(against))
         if verdict_cls:
-            status = _status_for(verdict_cls[0], verdict_cls[1], verdict_cls[2], blocked)
+            status = _status_for(verdict_cls[0], verdict_cls[1], verdict_cls[2], is_blocked)
             if status != h.status:
-                hyp_updates[h.id] = h.model_copy(update={"status": status, "updated_at": utcnow(),
-                                                         "status_reason": f"Analysis round {iteration}."})
-                events.append(audit(ANALYST, AuditAction.HYPOTHESIS_UPDATED, f"{status.value}: {h.statement[:140]}",
-                                    subject_type="hypothesis", subject_id=h.id))
+                hyp_updates[h.id] = h.model_copy(
+                    update={"status": status, "updated_at": utcnow(), "status_reason": f"Analysis round {iteration}."}
+                )
+                events.append(
+                    audit(
+                        ANALYST,
+                        AuditAction.HYPOTHESIS_UPDATED,
+                        f"{status.value}: {h.statement[:140]}",
+                        subject_type="hypothesis",
+                        subject_id=h.id,
+                    )
+                )
 
     # 3. Summary claims for split parents: where the driver applies and where it does not.
     current = hyps | hyp_updates
@@ -215,36 +287,62 @@ async def analyse(state: InvestigationState, runtime: Runtime[InvestigationConte
         if not sup:
             continue
         label = ctx.taxonomy.categories[p.category].label
-        stmt = (f"{label} explains part of the change: supported for "
-                f"{', '.join(names.get(k.segment or '', k.segment or '') for k in sup)}"
-                + (f"; not supported for {', '.join(names.get(k.segment or '', k.segment or '') for k in rej)}."
-                   if rej else "."))
-        support_ids = sorted({cid_e for k in sup for c in claims.values() if k.id in c.related_hypothesis_ids
-                              and c.causal for cid_e in c.supporting_evidence_ids})
+        stmt = (
+            f"{label} explains part of the change: supported for "
+            f"{', '.join(names.get(k.segment or '', k.segment or '') for k in sup)}"
+            + (
+                f"; not supported for {', '.join(names.get(k.segment or '', k.segment or '') for k in rej)}."
+                if rej
+                else "."
+            )
+        )
+        support_ids = sorted(
+            {
+                cid_e
+                for k in sup
+                for c in claims.values()
+                if k.id in c.related_hypothesis_ids and c.causal
+                for cid_e in c.supporting_evidence_ids
+            }
+        )
         cid = stable_id("clm", "split", p.id)
-        claim = Claim(id=cid, statement=stmt, classification=Classification.INFERRED,
-                      proposed_classification=Classification.INFERRED, causal=True,
-                      supporting_evidence_ids=support_ids, related_hypothesis_ids=[p.id, *(k.id for k in sup)],
-                      inferential_step="Aggregates segment-level conclusions.",
-                      reasoning_summary="Segment-level hypotheses were tested separately.",
-                      limitations=["Share of the total change attributable to this driver is approximate."],
-                      created_by=ANALYST, iteration=iteration)
+        claim = Claim(
+            id=cid,
+            statement=stmt,
+            classification=Classification.INFERRED,
+            proposed_classification=Classification.INFERRED,
+            causal=True,
+            supporting_evidence_ids=support_ids,
+            related_hypothesis_ids=[p.id, *(k.id for k in sup)],
+            inferential_step="Aggregates segment-level conclusions.",
+            reasoning_summary="Segment-level hypotheses were tested separately.",
+            limitations=["Share of the total change attributable to this driver is approximate."],
+            created_by=ANALYST,
+            iteration=iteration,
+        )
         result = assess_claim(claim, evidence, sources, ctx.quality)
-        claims[cid] = claim.model_copy(update={"classification": result.classification,
-                                               "confidence": result.assessment})
+        claims[cid] = claim.model_copy(
+            update={"classification": result.classification, "confidence": result.assessment}
+        )
         produced.add(cid)
 
     # 4. Claims no longer produced become inactive (kept for history).
     analysed = {h.id for h, _, _ in jobs} | {p.id for p in current.values() if p.status == HypothesisStatus.SPLIT}
-    for cid, c in existing_claims.items():
-        if cid not in produced and c.active and set(c.related_hypothesis_ids) & analysed:
-            claims[cid] = c.model_copy(update={"active": False, "updated_at": utcnow()})
+    for cid, old in existing_claims.items():
+        if cid not in produced and old.active and set(old.related_hypothesis_ids) & analysed:
+            claims[cid] = old.model_copy(update={"active": False, "updated_at": utcnow()})
 
-    contradictions = {c.id: c for c in [*detect_contradictions(current, evidence),
-                                         *absolutist_contradictions(current, evidence)]}
-    return {"hypotheses": {**hyp_updates, **{c.id: current[c.id] for c in children}},
-            "evidence": changed_evidence, "claims": claims, "contradictions": contradictions,
-            "audit": events, "usage": usage_from(calls_all)}
+    contradictions = {
+        c.id: c for c in [*detect_contradictions(current, evidence), *absolutist_contradictions(current, evidence)]
+    }
+    return {
+        "hypotheses": {**hyp_updates, **{c.id: current[c.id] for c in children}},
+        "evidence": changed_evidence,
+        "claims": claims,
+        "contradictions": contradictions,
+        "audit": events,
+        "usage": usage_from(calls_all),
+    }
 
 
 # ---- sceptic / challenger -------------------------------------------------------------------------
@@ -258,41 +356,96 @@ async def challenge(state: InvestigationState, runtime: Runtime[InvestigationCon
     hyps = state.get("hypotheses") or {}
     tasks = state.get("tasks") or {}
     iteration = state.get("iteration", 0)
-    fresh = run_sceptic(claims=claims, evidence=evidence, sources=sources, hypotheses=hyps, tasks=tasks,
-                        catalog=ctx.catalog, iteration=iteration)
+    fresh = run_sceptic(
+        claims=claims,
+        evidence=evidence,
+        sources=sources,
+        hypotheses=hyps,
+        tasks=tasks,
+        catalog=ctx.catalog,
+        iteration=iteration,
+    )
     active = [c for c in claims.values() if c.active]
     drafts, calls = await ctx.reasoner.challenge(
-        fr, [{"id": c.id, "statement": c.statement, "classification": c.classification.value,
-              "causal": c.causal, "supporting": c.supporting_evidence_ids,
-              "contradicting": c.contradicting_evidence_ids, "limitations": c.limitations} for c in active],
-        [evidence_view(e, sources) for e in evidence.values() if e.usable][:120])
+        fr,
+        [
+            {
+                "id": c.id,
+                "statement": c.statement,
+                "classification": c.classification.value,
+                "causal": c.causal,
+                "supporting": c.supporting_evidence_ids,
+                "contradicting": c.contradicting_evidence_ids,
+                "limitations": c.limitations,
+            }
+            for c in active
+        ],
+        [evidence_view(e, sources) for e in evidence.values() if e.usable][:120],
+    )
     valid_targets = {c.id for c in active} | set(hyps)
     for d in drafts:
         if d.target_id in valid_targets:
-            fresh.append(Challenge(id=stable_id("chl", "llm", d.kind.value, d.target_id), target_type=
-                                   "claim" if d.target_id in claims else "hypothesis", target_id=d.target_id,
-                                   kind=d.kind, severity=d.severity, argument=d.argument,
-                                   research_question=d.research_question, raised_by=SCEPTIC, iteration=iteration))
+            fresh.append(
+                Challenge(
+                    id=stable_id("chl", "llm", d.kind.value, d.target_id),
+                    target_type="claim" if d.target_id in claims else "hypothesis",
+                    target_id=d.target_id,
+                    kind=d.kind,
+                    severity=d.severity,
+                    argument=d.argument,
+                    research_question=d.research_question,
+                    raised_by=SCEPTIC,
+                    iteration=iteration,
+                )
+            )
     existing = state.get("challenges") or {}
     merged = merge_challenges(existing, fresh)
     events = []
     for c in merged.values():
         if c.id not in existing:
-            events.append(audit(SCEPTIC, AuditAction.CHALLENGE_RAISED, f"[{c.severity.value}] {c.kind.value}: "
-                                f"{c.argument[:160]}", subject_type=c.target_type, subject_id=c.target_id))
+            events.append(
+                audit(
+                    SCEPTIC,
+                    AuditAction.CHALLENGE_RAISED,
+                    f"[{c.severity.value}] {c.kind.value}: {c.argument[:160]}",
+                    subject_type=c.target_type,
+                    subject_id=c.target_id,
+                )
+            )
         elif existing[c.id].status != c.status:
-            events.append(audit(SCEPTIC, AuditAction.CHALLENGE_RESOLVED, f"{c.kind.value} -> {c.status.value}",
-                                subject_type=c.target_type, subject_id=c.target_id))
+            events.append(
+                audit(
+                    SCEPTIC,
+                    AuditAction.CHALLENGE_RESOLVED,
+                    f"{c.kind.value} -> {c.status.value}",
+                    subject_type=c.target_type,
+                    subject_id=c.target_id,
+                )
+            )
     challenged = {c.target_id for c in merged.values() if c.status == ChallengeStatus.OPEN}
-    claim_updates = {cid: c.model_copy(update={"review_state": ReviewState.CHALLENGED})
-                     for cid, c in claims.items() if cid in challenged and c.review_state == ReviewState.UNREVIEWED}
+    claim_updates = {
+        cid: c.model_copy(update={"review_state": ReviewState.CHALLENGED})
+        for cid, c in claims.items()
+        if cid in challenged and c.review_state == ReviewState.UNREVIEWED
+    }
 
     routing = decide_routing(state, {**existing, **merged})
-    events.append(audit(SCEPTIC, AuditAction.ROUTING_DECISION, routing.rationale,
-                        continue_research=routing.continue_research,
-                        stop_reason=routing.stop_reason.value if routing.stop_reason else None))
-    return {"challenges": merged, "claims": claim_updates, "routing": [routing], "audit": events,
-            "usage": usage_from(calls)}
+    events.append(
+        audit(
+            SCEPTIC,
+            AuditAction.ROUTING_DECISION,
+            routing.rationale,
+            continue_research=routing.continue_research,
+            stop_reason=routing.stop_reason.value if routing.stop_reason else None,
+        )
+    )
+    return {
+        "challenges": merged,
+        "claims": claim_updates,
+        "routing": [routing],
+        "audit": events,
+        "usage": usage_from(calls),
+    }
 
 
 def decide_routing(state: InvestigationState, challenges: dict[str, Challenge]) -> RoutingDecision:
@@ -304,20 +457,34 @@ def decide_routing(state: InvestigationState, challenges: dict[str, Challenge]) 
     new_evidence = sum(1 for e in (state.get("evidence") or {}).values() if e.task_id in round_ids)
     open_challenges = [c for c in challenges.values() if c.status == ChallengeStatus.OPEN]
     blocking = sum(1 for c in open_challenges if c.severity == Severity.BLOCKING)
-    actionable = [c for c in open_challenges if c.severity in {Severity.BLOCKING, Severity.MAJOR}
-                  and (c.research_question or c.suggested_analysis) and not c.research_attempted]
+    actionable = [
+        c
+        for c in open_challenges
+        if c.severity in {Severity.BLOCKING, Severity.MAJOR}
+        and (c.research_question or c.suggested_analysis)
+        and not c.research_attempted
+    ]
     proposed = [h for h in (state.get("hypotheses") or {}).values() if h.status == HypothesisStatus.PROPOSED]
     exhausted = usage.exhausted(budget) if usage else []
 
     def decision(cont: bool, reason: StopReason | None, why: str) -> RoutingDecision:
-        return RoutingDecision(iteration=iteration, continue_research=cont, stop_reason=reason, rationale=why,
-                               open_blocking_challenges=blocking, new_evidence_last_round=new_evidence)
+        return RoutingDecision(
+            iteration=iteration,
+            continue_research=cont,
+            stop_reason=reason,
+            rationale=why,
+            open_blocking_challenges=blocking,
+            new_evidence_last_round=new_evidence,
+        )
 
     if exhausted:
         return decision(False, StopReason.BUDGET, "Stopping: " + "; ".join(exhausted) + ".")
     if iteration >= budget.max_iterations:
-        return decision(False, StopReason.MAX_ITERATIONS,
-                        f"Stopping: reached the maximum of {budget.max_iterations} research rounds.")
+        return decision(
+            False,
+            StopReason.MAX_ITERATIONS,
+            f"Stopping: reached the maximum of {budget.max_iterations} research rounds.",
+        )
     if actionable or proposed or state.get("research_requests"):
         parts = []
         if actionable:
@@ -326,10 +493,12 @@ def decide_routing(state: InvestigationState, challenges: dict[str, Challenge]) 
             parts.append(f"{len(proposed)} hypothesis(es) not yet investigated")
         return decision(True, None, "Continuing: " + "; ".join(parts) + ".")
     if iteration > 1 and new_evidence == 0:
-        return decision(False, StopReason.DIMINISHING_RETURNS,
-                        "Stopping: the last round produced no new evidence.")
-    return decision(False, StopReason.SUFFICIENT,
-                    "Stopping: no open challenge requests further research and all hypotheses have been tested.")
+        return decision(False, StopReason.DIMINISHING_RETURNS, "Stopping: the last round produced no new evidence.")
+    return decision(
+        False,
+        StopReason.SUFFICIENT,
+        "Stopping: no open challenge requests further research and all hypotheses have been tested.",
+    )
 
 
 def route_after_challenge(state: InvestigationState) -> str:

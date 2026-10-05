@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from sip.domain import (
     Challenge,
@@ -42,6 +42,8 @@ class ScenarioOut(BaseModel):
 
 
 class CreateInvestigation(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     question: str | None = Field(default=None, max_length=2000)
     scenario_id: str | None = Field(default=None, max_length=64)
     organisation: str | None = Field(default=None, max_length=200)
@@ -115,6 +117,10 @@ class ClaimChain(BaseModel):
 
 
 class ReviewResponseIn(BaseModel):
+    """The responding actor is deliberately absent: it is taken from the authenticated principal."""
+
+    model_config = ConfigDict(extra="forbid")
+
     action: ReviewAction
     note: str | None = Field(default=None, max_length=4000)
     items: list[ItemDecision] = Field(default_factory=list)

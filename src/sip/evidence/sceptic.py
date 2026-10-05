@@ -46,12 +46,29 @@ def run_sceptic(
 ) -> list[Challenge]:
     out: list[Challenge] = []
 
-    def add(target_type: str, target_id: str, kind: ChallengeKind, severity: Severity, argument: str,
-            research_question: str | None = None, analysis: AnalysisRequest | None = None) -> None:
-        out.append(Challenge(
-            id=stable_id("chl", kind.value, target_id), target_type=target_type, target_id=target_id,
-            kind=kind, severity=severity, argument=argument, research_question=research_question,
-            suggested_analysis=analysis, raised_by=SCEPTIC, iteration=iteration))
+    def add(
+        target_type: str,
+        target_id: str,
+        kind: ChallengeKind,
+        severity: Severity,
+        argument: str,
+        research_question: str | None = None,
+        analysis: AnalysisRequest | None = None,
+    ) -> None:
+        out.append(
+            Challenge(
+                id=stable_id("chl", kind.value, target_id),
+                target_type=target_type,
+                target_id=target_id,
+                kind=kind,
+                severity=severity,
+                argument=argument,
+                research_question=research_question,
+                suggested_analysis=analysis,
+                raised_by=SCEPTIC,
+                iteration=iteration,
+            )
+        )
 
     active = [c for c in claims.values() if c.classification != Classification.UNKNOWN and _is_active(c)]
     for c in active:
@@ -61,48 +78,90 @@ def run_sceptic(
 
         # 1. Claim asserts more than its evidence can carry
         if c.proposed_classification.strength >= Classification.INFERRED.strength and not support:
-            add("claim", c.id, ChallengeKind.UNSUPPORTED, Severity.BLOCKING,
-                "The claim cites no usable (verified, unflagged) evidence.")
+            add(
+                "claim",
+                c.id,
+                ChallengeKind.UNSUPPORTED,
+                Severity.BLOCKING,
+                "The claim cites no usable (verified, unflagged) evidence.",
+            )
             continue
 
         # 2. Correlation presented as causation
         if c.causal and EvidenceKind.CORRELATION in kinds and EvidenceKind.MEASUREMENT not in kinds:
             analysis = _disconfirming_test(support, catalog)
-            add("claim", c.id, ChallengeKind.CORRELATION_NOT_CAUSATION, Severity.BLOCKING,
+            add(
+                "claim",
+                c.id,
+                ChallengeKind.CORRELATION_NOT_CAUSATION,
+                Severity.BLOCKING,
                 "The causal claim rests on events that coincided in time. Coincidence does not show "
                 "that one caused the other; test whether the change also happened where the event did not.",
                 research_question=None if analysis else f"Is there evidence that tests causation for: {c.statement}",
-                analysis=analysis)
+                analysis=analysis,
+            )
 
         # 3. Stale-only support
         if support and all(e.quality and e.quality.freshness == Freshness.STALE for e in support):
-            add("claim", c.id, ChallengeKind.STALE_EVIDENCE, Severity.MAJOR,
+            add(
+                "claim",
+                c.id,
+                ChallengeKind.STALE_EVIDENCE,
+                Severity.MAJOR,
                 "All supporting evidence is stale relative to the investigation's as-of date.",
-                research_question=f"Current evidence on: {c.statement}")
+                research_question=f"Current evidence on: {c.statement}",
+            )
 
         # 4. Weak sources for a promoted claim
-        if c.classification.strength >= Classification.INFERRED.strength and support and \
-                max(_tier(e).rank for e in support) <= AuthorityTier.TERTIARY.rank:
-            add("claim", c.id, ChallengeKind.WEAK_SOURCE, Severity.MAJOR,
+        if (
+            c.classification.strength >= Classification.INFERRED.strength
+            and support
+            and max(_tier(e).rank for e in support) <= AuthorityTier.TERTIARY.rank
+        ):
+            add(
+                "claim",
+                c.id,
+                ChallengeKind.WEAK_SOURCE,
+                Severity.MAJOR,
                 "The best supporting source is tertiary for this kind of evidence.",
-                research_question=f"Primary-source evidence on: {c.statement}")
+                research_question=f"Primary-source evidence on: {c.statement}",
+            )
 
         # 5. Generalising from anecdotes
         if c.causal and kinds and kinds <= {EvidenceKind.ANECDOTE} and len(support) < 5:
-            add("claim", c.id, ChallengeKind.OVERGENERALISATION, Severity.MAJOR,
-                f"The claim generalises from {len(support)} individual case(s).")
+            add(
+                "claim",
+                c.id,
+                ChallengeKind.OVERGENERALISATION,
+                Severity.MAJOR,
+                f"The claim generalises from {len(support)} individual case(s).",
+            )
 
         # 6. Model proposed more than the rubric allows
         if c.proposed_classification.strength - c.classification.strength >= 2:
-            add("claim", c.id, ChallengeKind.HYPOTHESIS_AS_FINDING, Severity.MINOR,
+            add(
+                "claim",
+                c.id,
+                ChallengeKind.HYPOTHESIS_AS_FINDING,
+                Severity.MINOR,
                 f"Proposed as {c.proposed_classification.value.upper()} but the evidence rubric only "
-                f"supports {c.classification.value.upper()}; it must not be presented as established.")
+                f"supports {c.classification.value.upper()}; it must not be presented as established.",
+            )
 
         # 7. Contradicting evidence of equal or higher authority
-        if against and support and max(_tier(e).rank for e in against) >= max(_tier(e).rank for e in support) \
-                and c.classification.strength >= Classification.INFERRED.strength:
-            add("claim", c.id, ChallengeKind.IGNORED_CONTRADICTION, Severity.MAJOR,
-                "Evidence of equal or higher authority contradicts this claim.")
+        if (
+            against
+            and support
+            and max(_tier(e).rank for e in against) >= max(_tier(e).rank for e in support)
+            and c.classification.strength >= Classification.INFERRED.strength
+        ):
+            add(
+                "claim",
+                c.id,
+                ChallengeKind.IGNORED_CONTRADICTION,
+                Severity.MAJOR,
+                "Evidence of equal or higher authority contradicts this claim.",
+            )
 
     # 8. Absolutist assertions about split hypotheses ("entirely due to X")
     for h in hypotheses.values():
@@ -114,12 +173,22 @@ def run_sceptic(
             continue
         family = {h.id, *(k.id for k in kids)}
         for e in evidence.values():
-            if e.usable and e.quote and _ABSOLUTE.search(e.quote) and any(
-                    lk.hypothesis_id in family and lk.stance == Stance.SUPPORTS for lk in e.links):
-                add("hypothesis", h.id, ChallengeKind.OVERGENERALISATION, Severity.MAJOR,
+            if (
+                e.usable
+                and e.quote
+                and _ABSOLUTE.search(e.quote)
+                and any(lk.hypothesis_id in family and lk.stance == Stance.SUPPORTS for lk in e.links)
+            ):
+                add(
+                    "hypothesis",
+                    h.id,
+                    ChallengeKind.OVERGENERALISATION,
+                    Severity.MAJOR,
                     f"A source asserts this driver explains the change across the board "
-                    f"(\"{(e.quote or e.statement)[:140]}\"), but segment analysis rejects it for: "
-                    + ", ".join(k.segment or "?" for k in rejected) + ".")
+                    f'("{(e.quote or e.statement)[:140]}"), but segment analysis rejects it for: '
+                    + ", ".join(k.segment or "?" for k in rejected)
+                    + ".",
+                )
 
     # 9. Several supported causal explanations for the same segment
     by_segment: dict[str, list[Hypothesis]] = defaultdict(list)
@@ -128,26 +197,44 @@ def run_sceptic(
             by_segment[h.segment or "all"].append(h)
     for seg, hs in by_segment.items():
         if len(hs) >= 3:
-            add("investigation", f"segment:{seg}", ChallengeKind.ALTERNATIVE_EXPLANATION, Severity.MINOR,
+            add(
+                "investigation",
+                f"segment:{seg}",
+                ChallengeKind.ALTERNATIVE_EXPLANATION,
+                Severity.MINOR,
                 f"{len(hs)} drivers are supported for '{seg}' ({', '.join(h.category for h in hs)}). "
-                "Their relative contribution is not established by the available evidence.")
+                "Their relative contribution is not established by the available evidence.",
+            )
 
     # 10. Premature convergence: something supported while high-priority hypotheses are untested
     tested = {hid for t in tasks.values() if t.status == TaskStatus.DONE for hid in t.hypothesis_ids}
-    untested = [h for h in hypotheses.values() if h.priority.rank == 3 and h.is_open and h.id not in tested
-                and h.parent_id is None]
+    untested = [
+        h
+        for h in hypotheses.values()
+        if h.priority.rank == 3 and h.is_open and h.id not in tested and h.parent_id is None
+    ]
     if any(h.status == HypothesisStatus.SUPPORTED for h in hypotheses.values()) and untested:
         for h in untested:
-            add("hypothesis", h.id, ChallengeKind.PREMATURE_CONVERGENCE, Severity.MAJOR,
+            add(
+                "hypothesis",
+                h.id,
+                ChallengeKind.PREMATURE_CONVERGENCE,
+                Severity.MAJOR,
                 "A conclusion is forming while this high-priority alternative has not been tested.",
-                research_question=f"Evidence for or against: {h.statement}")
+                research_question=f"Evidence for or against: {h.statement}",
+            )
 
     # 11. Manipulated content
     flagged = [s for s in sources.values() if s.injection_flags]
     for s in flagged:
-        add("investigation", s.id, ChallengeKind.INJECTION_SUSPECTED, Severity.MINOR,
+        add(
+            "investigation",
+            s.id,
+            ChallengeKind.INJECTION_SUSPECTED,
+            Severity.MINOR,
             f"Source '{s.title}' contains text addressed to AI systems ({', '.join(s.injection_flags)}). "
-            "Affected passages are excluded from evidence.")
+            "Affected passages are excluded from evidence.",
+        )
     return out
 
 
@@ -173,8 +260,11 @@ def _disconfirming_test(support: list[Evidence], catalog: DatasetCatalog) -> Ana
         key = own.manifest.entity_key
         if len(entities) == 1 and key and key in own.manifest.dimensions:
             # Did the named entity change differently from everything else?
-            return AnalysisRequest(operation="compare_groups", dataset_id=own.manifest.id,
-                                   params={"dimension": key, "group": next(iter(entities))})
+            return AnalysisRequest(
+                operation="compare_groups",
+                dataset_id=own.manifest.id,
+                params={"dimension": key, "group": next(iter(entities))},
+            )
     return None
 
 
@@ -189,12 +279,16 @@ def merge_challenges(existing: Mapping[str, Challenge], fresh: list[Challenge]) 
             continue
         if cid in fresh_by_id:
             new = fresh_by_id[cid]
-            merged[cid] = old.model_copy(update={"argument": new.argument, "severity": new.severity,
-                                                 "status": ChallengeStatus.OPEN})
+            merged[cid] = old.model_copy(
+                update={"argument": new.argument, "severity": new.severity, "status": ChallengeStatus.OPEN}
+            )
         elif old.status == ChallengeStatus.OPEN:
-            merged[cid] = old.model_copy(update={
-                "status": ChallengeStatus.ADDRESSED,
-                "resolution_note": "No longer applies after further research or reclassification."})
+            merged[cid] = old.model_copy(
+                update={
+                    "status": ChallengeStatus.ADDRESSED,
+                    "resolution_note": "No longer applies after further research or reclassification.",
+                }
+            )
     for cid, new in fresh_by_id.items():
         if cid not in existing:
             merged[cid] = new

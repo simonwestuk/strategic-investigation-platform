@@ -1,9 +1,9 @@
 """Command-line interface.
 
-    sip db upgrade                 apply migrations (app DB) and create the vault schema
-    sip serve [--host --port]      run the API
-    sip run --scenario northstar   run an investigation end-to-end in the terminal (scripted reviewer)
-    sip eval run --scenario northstar [--reasoner offline|llm] [--output DIR]
+sip db upgrade                 apply migrations (app DB) and create the vault schema
+sip serve [--host --port]      run the API
+sip run --scenario northstar   run an investigation end-to-end in the terminal (scripted reviewer)
+sip eval run --scenario northstar [--reasoner offline|llm] [--output DIR]
 """
 
 from __future__ import annotations

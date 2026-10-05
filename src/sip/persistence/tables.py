@@ -24,7 +24,8 @@ from sqlalchemy import (
 metadata = MetaData()
 
 investigations = Table(
-    "investigations", metadata,
+    "investigations",
+    metadata,
     Column("id", String(32), primary_key=True),
     Column("question", Text, nullable=False),
     Column("scenario_id", String(64)),
@@ -42,20 +43,28 @@ investigations = Table(
 
 def _entity(name: str, *extra: Column) -> Table:
     return Table(
-        name, metadata,
+        name,
+        metadata,
         Column("id", String(48), primary_key=True),
-        Column("investigation_id", String(32), ForeignKey("investigations.id", ondelete="CASCADE"),
-               nullable=False, index=True),
+        Column(
+            "investigation_id",
+            String(32),
+            ForeignKey("investigations.id", ondelete="CASCADE"),
+            nullable=False,
+            index=True,
+        ),
         *extra,
         Column("updated_at", DateTime(timezone=True), nullable=False),
         Column("payload", JSON, nullable=False),
     )
 
 
-hypotheses = _entity("hypotheses", Column("status", String(32)), Column("category", String(64)),
-                     Column("parent_id", String(48)))
-research_tasks = _entity("research_tasks", Column("status", String(32)), Column("method", String(32)),
-                         Column("iteration", Integer))
+hypotheses = _entity(
+    "hypotheses", Column("status", String(32)), Column("category", String(64)), Column("parent_id", String(48))
+)
+research_tasks = _entity(
+    "research_tasks", Column("status", String(32)), Column("method", String(32)), Column("iteration", Integer)
+)
 sources = _entity("sources", Column("source_type", String(48)), Column("canonical_url", Text))
 evidence = _entity("evidence", Column("source_id", String(48), index=True), Column("kind", String(32)))
 claims = _entity("claims", Column("classification", String(16)), Column("active", Integer))
@@ -66,17 +75,18 @@ strategic_options = _entity("strategic_options", Column("review_status", String(
 human_reviews = _entity("human_reviews", Column("kind", String(32)), Column("status", String(16)))
 decisions = _entity("decisions", Column("decided_by", String(200)))
 source_contents = Table(
-    "source_contents", metadata,
+    "source_contents",
+    metadata,
     Column("source_id", String(48), primary_key=True),
     Column("investigation_id", String(32), ForeignKey("investigations.id", ondelete="CASCADE"), index=True),
     Column("text", Text, nullable=False),  # sanitised / untrusted public text only
 )
 
 audit_events = Table(
-    "audit_events", metadata,
+    "audit_events",
+    metadata,
     Column("id", String(32), primary_key=True),
-    Column("investigation_id", String(32), ForeignKey("investigations.id", ondelete="CASCADE"),
-           nullable=False),
+    Column("investigation_id", String(32), ForeignKey("investigations.id", ondelete="CASCADE"), nullable=False),
     Column("at", DateTime(timezone=True), nullable=False),
     Column("actor_kind", String(16), nullable=False),
     Column("actor_id", String(200), nullable=False),
@@ -91,7 +101,8 @@ audit_events = Table(
 
 # Sanitised side of the privacy gateway. Raw content lives in the quarantine store; mappings in the vault.
 intake_documents = Table(
-    "intake_documents", metadata,
+    "intake_documents",
+    metadata,
     Column("id", String(32), primary_key=True),
     Column("investigation_id", String(32), ForeignKey("investigations.id", ondelete="CASCADE"), index=True),
     Column("kind", String(16), nullable=False),
@@ -104,8 +115,7 @@ intake_documents = Table(
 
 ENTITY_TABLES = {
     "hypotheses": (hypotheses, lambda e: {"status": e.status.value, "category": e.category, "parent_id": e.parent_id}),
-    "tasks": (research_tasks, lambda e: {"status": e.status.value, "method": e.method.value,
-                                         "iteration": e.iteration}),
+    "tasks": (research_tasks, lambda e: {"status": e.status.value, "method": e.method.value, "iteration": e.iteration}),
     "sources": (sources, lambda e: {"source_type": e.source_type.value, "canonical_url": e.canonical_url}),
     "evidence": (evidence, lambda e: {"source_id": e.source_id, "kind": e.kind.value}),
     "claims": (claims, lambda e: {"classification": e.classification.value, "active": int(e.active)}),

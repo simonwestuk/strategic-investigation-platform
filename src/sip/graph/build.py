@@ -1,14 +1,16 @@
 """Investigation graph topology.
 
-    START -> frame -(clarification?)-> intake -(privacy review?)-> hypothesise -> plan
-    plan ==Send x N==> research -> evidence_manager -> analyse -> challenge
-    challenge -(continue)-> plan          (loop; bounded by budget and max iterations)
-    challenge -(stop)-> findings_gate -(blocking challenges open?)-> synthesise -> options_gate
-    options_gate -(high consequence?)-> decision_room -> await_review -> END
-    await_review routes wherever the human's response sends it (intake/plan/synthesise/... or END).
+START -> frame -(clarification?)-> intake -(privacy review?)-> hypothesise -> plan
+plan ==Send x N==> research -> evidence_manager -> analyse -> challenge
+challenge -(continue)-> plan          (loop; bounded by budget and max iterations)
+challenge -(stop)-> findings_gate -(blocking challenges open?)-> synthesise -> options_gate
+options_gate -(high consequence?)-> decision_room -> await_review -> END
+await_review routes wherever the human's response sends it (intake/plan/synthesise/... or END).
 """
 
 from __future__ import annotations
+
+from typing import Any, cast
 
 from langgraph.checkpoint.base import BaseCheckpointSaver
 from langgraph.graph import END, START, StateGraph
@@ -40,13 +42,19 @@ from sip.graph.state import InvestigationState
 RECURSION_LIMIT = 250
 
 
-def build_graph(checkpointer: BaseCheckpointSaver | None = None) -> CompiledStateGraph:
+InvestigationGraph = CompiledStateGraph[
+    InvestigationState, InvestigationContext, InvestigationState, InvestigationState
+]
+
+
+def build_graph(checkpointer: BaseCheckpointSaver | None = None) -> InvestigationGraph:
     g = StateGraph(InvestigationState, context_schema=InvestigationContext)
     g.add_node("frame", frame, metadata={"agent": "investigation_lead"})
     g.add_node("intake", intake, metadata={"agent": "privacy_release"})
     g.add_node("hypothesise", hypothesise, metadata={"agent": "hypothesis_generator"})
     g.add_node("plan", plan, metadata={"agent": "research_planner"})
-    g.add_node("research", research, metadata={"agent": "researcher"})  # type: ignore[arg-type]
+    # The research node receives a Send payload rather than graph state, so it is typed loosely here.
+    g.add_node("research", cast(Any, research), metadata={"agent": "researcher"})
     g.add_node("evidence_manager", evidence_manager, metadata={"agent": "evidence_manager"})
     g.add_node("analyse", analyse, metadata={"agent": "analyst"})
     g.add_node("challenge", challenge, metadata={"agent": "sceptic"})
@@ -69,6 +77,9 @@ def build_graph(checkpointer: BaseCheckpointSaver | None = None) -> CompiledStat
     g.add_edge("synthesise", "options_gate")
     g.add_conditional_edges("options_gate", route_after_options, ["await_review", "decision_room"])
     g.add_edge("decision_room", "await_review")
-    g.add_conditional_edges("await_review", route_after_review,
-                            ["intake", "plan", "synthesise", "options_gate", "decision_room", "await_review", END])
+    g.add_conditional_edges(
+        "await_review",
+        route_after_review,
+        ["intake", "plan", "synthesise", "options_gate", "decision_room", "await_review", END],
+    )
     return g.compile(checkpointer=checkpointer, name="strategic_investigation")

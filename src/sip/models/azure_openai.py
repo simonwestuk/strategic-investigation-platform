@@ -35,8 +35,12 @@ def build_client(settings: Settings) -> AsyncOpenAI:
         from azure.identity.aio import DefaultAzureCredential, get_bearer_token_provider
 
         api_key = get_bearer_token_provider(DefaultAzureCredential(), COGNITIVE_SERVICES_SCOPE)
-    client = AsyncOpenAI(base_url=settings.azure_openai_base_url, api_key=api_key,
-                         timeout=settings.sip_llm_timeout_s, max_retries=settings.sip_llm_max_retries)
+    client = AsyncOpenAI(
+        base_url=settings.azure_openai_base_url,
+        api_key=api_key,
+        timeout=settings.sip_llm_timeout_s,
+        max_retries=settings.sip_llm_max_retries,
+    )
     if settings.langsmith_tracing:
         from langsmith.wrappers import wrap_openai
 
@@ -49,11 +53,21 @@ class AzureOpenAIModel:
         self.settings = settings
         self.client = client or build_client(settings)
         self.prices = parse_prices(settings.sip_model_prices)
-        self.deployments = {ModelTier.REASONING: settings.sip_model_reasoning,
-                            ModelTier.EXTRACTION: settings.sip_model_extraction}
+        self.deployments = {
+            ModelTier.REASONING: settings.sip_model_reasoning,
+            ModelTier.EXTRACTION: settings.sip_model_extraction,
+        }
 
-    async def generate(self, *, task: str, tier: ModelTier, instructions: str, input: str,
-                       schema: type[T], metadata: dict[str, Any] | None = None) -> tuple[T, ModelCall]:
+    async def generate(
+        self,
+        *,
+        task: str,
+        tier: ModelTier,
+        instructions: str,
+        input: str,
+        schema: type[T],
+        metadata: dict[str, Any] | None = None,
+    ) -> tuple[T, ModelCall]:
         model = self.deployments[tier]
         started = time.perf_counter()
         extra: dict[str, Any] = {}
@@ -63,8 +77,8 @@ class AzureOpenAIModel:
             if self.settings.sip_llm_reasoning_effort:
                 extra["reasoning"] = {"effort": self.settings.sip_llm_reasoning_effort}
             resp = await self.client.responses.parse(
-                model=model, instructions=instructions, input=input, text_format=schema,
-                store=False, **extra)
+                model=model, instructions=instructions, input=input, text_format=schema, store=False, **extra
+            )
             parsed = resp.output_parsed
             usage = resp.usage
             inp, out = (usage.input_tokens, usage.output_tokens) if usage else (0, 0)
@@ -72,9 +86,11 @@ class AzureOpenAIModel:
             if self.settings.sip_llm_reasoning_effort:
                 extra["reasoning_effort"] = self.settings.sip_llm_reasoning_effort
             chat = await self.client.chat.completions.parse(
-                model=model, response_format=schema,
+                model=model,
+                response_format=schema,
                 messages=[{"role": "system", "content": instructions}, {"role": "user", "content": input}],
-                **extra)
+                **extra,
+            )
             msg = chat.choices[0].message
             if msg.refusal:
                 raise ModelError(f"Model refused task {task}")
@@ -82,7 +98,12 @@ class AzureOpenAIModel:
             inp, out = (chat.usage.prompt_tokens, chat.usage.completion_tokens) if chat.usage else (0, 0)
         if parsed is None:
             raise ModelError(f"No structured output for task {task}")
-        call = ModelCall(task=task, model=model, input_tokens=inp, output_tokens=out,
-                         cost_usd=cost(self.prices, model, inp, out),
-                         latency_ms=int((time.perf_counter() - started) * 1000))
+        call = ModelCall(
+            task=task,
+            model=model,
+            input_tokens=inp,
+            output_tokens=out,
+            cost_usd=cost(self.prices, model, inp, out),
+            latency_ms=int((time.perf_counter() - started) * 1000),
+        )
         return parsed, call
