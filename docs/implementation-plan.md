@@ -159,3 +159,38 @@ Key design commitments:
 
 As section 49 of the build brief. Progress against it is tracked in the README "Status" section, which
 states plainly what has been verified locally, what has been verified only with mocks, and what is roadmap.
+
+---
+
+## 8. Status at end of V1 build (2026-10-05)
+
+| Definition-of-done item | Status |
+|---|---|
+| Runs locally; Northstar loads; investigation starts | ✅ `sip run`, API + web |
+| Hypotheses generated; research tasks created | ✅ |
+| External evidence gathered | ✅ offline corpus; ◑ Tavily/Brave mocked only |
+| Structured internal data analysed deterministically | ✅ |
+| Confidential content through privacy gateway | ✅ (bug found and fixed by evaluation) |
+| Claims preserve provenance; contradictions represented | ✅ |
+| Challenger causes further investigation; bounded execution | ✅ (disconfirming tests, budget, iteration cap) |
+| Governance evaluated; genuine HITL interrupts | ✅ privacy, findings, options, decision, clarification |
+| Recommendations cannot become decisions without a human | ✅ tested at type, graph, API, policy layers |
+| LangSmith tracing when configured | ◑ wired; not exercised against LangSmith from the build machine |
+| Evaluation datasets, graders; Northstar ground-truth eval runs | ✅ 2 scenarios, 12 graders |
+| Backend tested; CI defined | ✅ 91 tests; workflows defined (not yet run on GitHub) |
+| Frontend presents the investigation | see apps/web |
+| Docker/local setup | ✅ local; ◑ Dockerfiles/Compose not built (no Docker on build machine) |
+| Azure reference infrastructure | ✅ Bicep compiles/lints; ◑ never deployed |
+| Security/privacy/RAI docs; architecture matches implementation | ✅ |
+| No real employer data; no secrets in history | ✅ synthetic only; history checked; gitleaks in CI |
+| Claim traceable to evidence | ✅ API claim chain + UI |
+
+### Changes from the original plan
+
+* **Two reasoners** (LLM + offline) rather than one, so the system is testable and demonstrable without
+  credentials (ADR 0002).
+* **Hypothesis-tree splitting** by segment emerged during implementation as the mechanism by which
+  evidence creates, refines and closes hypotheses.
+* **Challenger-commissioned disconfirming tests** (difference-in-change) were added once it was clear
+  that "send back to research" needed concrete, falsifiable tasks rather than more searches.
+* A **second scenario** was added before V1 completion because a single tuned scenario proved little.
