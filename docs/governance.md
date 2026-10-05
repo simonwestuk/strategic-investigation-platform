@@ -48,7 +48,8 @@ the checkpoint.
 | Options | `options_gate` | approve / modify / reject **per option**, edit title/description/risks, request further investigation |
 | Decision | `decision_room` | decide (human-only Decision), request further investigation |
 
-Every review also accepts: a **note**, **human challenges** (to a claim or an assumption; they become
+Every review also accepts (through the API and the full working view; the briefing keeps only the essential
+choices): a **note**, **human challenges** (to a claim or an assumption; they become
 `HUMAN_CHALLENGE` challenges with research questions), **research requests** (become `HUMAN`-origin
 tasks), **classification overrides** (require governance_reviewer; recorded as `HumanOverride` with
 actor, previous value and reason; never silently recomputed away), and **additional iterations** (≤3).
