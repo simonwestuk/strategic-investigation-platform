@@ -29,7 +29,7 @@ dependencies = [
   "aiosqlite>=0.21",
   "structlog>=25.1",
   "beautifulsoup4>=4.13,<5",
-  "pypdf>=6.0,<7",
+  "pypdf>=6.0,<8",
   "pyjwt[crypto]>=2.10,<3",
 ]
 
